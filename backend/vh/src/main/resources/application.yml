@@ -11,6 +11,23 @@ spring:
   config:
     activate:
       on-profile: common
+  jpa:
+    properties:
+      hibernate:
+        format_sql: true
+        show_sql: true
+
+logging:
+  level:
+    org:
+      hibernate:
+        type:
+          descriptor:
+            sql: DEBUG
+        sql: DEBUG
+  config:
+    activate:
+      on-profile: common
 
 ---
 spring:
