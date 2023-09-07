@@ -24,12 +24,12 @@ import java.time.LocalDateTime;
                 name = "findFeedsAndHeartAndIsHeartByUserIdWhereTitleIsKeyword",
                 query = "SELECT F.feed_id as feedId, F.content, A.article_id as articleId, A.title, F.create_at as createAt, " +
                         "       IF((select count(*) from Heart " +
-                        "       where Heart.user_id = :userId and Heart.feed_id = F.feed_id) <= 0, false, true) as isHeart, " +
+                        "       where Heart.user_id = :myId and Heart.feed_id = F.feed_id) <= 0, false, true) as isHeart, " +
                         "       (select count(*) from Heart where Heart.feed_id = F.feed_id) as heart " +
                         "       from Feed as F " +
                         "       join Article as A " +
                         "       on F.article_id = A.article_id " +
-                        "       where A.title like :keyword and F.share >= :isOther " +
+                        "       where A.title like :keyword and F.share >= :isOther and F.user_id = :userId " +
                         "       order by createAt desc",
                 resultSetMapping = "findFeedsAndHeartAndIsHeartByUserIdWhereTitleIsKeyword"
         ),
@@ -37,12 +37,12 @@ import java.time.LocalDateTime;
                 name = "findFeedsAndHeartAndIsHeartByUserIdWhereContentIsKeyword",
                 query = "SELECT F.feed_id as feedId, F.content, A.article_id as articleId, A.title, F.create_at as createAt, " +
                         "       IF((select count(*) from Heart " +
-                        "       where Heart.user_id = :userId and Heart.feed_id = F.feed_id) <= 0, false, true) as isHeart, " +
+                        "       where Heart.user_id = :myId and Heart.feed_id = F.feed_id) <= 0, false, true) as isHeart, " +
                         "       (select count(*) from Heart where Heart.feed_id = F.feed_id) as heart " +
                         "       from Feed as F " +
                         "       join Article as A " +
                         "       on F.article_id = A.article_id " +
-                        "       where F.content like :keyword and F.share >= :isOther " +
+                        "       where F.content like :keyword and F.share >= :isOther and F.user_id = :userId " +
                         "       order by createAt desc",
                 resultSetMapping = "findFeedsAndHeartAndIsHeartByUserIdWhereTitleIsKeyword"
         ),
