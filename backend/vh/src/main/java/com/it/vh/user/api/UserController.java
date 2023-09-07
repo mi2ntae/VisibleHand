@@ -1,5 +1,7 @@
 package com.it.vh.user.api;
 
+import com.it.vh.feed.api.dto.FeedResDto;
+import com.it.vh.feed.service.FeedService;
 import com.it.vh.user.api.dto.UserFollowResDto;
 import com.it.vh.user.api.dto.UserProfileResDto;
 import com.it.vh.user.domain.dto.UserDto;
@@ -8,11 +10,11 @@ import com.it.vh.user.service.UserService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @Api(value = "유저 API", tags = {"User"})
 @RestController
@@ -20,6 +22,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/api/user")
 public class UserController {
     private final UserService userService;
+    private final FeedService feedService;
 
     @ApiOperation(value = "유저 프로필 조회", notes = "유저 프로필 조회")
     @GetMapping("/profile/{userId}")
@@ -32,5 +35,11 @@ public class UserController {
     @GetMapping("/follow/{userId}")
     public ResponseEntity<UserFollowResDto> getFollowInfoByUserId(@PathVariable long userId) throws NonExistUserIdException {
         return ResponseEntity.ok().body(userService.getFollowInfoByUserId(userId));
+    }
+
+    @ApiOperation(value = "유저 피드 목록 조회", notes = "유저 피드 목록 조회 5개씩.")
+    @GetMapping("/feed/{userId}")
+    public ResponseEntity<List<FeedResDto>> getFeedsByUserId(@PathVariable long userId, @RequestParam boolean isMe, @RequestParam int searchType, @RequestParam(required = false) String keyword, @RequestParam int page) throws NonExistUserIdException {
+        return ResponseEntity.ok().body(feedService.getFeedsByUserId(userId, isMe, searchType, keyword, page));
     }
 }
