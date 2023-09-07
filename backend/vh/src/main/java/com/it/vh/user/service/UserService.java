@@ -1,5 +1,8 @@
 package com.it.vh.user.service;
 
-public class UserService {
+import com.it.vh.user.domain.dto.UserDto;
+import com.it.vh.user.exception.NonExistUserIdException;
 
+public interface UserService {
+    UserDto getUserProfileByUserId(long userId) throws NonExistUserIdException;
 }
