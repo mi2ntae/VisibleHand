@@ -6,13 +6,13 @@ import lombok.Getter;
 
 @Getter
 @Builder
-public class UserProfileRes {
+public class UserProfileResDto {
     private String profileImg;
     private String nickname;
     private String statusMsg;
 
-    public static UserProfileRes from(UserDto userDto) {
-        return UserProfileRes.builder()
+    public static UserProfileResDto from(UserDto userDto) {
+        return UserProfileResDto.builder()
                 .profileImg(userDto.getProfileImg())
                 .nickname(userDto.getNickname())
                 .statusMsg(userDto.getStatusMsg())
