@@ -27,6 +27,7 @@ public class FeedServiceImpl implements FeedService {
     @Override
     public List<FeedResDto> getFeedsByUserId(long userId, boolean isMe, int searchType, String keyword, int page) {
         List<FeedResDto> feedResDtoList = null;
+        if(keyword == null) return feedRepository.findFeedsAndHeartAndIsHeartByUserIdWhereTitleIsKeyword(userId, "%%", !isMe, PageRequest.of(page, FEED_PAGE_NUM));
         switch(searchType) {
             case 0:
                 feedResDtoList = feedRepository.findFeedsAndHeartAndIsHeartByUserIdWhereTitleIsKeyword(userId, "%"+keyword+"%", !isMe, PageRequest.of(page, FEED_PAGE_NUM));
