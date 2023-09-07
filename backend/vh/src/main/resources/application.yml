@@ -11,6 +11,7 @@ spring:
   config:
     activate:
       on-profile: common
+    import: optional:file:.env[.properties]
   jpa:
     properties:
       hibernate:
@@ -29,6 +30,20 @@ logging:
     activate:
       on-profile: common
 
+cloud:
+  aws:
+    credentials:
+      accessKey: ${accessKey}
+      secretKey: ${secretKey}
+    region:
+      static: ${region}
+    stack:
+      auto: ${stack_auto}
+    s3:
+      bucket: ${bucket}
+  config:
+    activate:
+      on-profile: common
 ---
 spring:
   config:
