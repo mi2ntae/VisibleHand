@@ -12,9 +12,9 @@ import java.util.List;
 
 public interface FeedRepository extends JpaRepository<Feed, Long> {
     @Query(name = "findFeedsAndHeartAndIsHeartByUserIdWhereTitleIsKeyword", nativeQuery = true)
-    List<FeedResDto> findFeedsAndHeartAndIsHeartByUserIdWhereTitleIsKeyword(long userId, String keyword, boolean isOther, Pageable page);
+    List<FeedResDto> findFeedsAndHeartAndIsHeartByUserIdWhereTitleIsKeyword(long userId, long myId, String keyword, boolean isOther, Pageable page);
 
     @Query(name = "findFeedsAndHeartAndIsHeartByUserIdWhereContentIsKeyword", nativeQuery = true)
-    List<FeedResDto> findFeedsAndHeartAndIsHeartByUserIdWhereContentIsKeyword(long userId, String keyword, boolean isOther, Pageable page);
+    List<FeedResDto> findFeedsAndHeartAndIsHeartByUserIdWhereContentIsKeyword(long userId, long myId, String keyword, boolean isOther, Pageable page);
 
 }
