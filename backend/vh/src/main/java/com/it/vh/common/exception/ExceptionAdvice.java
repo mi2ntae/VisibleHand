@@ -16,6 +16,14 @@ import lombok.extern.slf4j.Slf4j;
 @RestControllerAdvice
 public class ExceptionAdvice {
 
+    @ExceptionHandler(AuthenticationAccessForbiddenException.class)
+    @ResponseStatus(HttpStatus.UNAUTHORIZED)
+    protected ResponseEntity<ErrorResponse> authenticationAccessForbiddenException() {
+        log.error("해당 유저가 아님. 비정상적인 접근");
+        ErrorResponse errorResponse = ErrorResponse.of(ExceptionList.AUTHENTICATION_ACCESS_FORBIDDEN);
+        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(errorResponse);
+    }
+
     @ExceptionHandler(NonExistUserIdException.class)
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
     protected ResponseEntity<ErrorResponse> nonExistUserIdException() {
