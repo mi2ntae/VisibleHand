@@ -1,6 +1,5 @@
 package com.it.vh.article.domain.entity;
 
-import com.it.vh.article.domain.ArticleKind;
 import com.it.vh.user.domain.entity.User;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -8,7 +7,6 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
-import java.time.LocalDateTime;
 
 @Data
 @Entity
@@ -27,5 +25,4 @@ public class Scrap {
     @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinColumn(name = "user_id", nullable = false)
     private User user;
-
 }

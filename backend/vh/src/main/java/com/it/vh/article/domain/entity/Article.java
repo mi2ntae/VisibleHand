@@ -1,12 +1,9 @@
 package com.it.vh.article.domain.entity;
 
-import com.it.vh.article.domain.ArticleKind;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.hibernate.annotations.ColumnDefault;
-
 import javax.persistence.*;
 import java.time.LocalDateTime;
 
