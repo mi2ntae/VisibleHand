@@ -36,30 +36,18 @@ logging:
 
 cloud:
   aws:
+    credentials:
+      accessKey: ${accessKey}
+      secretKey: ${secretKey}
     region:
-      static: us-east-1
-      auto: false
+      static: ${region}
     stack:
-      auto: false
+      auto: ${stack_auto}
+    s3:
+      bucket: ${bucket}
   config:
-      activate:
-        on-profile: common
-
-#cloud:
-#  aws:
-#    credentials:
-#      accessKey: ${accessKey}
-#      secretKey: ${secretKey}
-#    region:
-#      static: ${region}
-#    stack:
-#      auto: ${stack_auto}
-#    s3:
-#      bucket: ${bucket}
-#  config:
-#    activate:
-#      on-profile: common
-
+    activate:
+      on-profile: common
 ---
 spring:
   config:
@@ -72,7 +60,7 @@ spring:
     password: root
   jpa:
     hibernate:
-      ddl-auto: create
+      ddl-auto: validate
     show-sql: true
 
 ---
@@ -89,4 +77,5 @@ spring:
     hibernate:
       ddl-auto: validate
     show-sql: true
+
 
