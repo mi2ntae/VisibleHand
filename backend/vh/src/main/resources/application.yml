@@ -4,6 +4,7 @@ spring:
     group:
       local:
         - common
+        - oauth
       prod :
         - common
 ---
@@ -35,18 +36,30 @@ logging:
 
 cloud:
   aws:
-    credentials:
-      accessKey: ${accessKey}
-      secretKey: ${secretKey}
     region:
-      static: ${region}
+      static: us-east-1
+      auto: false
     stack:
-      auto: ${stack_auto}
-    s3:
-      bucket: ${bucket}
+      auto: false
   config:
-    activate:
-      on-profile: common
+      activate:
+        on-profile: common
+
+#cloud:
+#  aws:
+#    credentials:
+#      accessKey: ${accessKey}
+#      secretKey: ${secretKey}
+#    region:
+#      static: ${region}
+#    stack:
+#      auto: ${stack_auto}
+#    s3:
+#      bucket: ${bucket}
+#  config:
+#    activate:
+#      on-profile: common
+
 ---
 spring:
   config:
