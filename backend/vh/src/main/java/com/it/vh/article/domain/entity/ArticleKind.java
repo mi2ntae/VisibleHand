@@ -1,4 +1,4 @@
-package com.it.vh.article.domain;
+package com.it.vh.article.domain.entity;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
