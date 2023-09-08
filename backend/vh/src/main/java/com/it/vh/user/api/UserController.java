@@ -2,6 +2,8 @@ package com.it.vh.user.api;
 
 import com.it.vh.feed.api.dto.FeedResDto;
 import com.it.vh.feed.service.FeedService;
+import com.it.vh.quiz.service.SolvedQuizService;
+import com.it.vh.user.api.dto.ReviewnoteResDto;
 import com.it.vh.user.api.dto.UserFollowResDto;
 import com.it.vh.user.api.dto.UserProfileResDto;
 import com.it.vh.user.domain.dto.UserDto;
@@ -23,6 +25,7 @@ import java.util.List;
 public class UserController {
     private final UserService userService;
     private final FeedService feedService;
+    private final SolvedQuizService solvedQuizService;
 
     @ApiOperation(value = "유저 프로필 조회", notes = "유저 프로필 조회")
     @GetMapping("/profile/{userId}")
@@ -41,5 +44,11 @@ public class UserController {
     @GetMapping("/feed/{userId}/{myId}")
     public ResponseEntity<List<FeedResDto>> getFeedsByUserId(@PathVariable long userId, @PathVariable long myId, @RequestParam int searchType, @RequestParam(required = false) String keyword, @RequestParam int page) throws NonExistUserIdException {
         return ResponseEntity.ok().body(feedService.getFeedsByUserId(userId, myId, searchType, keyword, page));
+    }
+
+    @ApiOperation(value = "유저 오답 노트 조회", notes = "유저 오답 노트 조회 8개씩.")
+    @GetMapping("/reviewnote/{userId}")
+    public ResponseEntity<Page<ReviewnoteResDto>> getReviewNotesByUserId(@PathVariable long userId, @RequestParam int page) throws NonExistUserIdException{
+        return ResponseEntity.ok().body(solvedQuizService.getReviewNotesByUserId(userId, page));
     }
 }
