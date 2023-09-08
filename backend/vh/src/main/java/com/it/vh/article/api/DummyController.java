@@ -1,6 +1,6 @@
 package com.it.vh.article.api;
 
-import com.it.vh.article.domain.ArticleKind;
+import com.it.vh.article.domain.entity.ArticleKind;
 import com.it.vh.article.domain.entity.Article;
 import com.it.vh.article.domain.entity.CloudArticle;
 import com.it.vh.article.domain.repository.ArticleRepository;

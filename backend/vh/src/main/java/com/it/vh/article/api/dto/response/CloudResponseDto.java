@@ -1,6 +1,6 @@
 package com.it.vh.article.api.dto.response;
 
-import com.it.vh.article.domain.ArticleKind;
+import com.it.vh.article.domain.entity.ArticleKind;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;

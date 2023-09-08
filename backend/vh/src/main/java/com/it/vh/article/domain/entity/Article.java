@@ -1,6 +1,5 @@
 package com.it.vh.article.domain.entity;
 
-import com.it.vh.article.domain.ArticleKind;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
