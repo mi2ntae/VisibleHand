@@ -36,6 +36,21 @@ dependencies {
 	// swagger
 	implementation group: 'io.springfox', name: 'springfox-boot-starter', version: '3.0.0'
 	implementation group: 'com.google.guava', name: 'guava', version: '32.0.1-jre'
+
+	// spring-boot-starter-security
+//	implementation 'org.springframework.boot:spring-boot-starter-security'
+
+	// spring-boot-starter-oauth2-client
+	implementation group: 'org.springframework.boot', name: 'spring-boot-starter-oauth2-client', version: '2.7.11'
+
+	// jjwt-impl
+	runtimeOnly group: 'io.jsonwebtoken', name: 'jjwt-impl', version: '0.11.5'
+	// jjwt-api
+	implementation group: 'io.jsonwebtoken', name: 'jjwt-api', version: '0.11.5'
+	// jjwt-jackson
+	runtimeOnly group: 'io.jsonwebtoken', name: 'jjwt-jackson', version: '0.11.5'
+
+
 }
 
 tasks.named('test') {
