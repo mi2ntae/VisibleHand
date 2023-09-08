@@ -1,6 +1,6 @@
 package com.it.vh.article.api;
 
-import com.it.vh.article.api.dto.ScrapListRes;
+import com.it.vh.article.api.dto.ScrapListResDto;
 import com.it.vh.article.domain.exception.NonExistScrapIdException;
 import com.it.vh.article.service.ScrapService;
 import com.it.vh.common.exception.AuthenticationAccessForbiddenException;
@@ -19,9 +19,9 @@ import org.springframework.web.bind.annotation.*;
 public class ArticleController {
     private final ScrapService scrapService;
 
-    @ApiOperation(value = "기사 스크랩 목록 조회", notes = "해당 유저의 기사 스크랩 목록 조회")
+    @ApiOperation(value = "기사 스크랩 목록 조회", notes = "해당 유저의 기사 스크랩 목록 조회 8개씩")
     @GetMapping("/scrap/{userId}")
-    public ResponseEntity<Page<ScrapListRes>> getScrapListByUserId(@PathVariable long userId, @RequestParam(required = false) String keyword, @RequestParam int page) throws AuthenticationAccessForbiddenException, NonExistUserIdException {
+    public ResponseEntity<Page<ScrapListResDto>> getScrapListByUserId(@PathVariable long userId, @RequestParam(required = false) String keyword, @RequestParam int page) throws AuthenticationAccessForbiddenException, NonExistUserIdException {
         return ResponseEntity.ok().body(scrapService.getScrapListByUserId(userId, keyword, page));
     }
 

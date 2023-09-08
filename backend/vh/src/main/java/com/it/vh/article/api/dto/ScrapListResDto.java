@@ -7,7 +7,7 @@ import lombok.*;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class ScrapListRes {
+public class ScrapListResDto {
     private long scrapId;
     private long articleId;
     private String thumbnail;
