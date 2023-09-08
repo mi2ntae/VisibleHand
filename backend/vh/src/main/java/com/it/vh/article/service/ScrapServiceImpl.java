@@ -1,6 +1,6 @@
 package com.it.vh.article.service;
 
-import com.it.vh.article.api.dto.ScrapListRes;
+import com.it.vh.article.api.dto.ScrapListResDto;
 import com.it.vh.article.domain.entity.Scrap;
 import com.it.vh.article.domain.exception.NonExistScrapIdException;
 import com.it.vh.article.domain.repository.ScrapRepository;
@@ -15,7 +15,6 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
-import java.lang.reflect.Member;
 import java.util.Optional;
 
 @Service
@@ -29,7 +28,7 @@ public class ScrapServiceImpl implements ScrapService {
     private final int SCRAP_PAGE_NUm = 8;
 
     @Override
-    public Page<ScrapListRes> getScrapListByUserId(long userId, String keyword, int page) throws AuthenticationAccessForbiddenException, NonExistUserIdException {
+    public Page<ScrapListResDto> getScrapListByUserId(long userId, String keyword, int page) throws AuthenticationAccessForbiddenException, NonExistUserIdException {
         // uri로 받은 userId가 로그인한 사용자 ID와 같은지 반드시 체크해야 하는 서비스에서 사용 (정보 수정 삭제 등)
         authenticationHandler.checkUserAuthenticate(userId);
 
