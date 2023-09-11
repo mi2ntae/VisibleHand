@@ -23,4 +23,10 @@ public class AuthenticationHandler {
 //        if(loginUser.get().getUserId() != userId) throw new AuthenticationAccessForbiddenException();
     }
 
+    public long getLoginUserId() {
+//        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+//        return Long.parseLong(auth.getName());
+        return 0;
+    }
+
 }

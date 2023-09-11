@@ -41,9 +41,9 @@ public class UserController {
     }
 
     @ApiOperation(value = "유저 피드 목록 조회", notes = "유저 피드 목록 조회 5개씩.")
-    @GetMapping("/feed/{userId}/{myId}")
-    public ResponseEntity<List<FeedResDto>> getFeedsByUserId(@PathVariable long userId, @PathVariable long myId, @RequestParam int searchType, @RequestParam(required = false) String keyword, @RequestParam int page) throws NonExistUserIdException {
-        return ResponseEntity.ok().body(feedService.getFeedsByUserId(userId, myId, searchType, keyword, page));
+    @GetMapping("/feed/{userId}")
+    public ResponseEntity<List<FeedResDto>> getFeedsByUserId(@PathVariable long userId, @RequestParam int searchType, @RequestParam(required = false) String keyword, @RequestParam int page) throws NonExistUserIdException {
+        return ResponseEntity.ok().body(feedService.getFeedsByUserId(userId, searchType, keyword, page));
     }
 
     @ApiOperation(value = "유저 오답 노트 조회", notes = "유저 오답 노트 조회 8개씩.")
