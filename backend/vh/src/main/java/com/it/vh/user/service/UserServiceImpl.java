@@ -1,5 +1,6 @@
 package com.it.vh.user.service;
 
+import com.it.vh.user.api.dto.FollowResDto;
 import com.it.vh.user.api.dto.UserFollowListResDto;
 import com.it.vh.user.api.dto.UserFollowResDto;
 import com.it.vh.user.domain.dto.UserDto;
@@ -48,8 +49,10 @@ public class UserServiceImpl implements UserService{
         return followRepository.findFollowsByFrom_UserId(userId, PageRequest.of(page, FOLLOWLIST_PAGE_NUM)).map(
                 follow ->
                         UserFollowListResDto.builder()
+                                .userId(follow.getTo().getUserId())
                                 .UserName(follow.getTo().getNickname())
                                 .statusMsg(follow.getTo().getStatusMsg())
+                                .iamgeUrl(follow.getTo().getProfileImg())
                                 .build()
         );
     }
@@ -62,10 +65,36 @@ public class UserServiceImpl implements UserService{
         return followRepository.findFollowsByTo_UserId(userId, PageRequest.of(page, FOLLOWLIST_PAGE_NUM)).map(
                 follow ->
                     UserFollowListResDto.builder()
+                            .userId(follow.getFrom().getUserId())
                             .UserName(follow.getFrom().getNickname())
                             .statusMsg(follow.getFrom().getStatusMsg())
+                            .iamgeUrl(follow.getFrom().getProfileImg())
                             .build()
         );
 
+    }
+
+    @Override
+    public Page<UserFollowListResDto> getUserListBykeyword(String keyword, int page) {
+        log.info(keyword+"를 기반으로 유사한 사용자들을 검색합니다.");
+        return userRespository.findUsersByNicknameContains(keyword,PageRequest.of(page,FOLLOWLIST_PAGE_NUM)).map(
+                userList ->
+                        UserFollowListResDto.builder()
+                                .userId(userList.getUserId())
+                                .UserName(userList.getNickname())
+                                .statusMsg(userList.getStatusMsg())
+                                .iamgeUrl(userList.getProfileImg())
+                                .build()
+        );
+    }
+
+    @Override
+    public void registFollow(FollowResDto followResDto) {
+        User from = userRespository.findUserByUserId(followResDto.getFromId()).get();
+        User to = userRespository.findUserByUserId(followResDto.getToId()).get();
+        followRepository.save(Follow.builder()
+                        .to(to)
+                        .from(from)
+                                .build());
     }
 }
