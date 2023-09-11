@@ -3,20 +3,19 @@ package com.it.vh.user.api;
 import com.it.vh.feed.api.dto.FeedResDto;
 import com.it.vh.feed.service.FeedService;
 import com.it.vh.quiz.service.SolvedQuizService;
-import com.it.vh.user.api.dto.ReviewnoteResDto;
-import com.it.vh.user.api.dto.UserFollowListResDto;
-import com.it.vh.user.api.dto.UserFollowResDto;
-import com.it.vh.user.api.dto.UserProfileResDto;
+import com.it.vh.user.api.dto.*;
 import com.it.vh.user.domain.dto.UserDto;
 import com.it.vh.user.exception.NonExistUserIdException;
 import com.it.vh.user.service.UserService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
+import lombok.Value;
 import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.util.List;
 
 @Api(value = "유저 API", tags = {"User"})
@@ -57,5 +56,18 @@ public class UserController {
     @GetMapping("/following/{userId}")
     public ResponseEntity<Page<UserFollowListResDto>> getFollowerListByUserId(@PathVariable long userId, @RequestParam int page) throws NonExistUserIdException{
         return ResponseEntity.ok().body(userService.getFollowerListByUserId(userId, page));
+    }
+
+    @ApiOperation(value = "유저 목록 검색", notes = "검색한 유저 목록을 조회할수 있고 10개씩 조회가 되도록 진행한다.")
+    @GetMapping("/")
+    public ResponseEntity<Page<UserFollowListResDto>> getUserListByKeyWord(@RequestParam String keyword, @RequestParam int page){
+        return ResponseEntity.ok().body(userService.getUserListBykeyword(keyword,page));
+    }
+
+    @ApiOperation(value = "다른 유저 팔로우", notes ="사용자가 타인의 계정을 팔로우합니다")
+    @PostMapping("/follow")
+    public ResponseEntity<Void> followUser(@RequestBody @Valid FollowResDto followResDto){
+        userService.registFollow(followResDto);
+        return ResponseEntity.ok().build();
     }
 }

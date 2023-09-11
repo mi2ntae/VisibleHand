@@ -1,5 +1,6 @@
 package com.it.vh.user.service;
 
+import com.it.vh.user.api.dto.FollowResDto;
 import com.it.vh.user.api.dto.UserFollowListResDto;
 import com.it.vh.user.api.dto.UserFollowResDto;
 import com.it.vh.user.domain.dto.UserDto;
@@ -16,4 +17,7 @@ public interface UserService {
 
     Page<UserFollowListResDto> getFollowingListByUserId(long userId, int page);
     Page<UserFollowListResDto> getFollowerListByUserId(long userId, int page);
+    Page<UserFollowListResDto> getUserListBykeyword(String keyword, int page);
+
+    void registFollow(FollowResDto followResDto);
 }
