@@ -1,15 +1,21 @@
 package com.it.vh.user.service;
 
+import com.it.vh.user.api.dto.UserFollowListResDto;
 import com.it.vh.user.api.dto.UserFollowResDto;
 import com.it.vh.user.domain.dto.UserDto;
+import com.it.vh.user.domain.entity.Follow;
 import com.it.vh.user.domain.entity.User;
 import com.it.vh.user.domain.repository.FollowRepository;
 import com.it.vh.user.domain.repository.UserRespository;
 import com.it.vh.user.exception.NonExistUserIdException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -18,7 +24,7 @@ import java.util.Optional;
 public class UserServiceImpl implements UserService{
     private final UserRespository userRespository;
     private final FollowRepository followRepository;
-
+    private final int FOLLOWLIST_PAGE_NUM = 10;
     @Override
     public UserDto getUserProfileByUserId(long userId) throws NonExistUserIdException{
         Optional<User> optionalUser = userRespository.findUserByUserId(userId);
@@ -34,5 +40,32 @@ public class UserServiceImpl implements UserService{
                 .followingCnt(followRepository.countFollowsByFrom_UserId(userId))
                 .followerCnt(followRepository.countFollowsByTo_UserId(userId))
                 .build();
+    }
+
+    @Override
+    public Page<UserFollowListResDto> getFollowingListByUserId(long userId, int page) {
+        log.info("내가 팔로잉하고 있는 유저 목록을 조회하는 Service입니다.");
+        return followRepository.findFollowsByFrom_UserId(userId, PageRequest.of(page, FOLLOWLIST_PAGE_NUM)).map(
+                follow ->
+                        UserFollowListResDto.builder()
+                                .UserName(follow.getTo().getNickname())
+                                .statusMsg(follow.getTo().getStatusMsg())
+                                .build()
+        );
+    }
+
+    @Override
+    public Page<UserFollowListResDto> getFollowerListByUserId(long userId, int page) {
+        log.info("나를 팔로잉하고 있는 유저 목록을 조회하는 Service입니다.");
+
+//        Page<UserFollowListResDto> userList = new ArrayList<>();
+        return followRepository.findFollowsByTo_UserId(userId, PageRequest.of(page, FOLLOWLIST_PAGE_NUM)).map(
+                follow ->
+                    UserFollowListResDto.builder()
+                            .UserName(follow.getFrom().getNickname())
+                            .statusMsg(follow.getFrom().getStatusMsg())
+                            .build()
+        );
+
     }
 }

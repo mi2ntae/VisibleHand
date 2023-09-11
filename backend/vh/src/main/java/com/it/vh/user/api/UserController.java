@@ -4,6 +4,7 @@ import com.it.vh.feed.api.dto.FeedResDto;
 import com.it.vh.feed.service.FeedService;
 import com.it.vh.quiz.service.SolvedQuizService;
 import com.it.vh.user.api.dto.ReviewnoteResDto;
+import com.it.vh.user.api.dto.UserFollowListResDto;
 import com.it.vh.user.api.dto.UserFollowResDto;
 import com.it.vh.user.api.dto.UserProfileResDto;
 import com.it.vh.user.domain.dto.UserDto;
@@ -48,7 +49,13 @@ public class UserController {
 
     @ApiOperation(value = "유저 오답 노트 조회", notes = "유저 오답 노트 조회 8개씩.")
     @GetMapping("/reviewnote/{userId}")
-    public ResponseEntity<Page<ReviewnoteResDto>> getReviewNotesByUserId(@PathVariable long userId, @RequestParam int page) throws NonExistUserIdException{
-        return ResponseEntity.ok().body(solvedQuizService.getReviewNotesByUserId(userId, page));
+    public ResponseEntity<Page<UserFollowListResDto>> getFollowingListByUserId(@PathVariable long userId, @RequestParam int page) throws NonExistUserIdException{
+        return ResponseEntity.ok().body(userService.getFollowingListByUserId(userId,page));
+    }
+
+    @ApiOperation(value = "유저 팔로잉 목록 조회", notes = "팔로잉 목록 조회 10개씩.")
+    @GetMapping("/following/{userId}")
+    public ResponseEntity<Page<UserFollowListResDto>> getFollowerListByUserId(@PathVariable long userId, @RequestParam int page) throws NonExistUserIdException{
+        return ResponseEntity.ok().body(userService.getFollowerListByUserId(userId, page));
     }
 }
