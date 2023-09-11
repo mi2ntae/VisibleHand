@@ -1,6 +1,5 @@
 package com.it.vh.feed.service;
 
-import com.it.vh.feed.api.dto.HeartCreateReq;
 import com.it.vh.feed.api.dto.FeedResDto;
 
 import java.util.List;
