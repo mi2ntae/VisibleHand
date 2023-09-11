@@ -23,4 +23,6 @@ public class Dictionary {
     @Column(nullable = false, columnDefinition = "TEXT")
     private String meaning;
 
+    @Enumerated(EnumType.STRING)
+    private DictionaryType type;
 }
