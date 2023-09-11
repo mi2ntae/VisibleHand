@@ -1,33 +1,39 @@
 package com.it.vh.common.config;
 
-import com.it.vh.user.service.CustomOAuth2UserService;
+import com.it.vh.common.util.JwtTokenProvider;
+import com.it.vh.user.service.OAuth2UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.web.SecurityFilterChain;
 
 @Configuration
 @EnableWebSecurity
 @RequiredArgsConstructor
-public class SpringSecurityConfig {
+public class SecurityConfig {
 
-    private final CustomOAuth2UserService customOAuth2UserService;
+    private final OAuth2UserService userService;
+    private final JwtTokenProvider jwtTokenProvider;
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
 
         http
+            .headers()
+            .frameOptions()
+            .sameOrigin().and()
+            .cors().and()
             .csrf().disable()
-            .authorizeRequests()
-            .anyRequest().permitAll()
+            .sessionManagement()
+            .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
             .and()
-            .oauth2Login()
-                .userInfoEndpoint()
-                .userService(customOAuth2UserService);
+            //TODO: 주소 제한 추가
+            .authorizeRequests()
+            .anyRequest().permitAll();
 
         return http.build();
     }
-
 }
