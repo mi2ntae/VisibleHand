@@ -1,0 +1,9 @@
+spring:
+  config:
+    activate:
+      on-profile: "jwt"
+
+jwt:
+  secret: XUrYUhZfrEWLtykR7h80CrcITM59YLt5CRi3AdqZu33
+  access-expired-in: 1800000
+  refresh-expired-in: 604800000
