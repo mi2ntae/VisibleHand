@@ -1,5 +1,6 @@
 package com.it.vh.common.exception;
 
+import com.it.vh.article.domain.exception.NonExistScrapIdException;
 import com.it.vh.user.exception.NonExistUserIdException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -15,6 +16,22 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 @RestControllerAdvice
 public class ExceptionAdvice {
+
+    @ExceptionHandler(NonExistScrapIdException.class)
+    @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
+    protected ResponseEntity<ErrorResponse> nonExistScrapIdException() {
+        log.error("해당 스크랩이 이미 존재하지 않습니다.");
+        ErrorResponse errorResponse = ErrorResponse.of(ExceptionList.NON_EXIST_SCRAP_ID);
+        return ResponseEntity.internalServerError().body(errorResponse);
+    }
+
+    @ExceptionHandler(AuthenticationAccessForbiddenException.class)
+    @ResponseStatus(HttpStatus.UNAUTHORIZED)
+    protected ResponseEntity<ErrorResponse> authenticationAccessForbiddenException() {
+        log.error("해당 유저가 아님. 비정상적인 접근");
+        ErrorResponse errorResponse = ErrorResponse.of(ExceptionList.AUTHENTICATION_ACCESS_FORBIDDEN);
+        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(errorResponse);
+    }
 
     @ExceptionHandler(NonExistUserIdException.class)
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
