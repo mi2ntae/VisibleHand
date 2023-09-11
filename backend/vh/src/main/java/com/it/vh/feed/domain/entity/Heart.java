@@ -1,6 +1,7 @@
-package com.it.vh.user.domain.entity;
+package com.it.vh.feed.domain.entity;
 
-import com.it.vh.feed.domain.entity.Feed;
+import com.it.vh.feed.api.dto.HeartCreateReq;
+import com.it.vh.user.domain.entity.User;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -25,4 +26,11 @@ public class Heart {
     @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinColumn(name = "feed_id", nullable = false)
     private Feed feed;
+
+    public static Heart of(Feed feed, User user) {
+        return Heart.builder()
+                .feed(feed)
+                .user(user)
+                .build();
+    }
 }
