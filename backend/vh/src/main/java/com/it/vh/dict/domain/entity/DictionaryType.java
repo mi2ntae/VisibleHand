@@ -7,12 +7,12 @@ import lombok.RequiredArgsConstructor;
 @Getter
 public enum DictionaryType {
     //경제 사회 과학 경영 공공 금융
-    ENCONOMY("경제"),
-    SOCIAL("사회"),
-    SCIENCE("과학"),
-    MANAGEMENT("경영"),
-    PUBLIC("공공"),
-    FINANCE("금융");
+    경제("ECONOMY"),
+    사회("SOCIAL"),
+    과학("SCIENCE"),
+    경영("MANAGEMENT"),
+    공공("PUBLIC"),
+    금융("FINANCE");
 
     private final String type;
 }
