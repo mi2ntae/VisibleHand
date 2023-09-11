@@ -1,6 +1,6 @@
 package com.it.vh.feed.api;
 
-import com.it.vh.feed.api.dto.HeartCreateReq;
+import com.it.vh.feed.api.dto.HeartReq;
 import com.it.vh.feed.api.dto.FeedResDto;
 import com.it.vh.feed.exception.NonExistFeedIdException;
 import com.it.vh.feed.service.FeedService;
@@ -30,9 +30,16 @@ public class FeedController {
     }
 
     @ApiOperation(value = "피드 좋아요", notes = "로그인한 유저로 피드 좋아요")
-    @GetMapping("/heart")
-    public ResponseEntity<Void> createHeartByFeedId(@RequestBody HeartCreateReq feedHeartCreateReq) throws NonExistFeedIdException {
-        heartService.createHeartByFeedId(feedHeartCreateReq);
+    @PostMapping("/heart")
+    public ResponseEntity<Void> createHeartByFeedId(@RequestBody HeartReq heartReq) throws NonExistFeedIdException {
+        heartService.createHeartByFeedId(heartReq);
+        return ResponseEntity.ok().build();
+    }
+
+    @ApiOperation(value = "피드 좋아요 취소", notes = "로그인한 유저로 피드 좋아요 취소")
+    @DeleteMapping("/heart")
+    public ResponseEntity<Void> deleteHeartByFeedId(@RequestBody HeartReq heartReq) throws NonExistFeedIdException {
+        heartService.deleteHeartByFeedId(heartReq);
         return ResponseEntity.ok().build();
     }
 }

@@ -1,7 +1,6 @@
 package com.it.vh.feed.service;
 
 import com.it.vh.common.util.AuthenticationHandler;
-import com.it.vh.feed.api.dto.HeartCreateReq;
 import com.it.vh.feed.api.dto.FeedResDto;
 import com.it.vh.feed.domain.repository.FeedRepository;
 import com.it.vh.user.domain.entity.User;
