@@ -8,7 +8,8 @@ import lombok.Getter;
 @Builder
 @AllArgsConstructor
 public class UserFollowListResDto {
+    private long userId;
     private String UserName;
     private String statusMsg;
-    private String String;
+    private String iamgeUrl;
 }
