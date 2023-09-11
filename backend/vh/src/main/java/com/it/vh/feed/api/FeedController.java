@@ -1,18 +1,14 @@
 package com.it.vh.feed.api;
 
+import com.it.vh.feed.api.dto.HeartCreateReq;
 import com.it.vh.feed.api.dto.FeedResDto;
+import com.it.vh.feed.exception.NonExistFeedIdException;
 import com.it.vh.feed.service.FeedService;
-import com.it.vh.quiz.service.SolvedQuizService;
-import com.it.vh.user.api.dto.ReviewnoteResDto;
-import com.it.vh.user.api.dto.UserFollowResDto;
-import com.it.vh.user.api.dto.UserProfileResDto;
-import com.it.vh.user.domain.dto.UserDto;
+import com.it.vh.feed.service.HeartService;
 import com.it.vh.user.exception.NonExistUserIdException;
-import com.it.vh.user.service.UserService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -24,11 +20,19 @@ import java.util.List;
 @RequestMapping("/api/feed")
 public class FeedController {
     private final FeedService feedService;
+    private final HeartService heartService;
 
     @ApiOperation(value = "피드 목록 조회", notes = "로그인한 유저에 따른 피드 목록 조회")
     @GetMapping("/list/{userId}")
     public ResponseEntity<List<FeedResDto>> getFeedsByUserId(@PathVariable long userId, @RequestParam int searchType, @RequestParam(required = false) String keyword, @RequestParam int page) throws NonExistUserIdException {
         List<FeedResDto> userDtos = feedService.getFollowingFeedsByUserId(userId, searchType, keyword, page);
         return ResponseEntity.ok().body(userDtos);
+    }
+
+    @ApiOperation(value = "피드 좋아요", notes = "로그인한 유저로 피드 좋아요")
+    @GetMapping("/heart")
+    public ResponseEntity<Void> createHeartByFeedId(@RequestBody HeartCreateReq feedHeartCreateReq) throws NonExistFeedIdException {
+        heartService.createHeartByFeedId(feedHeartCreateReq);
+        return ResponseEntity.ok().build();
     }
 }

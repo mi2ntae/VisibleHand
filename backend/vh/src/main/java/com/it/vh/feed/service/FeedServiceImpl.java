@@ -1,17 +1,14 @@
 package com.it.vh.feed.service;
 
 import com.it.vh.common.util.AuthenticationHandler;
+import com.it.vh.feed.api.dto.HeartCreateReq;
 import com.it.vh.feed.api.dto.FeedResDto;
 import com.it.vh.feed.domain.repository.FeedRepository;
-import com.it.vh.user.api.dto.UserFollowResDto;
-import com.it.vh.user.domain.dto.UserDto;
 import com.it.vh.user.domain.entity.User;
-import com.it.vh.user.domain.repository.FollowRepository;
 import com.it.vh.user.domain.repository.UserRespository;
 import com.it.vh.user.exception.NonExistUserIdException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
