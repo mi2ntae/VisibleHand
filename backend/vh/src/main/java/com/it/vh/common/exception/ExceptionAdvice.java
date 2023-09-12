@@ -1,6 +1,7 @@
 package com.it.vh.common.exception;
 
 import com.it.vh.article.domain.exception.NonExistScrapIdException;
+import com.it.vh.article.exception.NonExistArticleIdException;
 import com.it.vh.feed.exception.NonExistFeedIdException;
 import com.it.vh.user.exception.NonExistUserIdException;
 import org.springframework.http.HttpStatus;
@@ -29,8 +30,16 @@ public class ExceptionAdvice {
     @ExceptionHandler(NonExistScrapIdException.class)
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
     protected ResponseEntity<ErrorResponse> nonExistScrapIdException() {
-        log.error("해당 스크랩이 이미 존재하지 않습니다.");
+        log.error("해당 스크랩이 존재하지 않습니다.");
         ErrorResponse errorResponse = ErrorResponse.of(ExceptionList.NON_EXIST_SCRAP_ID);
+        return ResponseEntity.internalServerError().body(errorResponse);
+    }
+
+    @ExceptionHandler(NonExistArticleIdException.class)
+    @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
+    protected ResponseEntity<ErrorResponse> nonExistArticleIdException() {
+        log.error("해당 기사가 존재하지 않습니다.");
+        ErrorResponse errorResponse = ErrorResponse.of(ExceptionList.NON_EXIST_ARTICLE_ID);
         return ResponseEntity.internalServerError().body(errorResponse);
     }
 

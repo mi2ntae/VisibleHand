@@ -1,7 +1,6 @@
 package com.it.vh.feed.api;
 
-import com.it.vh.feed.api.dto.HeartReq;
-import com.it.vh.feed.api.dto.FeedResDto;
+import com.it.vh.feed.api.dto.*;
 import com.it.vh.feed.exception.NonExistFeedIdException;
 import com.it.vh.feed.service.FeedService;
 import com.it.vh.feed.service.HeartService;
@@ -40,6 +39,42 @@ public class FeedController {
     @DeleteMapping("/heart")
     public ResponseEntity<Void> deleteHeartByFeedId(@RequestBody HeartReq heartReq) throws NonExistFeedIdException {
         heartService.deleteHeartByFeedId(heartReq);
+        return ResponseEntity.ok().build();
+    }
+
+    @ApiOperation(value = "뉴스별 피드 목록", notes = "해당 뉴스에 대한 피드 목록 조회")
+    @GetMapping("/list/{articleId}/{userId}")
+    public ResponseEntity<List<FeedListOfArticleResDto>> getFeedsByArticleId(@PathVariable long articleId, @PathVariable long userId, @RequestParam int page) {
+        List<FeedListOfArticleResDto> res = feedService.getFeedsByArticleId(articleId, userId, page);
+        return ResponseEntity.ok().body(res);
+    }
+
+
+    @ApiOperation(value = "뉴스 피드 등록", notes = "로그인한 유저의 계정으로 해당 뉴스에 대한 피드 등록")
+    @PostMapping("/")
+    public ResponseEntity<Void> writeFeed(@RequestBody FeedReq feedReq) {
+        feedService.registFeed(feedReq.getUserId(), feedReq.getArticleId(), feedReq.getContent(), feedReq.isShared());
+        return ResponseEntity.ok().build();
+    }
+
+    @ApiOperation(value = "뉴스에 대한 내 피드 조회", notes = "해당 뉴스에 대한 내 피드 조회")
+    @GetMapping("/{articleId}/{userId}")
+    public ResponseEntity<MyFeedRes> getFeedByArticleIdAndUserId(@PathVariable long articleId, @PathVariable long userId) {
+        MyFeedRes res = feedService.getFeedByArticleIdAndUserId(articleId, userId);
+        return ResponseEntity.ok().body(res);
+    }
+
+    @ApiOperation(value = "뉴스 피드 수정")
+    @PutMapping("/{feedId}")
+    public ResponseEntity<Void> modifyFeedByFeedId(@PathVariable long feedId, @RequestBody FeedUpdateReq feedUpdateReq) {
+        feedService.updateFeed(feedId, feedUpdateReq.getContent(), feedUpdateReq.isShared());
+        return ResponseEntity.ok().build();
+    }
+
+    @ApiOperation(value = "뉴스 피드 삭제")
+    @DeleteMapping("/{feedId}")
+    public ResponseEntity<Void> deleteFeedByFeedId(@PathVariable long feedId) {
+        feedService.deleteFeed(feedId);
         return ResponseEntity.ok().build();
     }
 }

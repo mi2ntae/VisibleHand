@@ -9,7 +9,7 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 @NoArgsConstructor
 public class FeedResDto {
-    private int feedId;
+    private long feedId;
     private String content;
     private int heart;
     private int isHeart;
