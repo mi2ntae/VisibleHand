@@ -102,6 +102,6 @@ public class UserServiceImpl implements UserService{
     public void deleteFollow(FollowResDto followResDto) {
         User from = userRespository.findUserByUserId(followResDto.getFromId()).get();
         User to = userRespository.findUserByUserId(followResDto.getToId()).get();
-        followRepository.deleteByFromandTo(from,to);
+        followRepository.deleteByFromAndTo(from,to);
     }
 }
