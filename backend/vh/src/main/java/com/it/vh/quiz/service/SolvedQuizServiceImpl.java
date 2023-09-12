@@ -1,6 +1,12 @@
 package com.it.vh.quiz.service;
 
+import com.it.vh.article.domain.repository.ArticleRepository;
+import com.it.vh.article.domain.repository.WordCloudRepository;
+import com.it.vh.dict.domain.repository.DictionaryRepository;
+import com.it.vh.quiz.api.dto.requestDto.SolvedQuizReq;
 import com.it.vh.quiz.domain.entity.SolvedQuiz;
+import com.it.vh.quiz.domain.exception.SolvingQuizException;
+import com.it.vh.quiz.domain.repository.NewsQuizRepository;
 import com.it.vh.quiz.domain.repository.SolvedQuizRepository;
 import com.it.vh.user.api.dto.ReviewnoteResDto;
 import com.it.vh.user.api.dto.UserFollowResDto;
@@ -24,7 +30,8 @@ import java.util.Optional;
 public class SolvedQuizServiceImpl implements SolvedQuizService {
     private final UserRespository userRespository;
     private final SolvedQuizRepository solvedQuizRepository;
-
+    private final NewsQuizRepository newsQuizRepository;
+    private final DictionaryRepository dictionaryRepository;
     private final int REVIEWNOTE_PAGE_NUM = 8;
     @Override
     public Page<ReviewnoteResDto> getReviewNotesByUserId(long userId, int page) throws NonExistUserIdException {
@@ -37,5 +44,18 @@ public class SolvedQuizServiceImpl implements SolvedQuizService {
                             .answer(solvedQuiz.getNewsquiz() == null ? solvedQuiz.getWord().getWord() : solvedQuiz.getNewsquiz().getAnswer())
                             .build()
                 );
+    }
+
+    public void solveQuiz(SolvedQuizReq req) throws SolvingQuizException {
+        SolvedQuiz sq=new SolvedQuiz();
+        sq.setUser(userRespository.getReferenceById(req.getUserId()));
+        sq.setCorrect(req.isCorrect());
+        if(req.getNewsquizId()!=null){
+            sq.setNewsquiz(newsQuizRepository.getReferenceById(req.getNewsquizId()));
+        }
+        else{
+            sq.setWord(dictionaryRepository.getReferenceById(req.getWordId()));
+        }
+        solvedQuizRepository.save(sq);
     }
 }
