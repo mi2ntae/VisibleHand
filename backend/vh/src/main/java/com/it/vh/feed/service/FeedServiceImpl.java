@@ -1,8 +1,15 @@
 package com.it.vh.feed.service;
 
+import com.it.vh.article.domain.entity.Article;
+import com.it.vh.article.domain.repository.ArticleRepository;
+import com.it.vh.article.exception.NonExistArticleIdException;
 import com.it.vh.common.util.AuthenticationHandler;
+import com.it.vh.feed.api.dto.FeedListOfArticleResDto;
 import com.it.vh.feed.api.dto.FeedResDto;
+import com.it.vh.feed.api.dto.MyFeedRes;
+import com.it.vh.feed.domain.entity.Feed;
 import com.it.vh.feed.domain.repository.FeedRepository;
+import com.it.vh.feed.exception.NonExistFeedIdException;
 import com.it.vh.user.domain.entity.User;
 import com.it.vh.user.domain.repository.UserRespository;
 import com.it.vh.user.exception.NonExistUserIdException;
@@ -20,6 +27,7 @@ import java.util.Optional;
 public class FeedServiceImpl implements FeedService {
     private final FeedRepository feedRepository;
     private final UserRespository userRespository;
+    private final ArticleRepository articleRepository;
     private final AuthenticationHandler authenticationHandler;
 
     private final int FEED_PAGE_NUM = 6;
@@ -70,5 +78,76 @@ public class FeedServiceImpl implements FeedService {
                 break;
         }
         return feedResDtoList;
+    }
+
+    @Override
+    public List<FeedListOfArticleResDto> getFeedsByArticleId(long articleId, long userId, int page) {
+        System.out.println(11111);
+        Optional<User> optionalUser = userRespository.findUserByUserId(userId);
+        if(!optionalUser.isPresent()) throw new NonExistUserIdException();
+        System.out.println(22222);
+        authenticationHandler.checkUserAuthenticate(userId);
+        long myId = authenticationHandler.getLoginUserId();
+        System.out.println(33333);
+        System.out.println(articleId);
+
+        List<FeedListOfArticleResDto> list = feedRepository.findFeedsByArticle(articleId, myId, PageRequest.of(page, FEED_PAGE_NUM));
+        log.info("list: {}", list);
+        return list;
+    }
+
+    @Override
+    public void registFeed(long userId, long articleId, String content, boolean isShared) {
+        Optional<User> optionalUser = userRespository.findById(userId);
+        if(!optionalUser.isPresent()) throw new NonExistUserIdException();
+
+        authenticationHandler.checkUserAuthenticate(userId);
+
+        Optional<Article> optionalArticle = articleRepository.findById(articleId);
+        if (!optionalArticle.isPresent()) throw new NonExistArticleIdException();
+
+        Feed feed = Feed.builder()
+                .article(optionalArticle.get())
+                .content(content)
+                .share(isShared)
+                .user(optionalUser.get())
+                .build();
+
+        System.out.println(feed.toString());
+        feedRepository.save(feed);
+    }
+
+    @Override
+    public MyFeedRes getFeedByArticleIdAndUserId(long articleId, long userId) {
+        Optional<User> optionalUser = userRespository.findById(userId);
+        if(!optionalUser.isPresent()) throw new NonExistUserIdException();
+
+        authenticationHandler.checkUserAuthenticate(userId);
+
+        Optional<Article> optionalArticle = articleRepository.findById(articleId);
+        if (!optionalArticle.isPresent()) throw new NonExistArticleIdException();
+
+
+        Optional<Feed> optionalFeed = feedRepository.findFeedByArticleAndUser(optionalArticle.get(), optionalUser.get());
+        MyFeedRes myFeedRes;
+        if (optionalFeed.isPresent()) myFeedRes = MyFeedRes.builder().feedId(optionalFeed.get().getFeedId()).content(optionalFeed.get().getContent()).build();
+        else myFeedRes = MyFeedRes.builder().feedId(-1).build();
+        return  myFeedRes;
+    }
+
+    @Override
+    public void updateFeed(long feedId, String content, boolean isShared) {
+        Optional<Feed> optionalFeed = feedRepository.findById(feedId);
+        if (!optionalFeed.isPresent()) throw new NonExistFeedIdException();
+        Feed feed = optionalFeed.get();
+        feed.setContent(content);
+        feed.setShare(isShared);
+        feedRepository.save(feed);
+    }
+
+    @Override
+    public void deleteFeed(long feedId) {
+        if (!feedRepository.existsById(feedId)) throw new NonExistFeedIdException();
+        feedRepository.deleteById(feedId);
     }
 }
