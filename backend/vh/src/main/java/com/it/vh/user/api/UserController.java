@@ -78,4 +78,31 @@ public class UserController {
         userService.deleteFollow(followResDto);
         return ResponseEntity.ok().build();
     }
+
+    @ApiOperation(value = "유저 닉네임 중복 검사", notes = "유저 닉네임 중복 여부를 검사합니다.")
+    @GetMapping("/auth/nickname")
+    public ResponseEntity<NicknameResDto> isDuplicatedNickname(@RequestParam("nickname") String nickname) {
+        return ResponseEntity.ok().body(userService.isDuplicatedNickname(nickname));
+    }
+
+    @ApiOperation(value = "유저 프로필 등록", notes = "유저 프로필을 등록합니다.")
+    @PostMapping("/profile")
+    public ResponseEntity<?> createProfile(@RequestBody UserProfileReqDto userProfileReqDto) {
+        userService.createProfile(userProfileReqDto);
+        return ResponseEntity.ok().build();
+    }
+
+    @ApiOperation(value = "유저 프로필 수정", notes = "유저 프로필을 수정합니다.")
+    @PutMapping("/profile/{userId}")
+    public ResponseEntity<?> updateProfile(@PathVariable Long userId, @RequestBody UserProfileReqDto userProfileReqDto) {
+        userService.updateProfile(userId, userProfileReqDto);
+        return ResponseEntity.ok().build();
+    }
+
+    @ApiOperation(value = "유저 탈퇴", notes = "유저가 탈퇴합니다.")
+    @DeleteMapping("/{userId}")
+    public ResponseEntity<?> deleteUser(@PathVariable Long userId) {
+        userService.deleteUser(userId);
+        return ResponseEntity.ok().build();
+    }
 }
