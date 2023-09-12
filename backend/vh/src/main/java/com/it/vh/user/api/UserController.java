@@ -3,19 +3,20 @@ package com.it.vh.user.api;
 import com.it.vh.feed.api.dto.FeedResDto;
 import com.it.vh.feed.service.FeedService;
 import com.it.vh.quiz.service.SolvedQuizService;
-import com.it.vh.user.api.dto.ReviewnoteResDto;
-import com.it.vh.user.api.dto.UserFollowResDto;
-import com.it.vh.user.api.dto.UserProfileResDto;
+import com.it.vh.user.api.dto.*;
 import com.it.vh.user.domain.dto.UserDto;
 import com.it.vh.user.exception.NonExistUserIdException;
 import com.it.vh.user.service.UserService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
+import lombok.Value;
+import net.bytebuddy.asm.MemberSubstitution;
 import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.util.List;
 
 @Api(value = "유저 API", tags = {"User"})
@@ -41,14 +42,67 @@ public class UserController {
     }
 
     @ApiOperation(value = "유저 피드 목록 조회", notes = "유저 피드 목록 조회 5개씩.")
-    @GetMapping("/feed/{userId}/{myId}")
-    public ResponseEntity<List<FeedResDto>> getFeedsByUserId(@PathVariable long userId, @PathVariable long myId, @RequestParam int searchType, @RequestParam(required = false) String keyword, @RequestParam int page) throws NonExistUserIdException {
-        return ResponseEntity.ok().body(feedService.getFeedsByUserId(userId, myId, searchType, keyword, page));
+    @GetMapping("/feed/{userId}")
+    public ResponseEntity<List<FeedResDto>> getFeedsByUserId(@PathVariable long userId, @RequestParam int searchType, @RequestParam(required = false) String keyword, @RequestParam int page) throws NonExistUserIdException {
+        return ResponseEntity.ok().body(feedService.getFeedsByUserId(userId, searchType, keyword, page));
     }
 
     @ApiOperation(value = "유저 오답 노트 조회", notes = "유저 오답 노트 조회 8개씩.")
     @GetMapping("/reviewnote/{userId}")
-    public ResponseEntity<Page<ReviewnoteResDto>> getReviewNotesByUserId(@PathVariable long userId, @RequestParam int page) throws NonExistUserIdException{
-        return ResponseEntity.ok().body(solvedQuizService.getReviewNotesByUserId(userId, page));
+    public ResponseEntity<Page<UserFollowListResDto>> getFollowingListByUserId(@PathVariable long userId, @RequestParam int page) throws NonExistUserIdException{
+        return ResponseEntity.ok().body(userService.getFollowingListByUserId(userId,page));
+    }
+
+    @ApiOperation(value = "유저 팔로잉 목록 조회", notes = "팔로잉 목록 조회 10개씩.")
+    @GetMapping("/following/{userId}")
+    public ResponseEntity<Page<UserFollowListResDto>> getFollowerListByUserId(@PathVariable long userId, @RequestParam int page) throws NonExistUserIdException{
+        return ResponseEntity.ok().body(userService.getFollowerListByUserId(userId, page));
+    }
+
+    @ApiOperation(value = "유저 목록 검색", notes = "검색한 유저 목록을 조회할수 있고 10개씩 조회가 되도록 진행한다.")
+    @GetMapping("/")
+    public ResponseEntity<Page<UserFollowListResDto>> getUserListByKeyWord(@RequestParam String keyword, @RequestParam int page){
+        return ResponseEntity.ok().body(userService.getUserListBykeyword(keyword,page));
+    }
+
+    @ApiOperation(value = "다른 유저 팔로우", notes ="사용자가 타인의 계정을 팔로우합니다")
+    @PostMapping("/follow")
+    public ResponseEntity<Void> followUser(@RequestBody @Valid FollowResDto followResDto){
+        userService.registFollow(followResDto);
+        return ResponseEntity.ok().build();
+    }
+
+    @ApiOperation(value = "팔로우 취소", notes="팔로우를 취소합니다.")
+    @DeleteMapping("/follow")
+    public ResponseEntity<Void>  deletefollow(@RequestBody @Valid FollowResDto followResDto){
+        userService.deleteFollow(followResDto);
+        return ResponseEntity.ok().build();
+    }
+
+    @ApiOperation(value = "유저 닉네임 중복 검사", notes = "유저 닉네임 중복 여부를 검사합니다.")
+    @GetMapping("/auth/nickname")
+    public ResponseEntity<NicknameResDto> isDuplicatedNickname(@RequestParam("nickname") String nickname) {
+        return ResponseEntity.ok().body(userService.isDuplicatedNickname(nickname));
+    }
+
+    @ApiOperation(value = "유저 프로필 등록", notes = "유저 프로필을 등록합니다.")
+    @PostMapping("/profile")
+    public ResponseEntity<?> createProfile(@RequestBody UserProfileReqDto userProfileReqDto) {
+        userService.createProfile(userProfileReqDto);
+        return ResponseEntity.ok().build();
+    }
+
+    @ApiOperation(value = "유저 프로필 수정", notes = "유저 프로필을 수정합니다.")
+    @PutMapping("/profile/{userId}")
+    public ResponseEntity<?> updateProfile(@PathVariable Long userId, @RequestBody UserProfileReqDto userProfileReqDto) {
+        userService.updateProfile(userId, userProfileReqDto);
+        return ResponseEntity.ok().build();
+    }
+
+    @ApiOperation(value = "유저 탈퇴", notes = "유저가 탈퇴합니다.")
+    @DeleteMapping("/{userId}")
+    public ResponseEntity<?> deleteUser(@PathVariable Long userId) {
+        userService.deleteUser(userId);
+        return ResponseEntity.ok().build();
     }
 }

@@ -1,6 +1,7 @@
 package com.it.vh.common.exception;
 
 import com.it.vh.article.domain.exception.NonExistScrapIdException;
+import com.it.vh.feed.exception.NonExistFeedIdException;
 import com.it.vh.user.exception.NonExistUserIdException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -16,6 +17,14 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 @RestControllerAdvice
 public class ExceptionAdvice {
+
+    @ExceptionHandler(NonExistFeedIdException.class)
+    @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
+    protected ResponseEntity<ErrorResponse> nonExistFeedIdException() {
+        log.error("해당 피드가 존재하지 않습니다.");
+        ErrorResponse errorResponse = ErrorResponse.of(ExceptionList.NON_EXIST_FEED_ID);
+        return ResponseEntity.internalServerError().body(errorResponse);
+    }
 
     @ExceptionHandler(NonExistScrapIdException.class)
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)

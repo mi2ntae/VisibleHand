@@ -9,6 +9,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 
 import java.util.List;
+import java.util.Optional;
 
 public interface FeedRepository extends JpaRepository<Feed, Long> {
     @Query(name = "findFeedsAndHeartAndIsHeartByUserIdWhereTitleIsKeyword", nativeQuery = true)
@@ -17,4 +18,9 @@ public interface FeedRepository extends JpaRepository<Feed, Long> {
     @Query(name = "findFeedsAndHeartAndIsHeartByUserIdWhereContentIsKeyword", nativeQuery = true)
     List<FeedResDto> findFeedsAndHeartAndIsHeartByUserIdWhereContentIsKeyword(long userId, long myId, String keyword, boolean isOther, Pageable page);
 
+    @Query(name = "findFeedsByFollowingUserIdAndContent", nativeQuery = true)
+    List<FeedResDto> findFeedsByFollowingUserIdAndContent(long userId, String keyword, Pageable page);
+
+    @Query(name = "findFeedsByFollowingUserIdAndTitle", nativeQuery = true)
+    List<FeedResDto> findFeedsByFollowingUserIdAndTitle(long userId, String keyword, Pageable page);
 }

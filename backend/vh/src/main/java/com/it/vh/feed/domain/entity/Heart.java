@@ -1,10 +1,10 @@
-package com.it.vh.user.domain.entity;
+package com.it.vh.feed.domain.entity;
 
+import com.it.vh.user.domain.entity.User;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.hibernate.annotations.ColumnDefault;
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
 
@@ -15,18 +15,25 @@ import javax.persistence.*;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class Follow {
+public class Heart {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long followId;
+    private Long heartId;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @OnDelete(action = OnDeleteAction.CASCADE)
-    @JoinColumn(name="from_id", nullable = false)
-    private User from;
+    @JoinColumn(name = "user_id", nullable = false)
+    private User user;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @OnDelete(action = OnDeleteAction.CASCADE)
-    @JoinColumn(name="to_id", nullable = false)
-    private User to;
+    @JoinColumn(name = "feed_id", nullable = false)
+    private Feed feed;
+
+    public static Heart of(Feed feed, User user) {
+        return Heart.builder()
+                .feed(feed)
+                .user(user)
+                .build();
+    }
 }
