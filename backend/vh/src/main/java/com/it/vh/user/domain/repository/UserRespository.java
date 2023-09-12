@@ -11,4 +11,7 @@ public interface UserRespository extends JpaRepository<User, Long> {
     Optional<User> findUserByUserId(long userId);
 
     Page<User>  findUsersByNicknameContains(String keyword, Pageable page);
+
+    Optional<User> findBySnsEmail(String email);
+    Optional<User> findByNickname(String nickname);
 }
