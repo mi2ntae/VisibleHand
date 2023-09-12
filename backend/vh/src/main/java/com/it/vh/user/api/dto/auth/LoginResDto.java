@@ -1,18 +1,8 @@
-package com.it.vh.user.api.dto;
+package com.it.vh.user.api.dto.auth;
 
 import lombok.Builder;
 import lombok.Getter;
 
-/**
- * {
- * 	user : {
- * 		userId : 0,
- * 		nickname : "",
- * 		statusMsg : ""
- *        },
- * 	token : ""
- * }
- */
 @Getter
 @Builder
 public class LoginResDto {
