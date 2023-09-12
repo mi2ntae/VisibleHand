@@ -49,9 +49,10 @@ public class UserController {
 
     @ApiOperation(value = "유저 오답 노트 조회", notes = "유저 오답 노트 조회 8개씩.")
     @GetMapping("/reviewnote/{userId}")
-    public ResponseEntity<Page<UserFollowListResDto>> getFollowingListByUserId(@PathVariable long userId, @RequestParam int page) throws NonExistUserIdException{
-        return ResponseEntity.ok().body(userService.getFollowingListByUserId(userId,page));
+    public ResponseEntity<Page<ReviewnoteResDto>> getReviewNotesByUserId(@PathVariable long userId, @RequestParam int page) throws NonExistUserIdException{
+        return ResponseEntity.ok().body(solvedQuizService.getReviewNotesByUserId(userId, page));
     }
+
 
     @ApiOperation(value = "유저 팔로잉 목록 조회", notes = "팔로잉 목록 조회 10개씩.")
     @GetMapping("/following/{userId}")
