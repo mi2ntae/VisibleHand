@@ -4,8 +4,6 @@ spring:
     group:
       local:
         - common
-        - oauth
-        - jwt
       prod :
         - common
 ---
@@ -78,3 +76,4 @@ spring:
     hibernate:
       ddl-auto: validate
     show-sql: true
+
