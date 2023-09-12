@@ -2,6 +2,7 @@ package com.it.vh.quiz.api;
 
 import com.it.vh.quiz.api.dto.requestDto.SolvedQuizReq;
 import com.it.vh.quiz.domain.exception.SolvingQuizException;
+import com.it.vh.quiz.service.QuizService;
 import com.it.vh.quiz.service.SolvedQuizService;
 import io.swagger.annotations.Api;
 import lombok.RequiredArgsConstructor;
@@ -15,10 +16,16 @@ import org.springframework.web.bind.annotation.*;
 public class QuizController {
 
     private final SolvedQuizService solvedQuizService;
+    private final QuizService quizService;
 
     @PutMapping()
     public ResponseEntity<?> solveQuiz (@RequestBody SolvedQuizReq req) throws SolvingQuizException {
         solvedQuizService.solveQuiz(req);
         return ResponseEntity.ok().build();
+    }
+
+    @GetMapping("/article/{articleId}")
+    public ResponseEntity<?> getNewsquiz(@PathVariable Long articleId) {
+        return ResponseEntity.ok().body(quizService.findByArticleId(articleId));
     }
 }
