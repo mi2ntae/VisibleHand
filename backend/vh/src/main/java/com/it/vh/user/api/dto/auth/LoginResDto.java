@@ -13,6 +13,7 @@ public class LoginResDto {
     @Getter
     @Builder
     public static class UserProfile {
+
         private Long userId;
         private String nickname;
         private String statusMsg;
@@ -23,7 +24,9 @@ public class LoginResDto {
     @Getter
     @Builder
     public static class TokenInfo {
-        private String type;
+
+        @Builder.Default
+        private String type = "Bearer";
         private String accessToken;
         private String refreshToken;
     }
