@@ -61,7 +61,7 @@ spring:
     password: root
   jpa:
     hibernate:
-      ddl-auto: validate
+      ddl-auto: create-drop
     show-sql: true
 
 ---
@@ -78,5 +78,3 @@ spring:
     hibernate:
       ddl-auto: validate
     show-sql: true
-
-
