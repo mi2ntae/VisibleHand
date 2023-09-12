@@ -1,15 +1,15 @@
 package com.it.vh.user.service;
 
-import com.it.vh.common.util.CustomUserDetailsService;
 import com.it.vh.common.util.JwtTokenProvider;
-import com.it.vh.user.api.dto.KakaoUserInfo;
-import com.it.vh.user.api.dto.LoginResDto;
-import com.it.vh.user.api.dto.LoginResDto.TokenInfo;
-import com.it.vh.user.api.dto.LoginResDto.UserProfile;
-import com.it.vh.user.api.dto.OAuth2TokenInfo;
-import com.it.vh.user.api.dto.OAuth2UserInfo;
+import com.it.vh.user.api.dto.auth.KakaoUserInfo;
+import com.it.vh.user.api.dto.auth.LoginResDto;
+import com.it.vh.user.api.dto.auth.LoginResDto.TokenInfo;
+import com.it.vh.user.api.dto.auth.LoginResDto.UserProfile;
+import com.it.vh.user.api.dto.auth.OAuth2TokenInfo;
+import com.it.vh.user.api.dto.auth.OAuth2UserInfo;
+import com.it.vh.user.domain.dto.UserDto;
 import com.it.vh.user.domain.entity.User;
-import com.it.vh.user.domain.repository.UserRepository;
+import com.it.vh.user.domain.repository.UserRespository;
 import java.nio.charset.StandardCharsets;
 import java.util.Collections;
 import java.util.Map;
@@ -34,49 +34,51 @@ import org.springframework.web.reactive.function.client.WebClient;
 @Service
 public class OAuth2UserService {
 
-    private static final String type = "bearer";
     private final InMemoryClientRegistrationRepository inMemoryRepository;
-    private final UserRepository userRepository;
+    private final UserRespository userRespository;
     private final JwtTokenProvider jwtTokenProvider;
 
     @Transactional
     public LoginResDto login(String code) {
         ClientRegistration provider = inMemoryRepository.findByRegistrationId("kakao");
-        log.info("provider: {}", provider);
 
         //토큰 받기
         OAuth2TokenInfo token = getToken(code, provider);
-        log.info("token: {}", token);
 
-        //가입 또는 로그인 처리
-        User user = getUser(token, provider);
-        log.info("user: {}", user);
-
-        //jwt 토큰 발급
-        String accessToken = jwtTokenProvider.createAccessToken(user.getUserId());
-        String refreshToken = jwtTokenProvider.createRefreshToken(user.getUserId());
+        //일단은 DTO로 가지고 있다가 프로필 작성 후 가입 또는 로그인 처리
+        UserDto userDto = getUser(token, provider);
+        log.info("userId: {}", userDto.getUserId());
 
         UserProfile userProfile = UserProfile.builder()
-            .userId(user.getUserId())
-            .nickname(user.getNickname())
-            .statusMsg(user.getStatusMsg())
-            .profileImg(user.getProfileImg())
-            .snsEmail(user.getSnsEmail())
+            .userId(userDto.getUserId())
+            .nickname(userDto.getNickname())
+            .statusMsg(userDto.getStatusMsg())
+            .profileImg(userDto.getProfileImg())
+            .snsEmail(userDto.getSnsEmail())
             .build();
 
-        TokenInfo tokenInfo = TokenInfo.builder()
-            .type(type)
+        //하지만 이미 가입된 회원은
+        //로그인 시 jwt 토큰 발급
+        if(userDto.getUserId()!=null) {
+            String accessToken = jwtTokenProvider.createAccessToken(userDto.getUserId());
+            String refreshToken = jwtTokenProvider.createRefreshToken(userDto.getUserId());
+
+            TokenInfo tokenInfo = TokenInfo.builder()
             .accessToken(accessToken)
             .refreshToken(refreshToken)
             .build();
 
+            return LoginResDto.builder()
+                .user(userProfile)
+                .token(tokenInfo)
+                .build();
+        }
+
         return LoginResDto.builder()
             .user(userProfile)
-            .token(tokenInfo)
             .build();
     }
 
-    //TODO: 이미 있으면 요청 안 가도록
     private OAuth2TokenInfo getToken(String code, ClientRegistration provider) {
         return WebClient.create()
             .post()
@@ -101,39 +103,32 @@ public class OAuth2UserService {
         return formData;
     }
 
-    // TODO: 프로필 이미지, 닉네임 추가 동의 받아서 프로필 설정 페이지로 넘어갈 때 미리 설정되어 있도록?
-    private User getUser(OAuth2TokenInfo tokenResponse, ClientRegistration provider) {
-        Map<String, Object> userAttributes = getUserAttributes(tokenResponse, provider);
+    // TODO: 프로필 이미지, 닉네임 추가 동의 받아서 프로필 설정 페이지로 넘어갈 때 미리 설정되어 있도록
+    private UserDto getUser(OAuth2TokenInfo token, ClientRegistration provider) {
+        Map<String, Object> userAttributes = getUserAttributes(token, provider);
 
         OAuth2UserInfo oAuth2UserInfo = new KakaoUserInfo(userAttributes);
-
         String snsEmail = oAuth2UserInfo.getEmail();
-        Optional<User> findUser = userRepository.findBySnsEmail(snsEmail);
+        Optional<User> findUser = userRespository.findBySnsEmail(snsEmail);
 
         if (findUser.isPresent()) {
             log.info(">>>>> 이미 등록된 사용자");
-            return findUser.get();
+            Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+            log.info("auth: {}", auth.getName());
+            return UserDto.from(findUser.get());
         }
 
-        // TODO: 권한 추가?
-        User saveUser = User.builder()
-            .nickname("test")
-            .profileImg("test")
-            .statusMsg("test")
-            .snsEmail(snsEmail)
-            .build();
-        userRepository.save(saveUser);
-
-        return saveUser;
+        UserDto userDto = UserDto.builder().snsEmail(snsEmail).build();
+        return userDto;
     }
 
-    private Map<String, Object> getUserAttributes(OAuth2TokenInfo tokenResponse,
+    private Map<String, Object> getUserAttributes(OAuth2TokenInfo token,
         ClientRegistration provider) {
         return WebClient.create()
             .get()
             .uri(provider.getProviderDetails().getUserInfoEndpoint().getUri())
             .headers(header -> {
-                header.setBearerAuth(tokenResponse.getAccess_token());
+                header.setBearerAuth(token.getAccess_token());
             })
             .retrieve()
             .bodyToMono(new ParameterizedTypeReference<Map<String, Object>>() {
