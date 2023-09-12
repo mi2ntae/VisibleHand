@@ -20,4 +20,6 @@ public interface UserService {
     Page<UserFollowListResDto> getUserListBykeyword(String keyword, int page);
 
     void registFollow(FollowResDto followResDto);
+
+    void deleteFollow(FollowResDto followResDto);
 }

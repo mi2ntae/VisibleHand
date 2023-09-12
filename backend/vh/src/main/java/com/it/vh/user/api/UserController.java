@@ -11,6 +11,7 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
 import lombok.Value;
+import net.bytebuddy.asm.MemberSubstitution;
 import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -68,6 +69,13 @@ public class UserController {
     @PostMapping("/follow")
     public ResponseEntity<Void> followUser(@RequestBody @Valid FollowResDto followResDto){
         userService.registFollow(followResDto);
+        return ResponseEntity.ok().build();
+    }
+
+    @ApiOperation(value = "팔로우 취소", notes="팔로우를 취소합니다.")
+    @DeleteMapping("/follow")
+    public ResponseEntity<Void>  deletefollow(@RequestBody @Valid FollowResDto followResDto){
+        userService.deleteFollow(followResDto);
         return ResponseEntity.ok().build();
     }
 }
