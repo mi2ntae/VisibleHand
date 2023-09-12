@@ -1,8 +1,10 @@
 package com.it.vh.user.service;
 
 import com.it.vh.user.api.dto.FollowResDto;
+import com.it.vh.user.api.dto.NicknameResDto;
 import com.it.vh.user.api.dto.UserFollowListResDto;
 import com.it.vh.user.api.dto.UserFollowResDto;
+import com.it.vh.user.api.dto.UserProfileReqDto;
 import com.it.vh.user.domain.dto.UserDto;
 import com.it.vh.user.domain.entity.Follow;
 import com.it.vh.user.domain.entity.User;
@@ -14,9 +16,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
-
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -103,5 +102,43 @@ public class UserServiceImpl implements UserService{
         User from = userRespository.findUserByUserId(followResDto.getFromId()).get();
         User to = userRespository.findUserByUserId(followResDto.getToId()).get();
         followRepository.deleteByFromAndTo(from,to);
+    }
+
+    @Override
+    public NicknameResDto isDuplicatedNickname(String nickname) {
+        Optional<User> findUser = userRespository.findByNickname(nickname);
+        if (findUser.isPresent()) {
+            return NicknameResDto.builder().isDuplicated(1).build();
+        } else {
+            return NicknameResDto.builder().isDuplicated(0).build();
+        }
+    }
+
+    @Override
+    public void createProfile(UserProfileReqDto userProfileReqDto) {
+        User user = User.builder()
+            .nickname(userProfileReqDto.getProfile().getNickname())
+            .statusMsg(userProfileReqDto.getProfile().getStatusMsg())
+            .profileImg(userProfileReqDto.getProfileImg())
+            .snsEmail(userProfileReqDto.getSnsEmail())
+            .build();
+        userRespository.save(user);
+    }
+
+    @Override
+    public void updateProfile(Long userId, UserProfileReqDto userProfileReqDto) {
+        Optional<User> findUser = userRespository.findUserByUserId(userId);
+        if(findUser.isPresent()) {
+            User user = findUser.get();
+            user.setNickname(userProfileReqDto.getProfile().getNickname());
+            user.setStatusMsg(userProfileReqDto.getProfile().getStatusMsg());
+            user.setProfileImg(userProfileReqDto.getProfileImg());
+            userRespository.save(user);
+        }
+    }
+
+    @Override
+    public void deleteUser(Long userId) {
+        userRespository.deleteById(userId);
     }
 }
