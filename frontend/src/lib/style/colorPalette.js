@@ -23,4 +23,10 @@ export const color = {
   lightest_grey: "#DFE0E5",
   white_grey: "#F3F4F6",
   white: "#FFFFFF",
+
+  streakFirst: "#C0FDFF",
+  streakSecond: "#C8E7FF",
+  streakThird: "#D0D1FF",
+  streakFourth: "#D8BBFF",
+  streakFifth: "#DEAAFF",
 };
