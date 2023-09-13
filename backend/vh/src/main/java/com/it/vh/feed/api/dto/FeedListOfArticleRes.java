@@ -11,7 +11,7 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class FeedListOfArticleResDto {
+public class FeedListOfArticleRes {
     private long feedId;
     private String profileImg;
     private String nickname;

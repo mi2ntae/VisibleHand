@@ -23,9 +23,9 @@ public class FeedController {
 
     @ApiOperation(value = "피드 목록 조회", notes = "로그인한 유저에 따른 피드 목록 조회")
     @GetMapping("/list/{userId}")
-    public ResponseEntity<List<FeedResDto>> getFeedsByUserId(@PathVariable long userId, @RequestParam int searchType, @RequestParam(required = false) String keyword, @RequestParam int page) throws NonExistUserIdException {
-        List<FeedResDto> userDtos = feedService.getFollowingFeedsByUserId(userId, searchType, keyword, page);
-        return ResponseEntity.ok().body(userDtos);
+    public ResponseEntity<List<FeedListRes>> getFeedsByUserId(@PathVariable long userId, @RequestParam int searchType, @RequestParam(required = false) String keyword, @RequestParam int page) throws NonExistUserIdException {
+        List<FeedListRes> res = feedService.searchFeedsByUserId(userId, searchType, keyword, page);
+        return ResponseEntity.ok().body(res);
     }
 
     @ApiOperation(value = "피드 좋아요", notes = "로그인한 유저로 피드 좋아요")
@@ -44,8 +44,8 @@ public class FeedController {
 
     @ApiOperation(value = "뉴스별 피드 목록", notes = "해당 뉴스에 대한 피드 목록 조회")
     @GetMapping("/list/{articleId}/{userId}")
-    public ResponseEntity<List<FeedListOfArticleResDto>> getFeedsByArticleId(@PathVariable long articleId, @PathVariable long userId, @RequestParam int page) {
-        List<FeedListOfArticleResDto> res = feedService.getFeedsByArticleId(articleId, userId, page);
+    public ResponseEntity<List<FeedListOfArticleRes>> getFeedsByArticleId(@PathVariable long articleId, @PathVariable long userId, @RequestParam int page) {
+        List<FeedListOfArticleRes> res = feedService.getFeedsByArticleId(articleId, userId, page);
         return ResponseEntity.ok().body(res);
     }
 
