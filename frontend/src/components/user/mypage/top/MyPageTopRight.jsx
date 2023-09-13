@@ -14,7 +14,9 @@ export default function MyPageTopRight({userId}) {
 
 const TopRightContainer = styled.div`
     display: flex;
-    justify-content: flex-start;
+    justify-content: center;
     box-sizing: border-box;
-    width: 60%;
+    align-items: center;
+    margin-right: 50px;
+    width: 43%;
 `;

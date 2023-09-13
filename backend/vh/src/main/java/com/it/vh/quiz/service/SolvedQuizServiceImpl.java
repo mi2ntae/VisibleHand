@@ -73,7 +73,7 @@ public class SolvedQuizServiceImpl implements SolvedQuizService {
     private StreakResDto setWeightByScore(StreakResDto streakResDto) {
         for(int i = 0; i < streakWeight.length; i++) {
             if(streakResDto.getWeight() <= streakWeight[i]) {
-                streakResDto.setWeight(i);
+                streakResDto.setWeight(i+1);
                 return streakResDto;
             }
         }

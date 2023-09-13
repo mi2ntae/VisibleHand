@@ -20,7 +20,7 @@ const Interceptor = ({ children }) => {
     http.interceptors.response.use(
       (response) => {
         const res = response.data;
-        return res;
+        return response;
       },
       (err) => {
         alert(err);
