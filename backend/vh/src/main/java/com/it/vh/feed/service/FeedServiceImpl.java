@@ -37,7 +37,6 @@ public class FeedServiceImpl implements FeedService {
         Optional<User> optionalUser = userRespository.findUserByUserId(userId);
         if(!optionalUser.isPresent()) throw new NonExistUserIdException();
 
-        authenticationHandler.checkUserAuthenticate(userId);
         long myId = authenticationHandler.getLoginUserId();
 
         List<FeedResDto> feedResDtoList = null;
