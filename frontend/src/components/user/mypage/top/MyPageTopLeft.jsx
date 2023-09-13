@@ -14,16 +14,16 @@ export default function MyPageTopLeft({userId}) {
     });
     useEffect(() => {
         http.get(`user/profile/${userId}`)
-        .then((res) => {
-            setProfile((prev) => { return { ...prev, nickname: res.nickname, statusMsg: res.statusMsg, profileImg: res.profileImg}})
+        .then(({data}) => {
+            setProfile((prev) => { return { ...prev, nickname: data.nickname, statusMsg: data.statusMsg, profileImg: data.profileImg}})
         })
         .catch((err) => {
             alert(err)
         })
 
         http.get(`user/follow/${userId}`)
-        .then((res) => {
-            setFollowInfo((prev) => { return { ...prev, followingCnt: res.followingCnt, followerCnt: res.followerCnt}})
+        .then(({data}) => {
+            setFollowInfo((prev) => { return { ...prev, followingCnt: data.followingCnt, followerCnt: data.followerCnt}})
         })
         .catch((err) => {
             alert(err.message)
@@ -54,7 +54,7 @@ const TopLeftContainer = styled.div`
     align-items: center;
     box-sizing: border-box;
     // background-color: red;
-    width: 30%;
+    width: 40%;
     
 `;
 

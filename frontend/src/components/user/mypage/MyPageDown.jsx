@@ -8,7 +8,6 @@ import MyPageReview from './down/MyPageReview';
 
 export default function MyPageDown({userId}) {
     const loginId = useSelector((state) => state.user.userId);
-    console.log(userId+" "+loginId);
     const tabNo = useSelector((state) => state.mypageTab.tabNo);
     const tabs = [
         {no: 0, tabName: "내 피드", check: true, content: <MyPageFeed/>, },
