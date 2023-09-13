@@ -53,6 +53,12 @@ public class UserController {
         return ResponseEntity.ok().body(solvedQuizService.getReviewNotesByUserId(userId, page));
     }
 
+    @ApiOperation(value = "유저 스트릭 조회", notes = "유저의 날짜별 풀이 가중치 조회")
+    @GetMapping("/streak/{userId}")
+    public ResponseEntity<List<StreakResDto>> getUserStreak(@PathVariable long userId) throws NonExistUserIdException{
+        return ResponseEntity.ok().body(solvedQuizService.getUserStreak(userId));
+    }
+
 
     @ApiOperation(value = "유저 팔로잉 목록 조회", notes = "팔로잉 목록 조회 10개씩.")
     @GetMapping("/following/{userId}")
