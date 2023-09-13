@@ -12,7 +12,7 @@ import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/wordcloud")
+@RequestMapping("/api/wordcloud")
 public class WordCloudController {
 
     private final WordCloudService wordCloudService;
