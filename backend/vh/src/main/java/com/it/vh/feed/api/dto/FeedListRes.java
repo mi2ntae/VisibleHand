@@ -1,18 +1,22 @@
 package com.it.vh.feed.api.dto;
 
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
 
 @Data
-@Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class FeedResDto {
+public class FeedListRes {
+    private long userId;
+    private String nickname;
+    private String profileImg;
     private long feedId;
     private String content;
     private int heart;
-    private int isHeart;
+    private boolean isHeart;
     private long articleId;
     private String title;
     private LocalDateTime createAt;

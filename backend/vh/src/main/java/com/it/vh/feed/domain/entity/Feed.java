@@ -2,8 +2,9 @@ package com.it.vh.feed.domain.entity;
 
 import com.it.vh.article.domain.entity.Article;
 import com.it.vh.common.baseEntity.BaseTimeEntity;
-import com.it.vh.feed.api.dto.FeedListOfArticleResDto;
-import com.it.vh.feed.api.dto.FeedResDto;
+import com.it.vh.feed.api.dto.FeedListOfArticleRes;
+import com.it.vh.feed.api.dto.FeedListRes;
+import com.it.vh.feed.api.dto.FeedRes;
 import com.it.vh.user.domain.entity.User;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -52,31 +53,63 @@ import java.time.LocalDateTime;
         ),
         @NamedNativeQuery(
                 name = "findFeedsByFollowingUserIdAndContent",
-                query = "SELECT F.feed_id as feedId, F.content, A.article_id as articleId, A.title, F.create_at as createAt, " +
-                        "       IF((select count(*) from Heart " +
-                        "       where Heart.user_id = :userId and Heart.feed_id = F.feed_id) <= 0, false, true) as isHeart, " +
-                        "       (select count(*) from Heart where Heart.feed_id = F.feed_id) as heart " +
-                        "       from Feed as F " +
-                        "       join Article as A " +
-                        "       on F.article_id = A.article_id " +
-                        "       join Follow as FF on F.user_id = FF.to_id " +
-                        "       where F.content like :keyword and F.share >= 1 and FF.from_id = :userId " +
-                        "       order by createAt desc",
-                resultSetMapping = "findFeedsAndHeartAndIsHeartByUserIdWhereTitleIsKeyword"
+                query = "SELECT u.user_id AS userId, u.nickname, u.profile_img AS profileImg, " +
+                        "f.feed_id AS feedId, f.content, f.create_at AS createdAt, " +
+                        "IFNULL((SELECT COUNT(*) FROM Heart AS h WHERE h.feed_id = f.feed_id), 0) AS heart, " +
+                        "IF((SELECT COUNT(*) FROM Heart AS h WHERE h.user_id = :userId AND h.feed_id = f.feed_id) > 0, true, false) AS isHeart, " +
+                        "a.article_id AS articleId, a.title " +
+                        "FROM Feed AS f " +
+                        "JOIN Article AS a ON f.article_id = a.article_id " +
+                        "JOIN Follow AS ff ON f.user_id = ff.to_id " +
+                        "JOIN User AS u ON f.user_id = u.user_id " +
+                        "WHERE a.content LIKE :keyword AND f.share > 0 AND ff.from_id = :userId " +
+                        "ORDER BY f.create_at DESC",
+//                query = "SELECT F.feed_id as feedId, F.content, A.article_id as articleId, A.title, F.create_at as createAt, " +
+//                        "       IF((select count(*) from Heart " +
+//                        "       where Heart.user_id = :userId and Heart.feed_id = F.feed_id) <= 0, false, true) as isHeart, " +
+//                        "       (select count(*) from Heart where Heart.feed_id = F.feed_id) as heart " +
+//                        "       from Feed as F " +
+//                        "       join Article as A " +
+//                        "       on F.article_id = A.article_id " +
+//                        "       join Follow as FF on F.user_id = FF.to_id " +
+//                        "       where F.content like :keyword and F.share >= 1 and FF.from_id = :userId " +
+//                        "       order by createAt desc",
+                resultSetMapping = "feedListDto"
         ),
+        // private long userId;
+        //    private String nickname;
+        //    private String profileImg;
+        //    private long feedId;
+        //    private String content;
+        //    private int heart;
+        //    private boolean isHeart;
+        //    private long articleId;
+        //    private String title;
+        //    private LocalDateTime createAt;
         @NamedNativeQuery(
                 name = "findFeedsByFollowingUserIdAndTitle",
-                query = "SELECT F.feed_id as feedId, F.content, A.article_id as articleId, A.title, F.create_at as createAt, " +
-                        "       IF((select count(*) from Heart " +
-                        "       where Heart.user_id = :userId and Heart.feed_id = F.feed_id) <= 0, false, true) as isHeart, " +
-                        "       (select count(*) from Heart where Heart.feed_id = F.feed_id) as heart " +
-                        "       from Feed as F " +
-                        "       join Article as A " +
-                        "       on F.article_id = A.article_id " +
-                        "       join Follow as FF on F.user_id = FF.to_id " +
-                        "       where A.title like :keyword and F.share >= 1 and FF.from_id = :userId " +
-                        "       order by createAt desc",
-                resultSetMapping = "findFeedsAndHeartAndIsHeartByUserIdWhereTitleIsKeyword"
+                query = "SELECT u.user_id AS userId, u.nickname, u.profile_img AS profileImg, " +
+                        "f.feed_id AS feedId, f.content, f.create_at AS createdAt, " +
+                        "IFNULL((SELECT COUNT(*) FROM Heart AS h WHERE h.feed_id = f.feed_id), 0) AS heart, " +
+                        "IF((SELECT COUNT(*) FROM Heart AS h WHERE h.user_id = :userId AND h.feed_id = f.feed_id) > 0, true, false) AS isHeart, " +
+                        "a.article_id AS articleId, a.title " +
+                        "FROM Feed AS f " +
+                        "JOIN Article AS a ON f.article_id = a.article_id " +
+                        "JOIN Follow AS ff ON f.user_id = ff.to_id " +
+                        "JOIN User AS u ON f.user_id = u.user_id " +
+                        "WHERE a.title LIKE :keyword AND f.share > 0 AND ff.from_id = :userId " +
+                        "ORDER BY f.create_at DESC",
+//                query = "SELECT F.feed_id as feedId, F.content, A.article_id as articleId, A.title, F.create_at as createAt, " +
+//                        "       IF((select count(*) from Heart " +
+//                        "       where Heart.user_id = :userId and Heart.feed_id = F.feed_id) <= 0, false, true) as isHeart, " +
+//                        "       (select count(*) from Heart where Heart.feed_id = F.feed_id) as heart " +
+//                        "       from Feed as F " +
+//                        "       join Article as A " +
+//                        "       on F.article_id = A.article_id " +
+//                        "       join Follow as FF on F.user_id = FF.to_id " +
+//                        "       where A.title like :keyword and F.share >= 1 and FF.from_id = :userId " +
+//                        "       order by createAt desc",
+                resultSetMapping = "feedListDto"
         ),
         @NamedNativeQuery(
                 name = "findFeedsByArticle",
@@ -109,7 +142,7 @@ import java.time.LocalDateTime;
 @SqlResultSetMapping(
         name = "findFeedsAndHeartAndIsHeartByUserIdWhereTitleIsKeyword",
         classes = @ConstructorResult(
-                targetClass = FeedResDto.class,
+                targetClass = FeedRes.class,
                 columns = {
                         @ColumnResult(name = "feedId", type = Long.class),
                         @ColumnResult(name = "content", type = String.class),
@@ -123,9 +156,28 @@ import java.time.LocalDateTime;
 )
 
 @SqlResultSetMapping(
+        name = "feedListDto",
+        classes = @ConstructorResult(
+                targetClass = FeedListRes.class,
+                columns = {
+                        @ColumnResult(name = "userId", type = Long.class),
+                        @ColumnResult(name = "nickname", type = String.class),
+                        @ColumnResult(name = "profileImg", type = String.class),
+                        @ColumnResult(name = "feedId", type = Long.class),
+                        @ColumnResult(name = "content", type = String.class),
+                        @ColumnResult(name = "heart", type = Integer.class),
+                        @ColumnResult(name = "isHeart", type = Boolean.class),
+                        @ColumnResult(name = "articleId", type = Long.class),
+                        @ColumnResult(name = "title", type = String.class),
+                        @ColumnResult(name = "createAt", type = LocalDateTime.class)
+                }
+        )
+)
+
+@SqlResultSetMapping(
         name = "findFeedsByArticle",
         classes = @ConstructorResult(
-                targetClass = FeedListOfArticleResDto.class,
+                targetClass = FeedListOfArticleRes.class,
                 columns = {
                         @ColumnResult(name = "feedId", type = Long.class),
                         @ColumnResult(name = "profileImg", type = String.class),
