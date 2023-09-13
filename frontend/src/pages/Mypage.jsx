@@ -4,8 +4,10 @@ import MyPageTop from '../components/user/mypage/MyPageTop';
 import styled from 'styled-components';
 import { useDispatch } from 'react-redux';
 import { setTabNo } from '../reducer/mypageTabReducer';
+import { useParams } from 'react-router';
 
 export default function Mypage() {
+    const params = useParams();
     const dispatch = useDispatch();
 
     useEffect(() => {
@@ -18,9 +20,9 @@ export default function Mypage() {
     return (
         <div>
             <MainContainer>
-                <MyPageTop>
+                <MyPageTop userId={params.userId}>
                 </MyPageTop>
-                <MyPageDown>
+                <MyPageDown userId={params.userId}>
                 </MyPageDown>
             </MainContainer>
         </div>
