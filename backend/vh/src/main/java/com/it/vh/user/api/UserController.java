@@ -1,6 +1,6 @@
 package com.it.vh.user.api;
 
-import com.it.vh.feed.api.dto.FeedResDto;
+import com.it.vh.feed.api.dto.FeedRes;
 import com.it.vh.feed.service.FeedService;
 import com.it.vh.quiz.service.SolvedQuizService;
 import com.it.vh.user.api.dto.*;
@@ -10,8 +10,6 @@ import com.it.vh.user.service.UserService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
-import lombok.Value;
-import net.bytebuddy.asm.MemberSubstitution;
 import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -43,7 +41,7 @@ public class UserController {
 
     @ApiOperation(value = "유저 피드 목록 조회", notes = "유저 피드 목록 조회 5개씩.")
     @GetMapping("/feed/{userId}")
-    public ResponseEntity<List<FeedResDto>> getFeedsByUserId(@PathVariable long userId, @RequestParam int searchType, @RequestParam(required = false) String keyword, @RequestParam int page) throws NonExistUserIdException {
+    public ResponseEntity<List<FeedRes>> getFeedsByUserId(@PathVariable long userId, @RequestParam int searchType, @RequestParam(required = false) String keyword, @RequestParam int page) throws NonExistUserIdException {
         return ResponseEntity.ok().body(feedService.getFeedsByUserId(userId, searchType, keyword, page));
     }
 

@@ -2,8 +2,6 @@ package com.it.vh.quiz.domain.entity;
 
 import com.it.vh.common.baseEntity.BaseTimeEntity;
 import com.it.vh.dict.domain.entity.Dictionary;
-import com.it.vh.feed.api.dto.FeedResDto;
-import com.it.vh.user.api.dto.ReviewnoteResDto;
 import com.it.vh.user.domain.entity.User;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -13,7 +11,6 @@ import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
 
 import javax.persistence.*;
-import java.time.LocalDateTime;
 
 @Data
 @Entity(name = "solved_quiz")

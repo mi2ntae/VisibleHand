@@ -4,8 +4,9 @@ import com.it.vh.article.domain.entity.Article;
 import com.it.vh.article.domain.repository.ArticleRepository;
 import com.it.vh.article.exception.NonExistArticleIdException;
 import com.it.vh.common.util.AuthenticationHandler;
-import com.it.vh.feed.api.dto.FeedListOfArticleResDto;
-import com.it.vh.feed.api.dto.FeedResDto;
+import com.it.vh.feed.api.dto.FeedListOfArticleRes;
+import com.it.vh.feed.api.dto.FeedListRes;
+import com.it.vh.feed.api.dto.FeedRes;
 import com.it.vh.feed.api.dto.MyFeedRes;
 import com.it.vh.feed.domain.entity.Feed;
 import com.it.vh.feed.domain.repository.FeedRepository;
@@ -33,14 +34,14 @@ public class FeedServiceImpl implements FeedService {
     private final int FEED_PAGE_NUM = 6;
 
     @Override
-    public List<FeedResDto> getFeedsByUserId(long userId, int searchType, String keyword, int page) {
+    public List<FeedRes> getFeedsByUserId(long userId, int searchType, String keyword, int page) {
         Optional<User> optionalUser = userRespository.findUserByUserId(userId);
         if(!optionalUser.isPresent()) throw new NonExistUserIdException();
 
         authenticationHandler.checkUserAuthenticate(userId);
         long myId = authenticationHandler.getLoginUserId();
 
-        List<FeedResDto> feedResDtoList = null;
+        List<FeedRes> feedResDtoList = null;
         boolean isMe = userId == myId ? true : false;
         if(keyword == null) return feedRepository.findFeedsAndHeartAndIsHeartByUserIdWhereTitleIsKeyword(userId, myId, "%%", !isMe, PageRequest.of(page, FEED_PAGE_NUM));
         switch(searchType) {
@@ -58,30 +59,24 @@ public class FeedServiceImpl implements FeedService {
     }
 
     @Override
-    public List<FeedResDto> getFollowingFeedsByUserId(long userId, int searchType, String keyword, int page) {
+    public List<FeedListRes> searchFeedsByUserId(long userId, int searchType, String keyword, int page) {
         Optional<User> optionalUser = userRespository.findById(userId);
         if(!optionalUser.isPresent()) throw new NonExistUserIdException();
 
         authenticationHandler.checkUserAuthenticate(userId);
-
-        List<FeedResDto> feedResDtoList = null;
         if(keyword == null) return feedRepository.findFeedsByFollowingUserIdAndTitle(userId, "%%", PageRequest.of(page, FEED_PAGE_NUM));
         switch(searchType) {
             case 0:
-                feedResDtoList = feedRepository.findFeedsByFollowingUserIdAndTitle(userId, "%"+keyword+"%", PageRequest.of(page, FEED_PAGE_NUM));
-                break;
+                return feedRepository.findFeedsByFollowingUserIdAndTitle(userId, "%" + keyword + "%", PageRequest.of(page, FEED_PAGE_NUM));
             case 1:
-                feedResDtoList = feedRepository.findFeedsByFollowingUserIdAndContent(userId, "%"+keyword+"%", PageRequest.of(page, FEED_PAGE_NUM));
-                break;
+                return feedRepository.findFeedsByFollowingUserIdAndContent(userId, "%"+keyword+"%", PageRequest.of(page, FEED_PAGE_NUM));
             default:
-                feedResDtoList = feedRepository.findFeedsByFollowingUserIdAndTitle(userId, "%%", PageRequest.of(page, FEED_PAGE_NUM));
-                break;
+                return feedRepository.findFeedsByFollowingUserIdAndTitle(userId, "%%", PageRequest.of(page, FEED_PAGE_NUM));
         }
-        return feedResDtoList;
     }
 
     @Override
-    public List<FeedListOfArticleResDto> getFeedsByArticleId(long articleId, long userId, int page) {
+    public List<FeedListOfArticleRes> getFeedsByArticleId(long articleId, long userId, int page) {
         System.out.println(11111);
         Optional<User> optionalUser = userRespository.findUserByUserId(userId);
         if(!optionalUser.isPresent()) throw new NonExistUserIdException();
@@ -91,7 +86,7 @@ public class FeedServiceImpl implements FeedService {
         System.out.println(33333);
         System.out.println(articleId);
 
-        List<FeedListOfArticleResDto> list = feedRepository.findFeedsByArticle(articleId, myId, PageRequest.of(page, FEED_PAGE_NUM));
+        List<FeedListOfArticleRes> list = feedRepository.findFeedsByArticle(articleId, myId, PageRequest.of(page, FEED_PAGE_NUM));
         log.info("list: {}", list);
         return list;
     }
