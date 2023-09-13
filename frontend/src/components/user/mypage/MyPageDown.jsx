@@ -6,7 +6,8 @@ import { useSelector } from 'react-redux';
 import MyPageScrap from './down/MyPageScrap';
 import MyPageReview from './down/MyPageReview';
 
-export default function MyPageDown() {
+export default function MyPageDown({userId}) {
+    const loginId = useSelector((state) => state.user.userId);
     const tabNo = useSelector((state) => state.mypageTab.tabNo);
     const tabs = [
         {no: 0, tabName: "내 피드", check: true, content: <MyPageFeed/>, },
@@ -14,7 +15,7 @@ export default function MyPageDown() {
         {no: 2, tabName: "오답 노트", check: false, content: <MyPageReview/>}];
     return (
         <DownContainer>
-            <MyPageTabs tabs={tabs}></MyPageTabs>
+            <MyPageTabs tabs={loginId === userId ? tabs : tabs.slice(0, 1)}></MyPageTabs>
             <HLine></HLine>
             {tabs.map((tab) =>
                 tabNo === tab.no ? tab.content : <div></div>)}

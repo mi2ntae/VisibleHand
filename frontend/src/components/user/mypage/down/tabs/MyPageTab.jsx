@@ -1,5 +1,5 @@
 import React from 'react';
-import "../css/Tab.css";
+import "components/user/mypage/css/Tab.css";
 import { useDispatch } from 'react-redux';
 import { setTabNo } from '../../../../../reducer/mypageTabReducer';
 
