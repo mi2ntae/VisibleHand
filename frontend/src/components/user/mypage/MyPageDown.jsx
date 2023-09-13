@@ -8,6 +8,7 @@ import MyPageReview from './down/MyPageReview';
 
 export default function MyPageDown({userId}) {
     const loginId = useSelector((state) => state.user.userId);
+    console.log(userId+" "+loginId);
     const tabNo = useSelector((state) => state.mypageTab.tabNo);
     const tabs = [
         {no: 0, tabName: "내 피드", check: true, content: <MyPageFeed/>, },
@@ -15,7 +16,7 @@ export default function MyPageDown({userId}) {
         {no: 2, tabName: "오답 노트", check: false, content: <MyPageReview/>}];
     return (
         <DownContainer>
-            <MyPageTabs tabs={loginId === userId ? tabs : tabs.slice(0, 1)}></MyPageTabs>
+            <MyPageTabs tabs={loginId == userId ? tabs : tabs.slice(0, 1)}></MyPageTabs>
             <HLine></HLine>
             {tabs.map((tab) =>
                 tabNo === tab.no ? tab.content : <div></div>)}
