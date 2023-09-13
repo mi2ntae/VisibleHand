@@ -10,7 +10,7 @@ export const light_grey = "#C9CAD1";
 export const lightest_grey = "#DFE0E5";
 export const white_grey = "#F3F4F6";
 export const white = "#FFFFFF";
-export const color = {
+const color = {
   primary: "#6A74C9",
   secondary: "#A8B1FF",
   teritary: "#D0D1FF",
@@ -24,3 +24,4 @@ export const color = {
   white_grey: "#F3F4F6",
   white: "#FFFFFF",
 };
+export default color;
