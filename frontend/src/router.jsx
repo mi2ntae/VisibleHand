@@ -19,7 +19,7 @@ const router = createBrowserRouter([
             {path: '/feed', element: <Feed />},
             {path: '/dictionary', element: <Dictionary />},
             {path: '/quiz', element: <Quiz />},
-            {path: '/mypage', element: <Mypage />}
+            {path: '/mypage/:userId', element: <Mypage />}
         ]
     },
 ])

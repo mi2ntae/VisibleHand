@@ -3,12 +3,12 @@ import styled from 'styled-components';
 import MypageTopLeft from "./top/MyPageTopLeft"
 import MyPageTopRight from './top/MyPageTopRight';
 
-export default function MyPageTop() {
+export default function MyPageTop({userId}) {
     return (
         <TopContainer>
-            <MypageTopLeft>
+            <MypageTopLeft userId={userId}>
             </MypageTopLeft>
-            <MyPageTopRight>
+            <MyPageTopRight userId={userId}>
             </MyPageTopRight>
         </TopContainer>
     );

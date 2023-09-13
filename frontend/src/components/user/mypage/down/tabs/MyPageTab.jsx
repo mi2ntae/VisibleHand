@@ -1,7 +1,7 @@
-import React from "react";
-import "../css/Tab.css";
-import { useDispatch } from "react-redux";
-import { setTabNo } from "../../../../../reducer/mypageTabReducer";
+import React from 'react';
+import "components/user/mypage/css/Tab.css";
+import { useDispatch } from 'react-redux';
+import { setTabNo } from '../../../../../reducer/mypageTabReducer';
 
 export default function MyPageTab({ no, tabName, isFirst }) {
   const dispatch = useDispatch();
