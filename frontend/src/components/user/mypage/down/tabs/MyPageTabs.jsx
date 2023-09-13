@@ -1,5 +1,5 @@
 import React from 'react';
-import "../css/Tab.css";
+import "components/user/mypage/css/Tab.css";
 import MyPageTab from './MyPageTab';
 
 export default function MyPageTabs({tabs}) {

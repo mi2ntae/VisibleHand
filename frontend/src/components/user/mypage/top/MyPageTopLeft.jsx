@@ -1,11 +1,8 @@
 import React, { useEffect, useState } from 'react';
-import { useSelector } from 'react-redux';
 import styled from 'styled-components';
 import http from "api/commonHttp";
 
-export default function MyPageTopLeft() {
-    // const userId = useSelector((state) => state.member.memberId);
-    const userId = 1;
+export default function MyPageTopLeft({userId}) {
     const [profile, setProfile] = useState({
         nickname: "",
         statusMsg: "",
@@ -31,6 +28,7 @@ export default function MyPageTopLeft() {
         .catch((err) => {
             alert(err.message)
         })
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [])
 
     return (
