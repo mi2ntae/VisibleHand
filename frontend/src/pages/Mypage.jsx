@@ -7,7 +7,7 @@ import MyPageLeft from 'components/user/mypage/MyPageLeft';
 import MyPageRight from 'components/user/mypage/MyPageRight';
 
 export default function Mypage() {
-    const params = useParams();
+    const userId = parseInt(useParams().userId);
     const dispatch = useDispatch();
 
     useEffect(() => {
@@ -24,8 +24,8 @@ export default function Mypage() {
                 </MyPageTop>
                 <MyPageDown userId={params.userId}>
                 </MyPageDown> */}
-                <MyPageLeft></MyPageLeft>
-                <MyPageRight userId={params.userId}></MyPageRight>
+                <MyPageLeft userId={userId}></MyPageLeft>
+                <MyPageRight userId={userId}></MyPageRight>
             </MainContainer>
         </div>
     );

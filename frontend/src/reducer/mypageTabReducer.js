@@ -2,7 +2,6 @@ import { createSlice } from "@reduxjs/toolkit";
 
 const initialState = {
   tabNo: 0,
-  asd: "",
 };
 
 const tabSlice = createSlice({
