@@ -2,10 +2,9 @@ package com.it.vh.user.api.dto.auth;
 
 import java.util.Map;
 import lombok.AllArgsConstructor;
-import lombok.NoArgsConstructor;
 
 @AllArgsConstructor
-public class KakaoUserInfo implements OAuth2UserInfo{
+public class KakaoUserInfo implements AuthUserInfo {
 
     private Map<String, Object> attributes;
     @Override
