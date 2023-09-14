@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
 import http from "api/commonHttp";
 
-export default function MyPageTopLeft({userId}) {
+export default function MyPageRightTop({userId}) {
     const [profile, setProfile] = useState({
         nickname: "",
         statusMsg: "",
@@ -32,35 +32,43 @@ export default function MyPageTopLeft({userId}) {
     }, [])
 
     return (
-        <TopLeftContainer>
+        <RightTopContainer>
             <Div>
                 <ImageContainer>
                     <Image src={profile.profileImg}></Image>
                 </ImageContainer>
-                <NickName>{profile.nickname}</NickName>
+                <div>
+                    <NickName>{profile.nickname}</NickName>
+                    <FollowInfo>
+                        <span>팔로잉 : {followInfo.followingCnt}</span>&nbsp;&nbsp;&nbsp;&nbsp;
+                        <span>팔로워 : {followInfo.followerCnt}</span>
+                    </FollowInfo>
+                </div>
+                <Button>asd</Button>
+                
             </Div>
-            <FollowInfo>
-                <span>팔로잉 : {followInfo.followingCnt}</span>&nbsp;&nbsp;&nbsp;&nbsp;
-                <span>팔로워 : {followInfo.followerCnt}</span>
-            </FollowInfo>
+           
             <StatusMsg>{profile.statusMsg}</StatusMsg>
-        </TopLeftContainer>
+        </RightTopContainer>
     );
 }
 
 
-const TopLeftContainer = styled.div`
+const RightTopContainer = styled.div`
     justify-content: center;
     align-items: center;
     box-sizing: border-box;
-    // background-color: red;
-    width: 40%;
-    
+    background-color: white;
+    border-radius: 20px;
+    box-shadow: 3px 3px 3px lightgrey;
+    width: 100%;
+    padding-top: 1px;
+    padding-bottom: 20px;
 `;
 
 const ImageContainer = styled.div`
-    width: 110px;
-    height: 110px; 
+    width: 100px;
+    height: 100px; 
     border: 1px solid lightgray;
     border-radius: 50%;
     overflow: hidden;
@@ -74,35 +82,43 @@ const Image = styled.img`
 `
 
 const Div = styled.div`
-    justify-content: center;
     display: flex;
     align-items: center;
-    text-align: center;
-    margin-top: 10%;
+    text-align: left;
+    margin-top: 5%;
+    margin-left: 5%;
 `
 
 const NickName = styled.div`
     display: inline-block;
-    margin-left: 18px;
-    font-size: 1.8em;
+    font-size: 1.5em;
     font-weight: bold;
+    margin-left: 10%;
 `
 
 const FollowInfo = styled.div`
-    margin-top: 3%;
-    font-size: 1.0em;
+    font-size: 0.8em;
     font-weight: light;
-    width: 100%;
-    justify-content: center;
-    display: flex;
+    min-width: 120px;
+    margin-top: 5%;
+    margin-left: 10%;
 `
 const StatusMsg = styled.div`
-    margin-top: 10%;
-    font-size: 1.0em;
+    margin-top: 3%;
+    font-size: 0.9em;
     font-weight: light;
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
     width: 100%;
+    text-align: center;
+`
+
+const Button = styled.button`
+    margin-right: 5%;
+    margin-bottom: 25%;
+    margin-left: 15%;
+    font-size: 1.0em;
+    font-weight: light;
     text-align: center;
 `

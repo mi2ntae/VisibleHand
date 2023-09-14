@@ -1,10 +1,10 @@
 import React, { useEffect } from 'react';
-import MyPageDown from '../components/user/mypage/MyPageDown';
-import MyPageTop from '../components/user/mypage/MyPageTop';
 import styled from 'styled-components';
 import { useDispatch } from 'react-redux';
 import { setTabNo } from '../reducer/mypageTabReducer';
 import { useParams } from 'react-router';
+import MyPageLeft from 'components/user/mypage/MyPageLeft';
+import MyPageRight from 'components/user/mypage/MyPageRight';
 
 export default function Mypage() {
     const params = useParams();
@@ -20,10 +20,12 @@ export default function Mypage() {
     return (
         <div>
             <MainContainer>
-                <MyPageTop userId={params.userId}>
+                {/* <MyPageTop userId={params.userId}>
                 </MyPageTop>
                 <MyPageDown userId={params.userId}>
-                </MyPageDown>
+                </MyPageDown> */}
+                <MyPageLeft></MyPageLeft>
+                <MyPageRight userId={params.userId}></MyPageRight>
             </MainContainer>
         </div>
     );
@@ -31,7 +33,7 @@ export default function Mypage() {
 
 const MainContainer = styled.div`
     display: flex;
-    flex-direction: column;
+    flex-direction: row;
     justify-content: flex-start;
     margin: auto;
     padding: 20px;
