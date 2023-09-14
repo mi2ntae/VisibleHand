@@ -27,8 +27,8 @@
     font-size: 0.8em;
     font-weight: bold;
     transition: all .15s ease-in-out;
-    margin-left: 15%;
     margin-right: 15%;
+    width: 80px;
 }   
   
 .radio-inputs .radio input:checked + .name {

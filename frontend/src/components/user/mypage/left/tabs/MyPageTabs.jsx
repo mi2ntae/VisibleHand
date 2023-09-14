@@ -21,4 +21,5 @@ const TabContainer = styled.div`
     min-height: 45px;
     width: 40%;
     display: flex;
+    text-align: left;
 `;
