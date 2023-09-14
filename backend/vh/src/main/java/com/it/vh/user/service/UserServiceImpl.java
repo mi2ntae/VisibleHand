@@ -17,6 +17,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import java.util.Optional;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @Slf4j
@@ -114,6 +115,7 @@ public class UserServiceImpl implements UserService{
         }
     }
 
+    @Transactional
     @Override
     public void createProfile(UserProfileReqDto userProfileReqDto) {
         User user = User.builder()
@@ -125,6 +127,8 @@ public class UserServiceImpl implements UserService{
         userRespository.save(user);
     }
 
+
+    @Transactional
     @Override
     public void updateProfile(Long userId, UserProfileReqDto userProfileReqDto) {
         Optional<User> findUser = userRespository.findUserByUserId(userId);
@@ -137,6 +141,7 @@ public class UserServiceImpl implements UserService{
         }
     }
 
+    @Transactional
     @Override
     public void deleteUser(Long userId) {
         userRespository.deleteById(userId);
