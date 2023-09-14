@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
 import http from "api/commonHttp";
 import Streak from "react-github-contribution-calendar"
-import {color} from "lib/style/colorPalette";
+import color from "lib/style/colorPalette";
 
 export default function MyPageStreak({userId}) {
     const [data, setData] = useState({});
@@ -37,8 +37,8 @@ export default function MyPageStreak({userId}) {
     }
     return (
         <StreakContainer>
-           <Streak weekNames={weekNames} monthNames={monthNames} panelAttributes={{rx: 3, ry: 3}} values={data} panelColors={colors} until={until}>
-
+            <Title>활동기록</Title>
+            <Streak weekNames={weekNames} monthNames={monthNames} panelAttributes={{rx: 3, ry: 3}} values={data} panelColors={colors} until={until}>
            </Streak>
         </StreakContainer>
     );
@@ -46,9 +46,20 @@ export default function MyPageStreak({userId}) {
 
 
 const StreakContainer = styled.div`
+    padding: 15px;
+    margin-top: 10%;
     justify-content: center;
     align-items: center;
     box-sizing: border-box;
-    // background-color: red;
+    background-color: white;
     width: 100%;
+    border-radius: 20px;
+    box-shadow: 3px 3px 3px lightgrey;
+`;
+
+const Title = styled.div`
+    color: black;
+    margin-bottom: 10px;
+    margin-left: 10px;
+    font-weight: light;
 `;

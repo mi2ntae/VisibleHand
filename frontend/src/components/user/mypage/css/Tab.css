@@ -2,14 +2,9 @@
     position: relative;
     display: flex;
     flex-wrap: wrap;
-    border-radius: 0.5rem;
-    background-color: white;
     box-shadow: 0 0 0px 0px rgba(0, 0, 0, 0.06);
     padding: 0.25rem;
     width: 99%;
-    font-size: 14px;
-    margin-top: 5px;
-    margin-bottom: 5px;
 }
   
 .radio-inputs .radio {
@@ -26,20 +21,19 @@
     cursor: pointer;
     align-items: center;
     justify-content: center;
-    border-radius: 0.5rem;
     border: none;
     padding: .5rem 0;
     color: rgba(51, 65, 85, 1);
-    font-size: 20px;
+    font-size: 0.8em;
     font-weight: bold;
-    height: 50px;
     transition: all .15s ease-in-out;
-
-}
+    margin-left: 15%;
+    margin-right: 15%;
+}   
   
 .radio-inputs .radio input:checked + .name {
-    background-color: #EFF4FF;
+    /* background-color: #EFF4FF; */
     font-weight: 600;
     color: #6A74C9;
-    box-shadow: 3px 3px 3px lightgrey;
+    border-bottom: 3px solid #6871CE;
 }
