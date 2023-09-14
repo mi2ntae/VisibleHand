@@ -9,7 +9,7 @@ import lombok.NoArgsConstructor;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class OAuth2TokenInfo {
+public class AuthTokenInfo {
     private String token_type;
     private String access_token;
     private Long expires_in;
