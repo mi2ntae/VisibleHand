@@ -19,7 +19,6 @@ const Interceptor = ({ children }) => {
     );
     http.interceptors.response.use(
       (response) => {
-        const res = response.data;
         return response;
       },
       (err) => {

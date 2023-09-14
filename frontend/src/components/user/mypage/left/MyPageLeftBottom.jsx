@@ -1,9 +1,12 @@
 import React from 'react';
+import { useSelector } from 'react-redux';
 import styled from 'styled-components';
+export default function MyPageLeftBottom({userId, tabs}) {
+    const tabNo = useSelector((state) => state.mypageTab.tabNo);
 
-export default function MyPageLeftBottom({userId}) {
     return (
         <LeftBottomContainer>
+            {tabs.map((tab) => tabNo === tab.no ? tab.content : <div></div>)}
         </LeftBottomContainer>
     );
 }
