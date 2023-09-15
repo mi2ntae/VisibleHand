@@ -5,5 +5,5 @@ spring:
 
 jwt:
   secret: XUrYUhZfrEWLtykR7h80CrcITM59YLt5CRi3AdqZu33
-  access-expired-in: 1800000
-  refresh-expired-in: 604800000
+  access-expiration: 1800000
+  refresh-expiration: 1209600000
