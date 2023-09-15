@@ -5,6 +5,7 @@ import com.it.vh.common.util.jwt.JwtTokenProvider;
 import com.it.vh.common.util.jwt.filter.JwtAccessDeniedHandler;
 import com.it.vh.common.util.jwt.filter.JwtAuthenticationEntryPoint;
 import com.it.vh.common.util.jwt.filter.JwtAuthenticationFilter;
+import com.it.vh.user.domain.repository.UserRespository;
 import com.it.vh.user.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
@@ -12,6 +13,8 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.http.SessionCreationPolicy;
+import org.springframework.security.crypto.factory.PasswordEncoderFactories;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.web.cors.CorsConfiguration;
@@ -21,13 +24,11 @@ import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 @Configuration
 @EnableWebSecurity
 @RequiredArgsConstructor
-public class SecurityConfig {
+public class SpringSecurityConfig {
 
     private final JwtTokenProvider jwtTokenProvider;
-    private final UserService userService;
-    private final JwtAccessDeniedHandler jwtAccessDeniedHandler;
-    private final JwtAuthenticationEntryPoint jwtAuthenticationEntryPoint;
     private final ObjectMapper objectMapper;
+    private final UserRespository userRespository;
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
@@ -50,16 +51,11 @@ public class SecurityConfig {
             .accessDeniedHandler(new JwtAccessDeniedHandler(objectMapper))
             .authenticationEntryPoint(new JwtAuthenticationEntryPoint(objectMapper))
             .and()
-            .addFilterBefore(new JwtAuthenticationFilter(jwtTokenProvider, objectMapper),
+            .addFilterBefore(new JwtAuthenticationFilter(jwtTokenProvider, objectMapper, userRespository),
                 UsernamePasswordAuthenticationFilter.class);
 
         return http.build();
     }
-
-//    @Bean
-//    public PasswordEncoder passwordEncoder() {
-//        return PasswordEncoderFactories.createDelegatingPasswordEncoder();
-//    }
 
     @Bean
     public CorsConfigurationSource corsConfigurationSource() {
@@ -76,4 +72,10 @@ public class SecurityConfig {
 
         return source;
     }
+
+    @Bean
+    public PasswordEncoder passwordEncoder() {
+        return PasswordEncoderFactories.createDelegatingPasswordEncoder();
+    }
+
 }
