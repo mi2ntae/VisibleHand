@@ -6,7 +6,7 @@ export default function MyPageLeftBottom({userId, tabs}) {
 
     return (
         <LeftBottomContainer>
-            {tabs.map((tab) => tabNo === tab.no ? tab.content : <div></div>)}
+            {tabs.map((tab) => tabNo === tab.no ? tab.content : <span></span>)}
         </LeftBottomContainer>
     );
 }

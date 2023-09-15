@@ -1,0 +1,75 @@
+#pen1 {
+    animation: pen1 2s infinite ease;
+  }
+  
+  #pen2 {
+    animation: pen2 2s infinite ease;
+  }
+  
+  #pen3 {
+    animation: pen3 2s infinite ease;
+  }
+  
+  #loader {
+    animation: loaderColor 5s infinite ease;
+  }
+  
+  @keyframes pen1 {
+    0% {
+      transform: translateY(0px);
+    }
+  
+    15% {
+      transform: translateY(-10px);
+    }
+  
+    30% {
+      transform: translateY(0px);
+    }
+  }
+  
+  @keyframes pen2 {
+    30% {
+      transform: translateY(0px);
+    }
+  
+    45% {
+      transform: translateY(-10px);
+    }
+  
+    60% {
+      transform: translateY(0px);
+    }
+  }
+  
+  @keyframes pen3 {
+    60% {
+      transform: translateY(0px);
+    }
+  
+    75% {
+      transform: translateY(-10px);
+    }
+  
+    90% {
+      transform: translateY(0px);
+    }
+  }
+  
+  @keyframes loaderColor {
+    0% {
+      fill: #513B56;
+    }
+  
+    33% {
+      fill: #348AA7;
+    }
+  
+    66% {
+      fill: #5DD39E;
+    }
+  
+    100% {
+      fill: #513B56;
+    }
+  }
