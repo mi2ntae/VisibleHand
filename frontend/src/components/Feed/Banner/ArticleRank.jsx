@@ -1,9 +1,23 @@
+import http from "api/commonHttp";
 import { grey, lightest_grey } from "lib/style/colorPalette";
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { Background, BannerElement, BannerTitle } from "styled";
 import styled from "styled-components";
 
-export default function ArticleRank({ articles }) {
+export default function ArticleRank() {
+  const [articles, setArticles] = useState([]);
+
+  useEffect(() => {
+    http
+      .get("article/rank")
+      .then(({ data }) => {
+        setArticles(data);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  }, []);
+
   return (
     <Background style={{ padding: 32, gap: 14 }}>
       <BannerTitle>
