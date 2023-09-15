@@ -9,6 +9,8 @@ import com.it.vh.user.domain.dto.UserDto;
 import com.it.vh.user.exception.NonExistUserIdException;
 import org.springframework.data.domain.Page;
 
+import java.util.List;
+
 public interface UserService {
 
     UserDto getUserProfileByUserId(long userId) throws NonExistUserIdException;
@@ -27,4 +29,6 @@ public interface UserService {
     void createProfile(UserProfileReqDto userProfileReqDto);
     void updateProfile(Long userId, UserProfileReqDto userProfileReqDto);
     void deleteUser(Long userId);
+
+    List<UserFollowListResDto> getRecommendUserListByUserId(long userId);
 }
