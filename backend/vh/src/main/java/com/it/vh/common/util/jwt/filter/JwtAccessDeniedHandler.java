@@ -29,12 +29,12 @@ public class JwtAccessDeniedHandler implements AccessDeniedHandler {
 
         log.info("accessDenied");
 
-        response.setStatus(HttpStatus.UNAUTHORIZED.value());
+        response.setStatus(HttpStatus.FORBIDDEN.value());
         response.setCharacterEncoding("UTF-8");
         response.setContentType(MediaType.APPLICATION_JSON_VALUE);
         response.getWriter().write(
             objectMapper.writeValueAsString(
-                ErrorResponse.of(HttpStatus.UNAUTHORIZED.value(), ACCESS_DENIED.getMessage())
+                ErrorResponse.of(HttpStatus.FORBIDDEN.value(), ACCESS_DENIED.getMessage())
             )
         );
     }
