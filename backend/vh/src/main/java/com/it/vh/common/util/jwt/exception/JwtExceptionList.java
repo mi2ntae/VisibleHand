@@ -14,7 +14,8 @@ public enum JwtExceptionList {
     MALFORMED_HEADER("잘못된 형식의 헤더"),
 
     NOT_MATCHED_TOKEN("토큰 불일치"),
-    TOKEN_NOTFOUND("토큰 존재하지 않음");
+    TOKEN_NOTFOUND("토큰 존재하지 않음"),
+    TOKEN_EXCEPTION("토큰 에러");
 
     private final String message;
 }
