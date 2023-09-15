@@ -51,6 +51,9 @@ dependencies {
 	// spring-boot-starter-webflux
 	implementation group: 'org.springframework.boot', name: 'spring-boot-starter-webflux', version: '2.7.15'
 
+	// spring-boot-starter-data-redis
+	implementation group: 'org.springframework.boot', name: 'spring-boot-starter-data-redis', version: '2.7.15'
+
 }
 
 tasks.named('test') {
