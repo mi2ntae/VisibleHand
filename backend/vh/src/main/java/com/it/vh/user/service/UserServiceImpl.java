@@ -49,7 +49,7 @@ public class UserServiceImpl implements UserService{
                 follow ->
                         UserFollowListResDto.builder()
                                 .userId(follow.getTo().getUserId())
-                                .UserName(follow.getTo().getNickname())
+                                .userName(follow.getTo().getNickname())
                                 .statusMsg(follow.getTo().getStatusMsg())
                                 .imageUrl(follow.getTo().getProfileImg())
                                 .build()
@@ -65,7 +65,7 @@ public class UserServiceImpl implements UserService{
                 follow ->
                     UserFollowListResDto.builder()
                             .userId(follow.getFrom().getUserId())
-                            .UserName(follow.getFrom().getNickname())
+                            .userName(follow.getFrom().getNickname())
                             .statusMsg(follow.getFrom().getStatusMsg())
                             .imageUrl(follow.getFrom().getProfileImg())
                             .build()
@@ -80,7 +80,7 @@ public class UserServiceImpl implements UserService{
                 userList ->
                         UserFollowListResDto.builder()
                                 .userId(userList.getUserId())
-                                .UserName(userList.getNickname())
+                                .userName(userList.getNickname())
                                 .statusMsg(userList.getStatusMsg())
                                 .imageUrl(userList.getProfileImg())
                                 .build()
