@@ -1,9 +1,10 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 import Search from "components/Feed/Search";
 import FeedElement from "components/Feed/FeedElement";
 import ArticleRank from "components/Feed/Banner/ArticleRank";
 import UserRecommend from "components/Feed/Banner/UserRecommend";
+import http from "api/commonHttp";
 
 export default function Feed() {
   const feeds = [
@@ -12,7 +13,7 @@ export default function Feed() {
       profileImg:
         "https://blog.kakaocdn.net/dn/FOcCY/btr5QAbW7Sv/iOSQ86mcRgUNUqQAf9ahRK/img.jpg",
       nickname: "메론빵",
-      feedId: 1,
+      feedId: 11,
       content:
         "신용공포 때문에 주가 변동이 정상적인 수준보다 훨씬 더 원유가격의 변동에 크게 좌우되게 되었다. 대부분의 에너지기업들이 (대부분의 원유수출국처럼) 어려움을 겪는 반면, 투자자들은 조만간 특히 필수소비재나 임의소비재를 생산하는 기업과 같은 저유가로 혜택을 입게 될 업종에 주목하기 시작할 것이다. 유틸리티와 일부 제조업 등 에너지집약형 업종도 역시 혜택을 입게 될 것이지만 에너지부문에의 장비 판매 비중이 큰 경우에는 예외이다. WTI와 S&P 500® 간의 금년 현재까지의 상관관계 70%는 아마도 지속되기 어려울 ... 더보기",
       heart: 123,
@@ -217,6 +218,27 @@ export default function Feed() {
       statusMsg: "하반가 취업왕은 나야나 👍",
     },
   ];
+
+  // 로그인 연결 후 초기값 수정
+  const [userId, setUserId] = useState(1);
+  // const [feeds, setFeeds] = useState([]);
+
+  // useEffect(() => {
+  //   // 리덕스에서 userId 가져온다
+  //   fetchData();
+  // });
+
+  // const fetchData = () => {
+  //   http
+  //     .get(`feed/list/${userId}`)
+  //     .then((data) => {
+  //       setFeeds(data);
+  //     })
+  //     .catch((err) => {
+  //       alert(err);
+  //     });
+  // };
+
   return (
     <div style={{ display: "flex", padding: "40px 100px", gap: "88px" }}>
       <div

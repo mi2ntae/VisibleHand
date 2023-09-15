@@ -1,6 +1,5 @@
 import {
   black_grey,
-  dark_grey,
   lightest_grey,
   primary,
   white,
@@ -9,12 +8,9 @@ import React from "react";
 import { Link } from "react-router-dom";
 import { ProfileImg } from "styled";
 import styled from "styled-components";
+import Heart from "components/Feed/Heart";
 
 export default function FeedElement({ data }) {
-  const handleLike = () => {
-    // 좋아요 요청을 보내거라
-  };
-
   const moveToProfile = () => {
     // 해당 프로필로 이동하거라
   };
@@ -32,14 +28,11 @@ export default function FeedElement({ data }) {
             <div onClick={moveToProfile} style={{ fontWeight: 600 }}>
               {data.nickname}
             </div>
-            <Heart onClick={handleLike}>
-              {data.isHeart ? (
-                <img src="/icons/feed/ic_heart.svg" alt="좋아요" />
-              ) : (
-                <img src="/icons/feed/ic_heart_empty.svg" alt="좋아요" />
-              )}
-              {data.heart}
-            </Heart>
+            <Heart
+              clicked={data.isHeart}
+              cnt={data.heart}
+              feedId={data.feedId}
+            />
           </div>
           <Content>{data.content}</Content>
         </div>
@@ -59,14 +52,6 @@ const Feed = styled.div`
   border-radius: 16px;
   border: 1px solid ${lightest_grey};
   background-color: ${white};
-`;
-
-const Heart = styled.div`
-  display: flex;
-  align-items: center;
-  gap: 6px;
-  color: ${dark_grey};
-  font-weight: 500;
 `;
 
 const Content = styled.div`
