@@ -3,8 +3,11 @@ package com.it.vh.common.util.jwt;
 import static com.it.vh.common.util.jwt.exception.JwtExceptionList.EXPIRED_TOKEN;
 import static com.it.vh.common.util.jwt.exception.JwtExceptionList.INVALID_TOKEN;
 
+import com.it.vh.common.util.jwt.dto.Token;
+import com.it.vh.user.api.dto.auth.LoginResDto.TokenInfo;
 import com.it.vh.user.domain.entity.User;
 import com.it.vh.user.domain.repository.UserRespository;
+import com.sun.security.auth.UnixNumericGroupPrincipal;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.Header;
@@ -18,13 +21,19 @@ import io.jsonwebtoken.security.Keys;
 import io.jsonwebtoken.security.SecurityException;
 import io.jsonwebtoken.security.SignatureException;
 import java.security.Key;
+import java.util.Arrays;
+import java.util.Collection;
 import java.util.Date;
 import java.util.Optional;
+import java.util.stream.Collectors;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
 
@@ -33,61 +42,91 @@ import org.springframework.stereotype.Component;
 public class JwtTokenProvider {
 
     private final Key key;
-    @Value("${jwt.access-expired-in}")
-    private Long accessToken;
-    @Value("${jwt.refresh-expired-in}")
-    private Long refreshToken;
-
-    private UserRespository userRepository;
+    @Value("${jwt.access-expiration}")
+    private Long access_expiration;
+    @Value("${jwt.refresh-expiration}")
+    private Long refresh_expiration;
 
     public JwtTokenProvider(@Value("${jwt.secret}") String secretKey) {
         byte[] keyBytes = Decoders.BASE64.decode(secretKey);
         this.key = Keys.hmacShaKeyFor(keyBytes);
     }
 
-//    public TokenInfo generateToken(Authentication authentication) {
-//        Jwts.builder()
+    public TokenInfo generateToken(Authentication authentication) {
+        String authorities = authentication.getAuthorities().stream()
+                .map(GrantedAuthority::getAuthority)
+                    .collect(Collectors.joining(","));
+        log.info("authorities: {}", authorities);
+        log.info("userId: {}", authentication.getName());
+
+        String accessToken = Jwts.builder()
+            .setSubject(String.valueOf(authentication.getName()))
+            .claim("userId", authentication.getName())
+            .claim("authority", authorities)
+            .setIssuedAt(new Date(System.currentTimeMillis()))
+            .setExpiration(new Date(System.currentTimeMillis() + access_expiration))
+            .signWith(key, SignatureAlgorithm.HS256)
+            .compact();
+
+        String refreshToken = Jwts.builder()
+            .setSubject(String.valueOf(authentication.getName()) + "_refresh")
+            .claim("userId", authentication.getName())
+            .claim("authority", authorities)
+            .setIssuedAt(new Date(System.currentTimeMillis()))
+            .setExpiration(new Date(System.currentTimeMillis() + refresh_expiration))
+            .signWith(key, SignatureAlgorithm.HS256)
+            .compact();
+
+        return TokenInfo.builder()
+                .type("Bearer")
+                .accessToken(accessToken)
+                .refreshToken(refreshToken)
+                .build();
+    }
+//    public String createAccessToken(Long userId) {
+//        return Jwts.builder()
 //            .setSubject(String.valueOf(userId))
 //            .claim("userId", userId)
+//            .claim("auth", userId)
 //            .setIssuedAt(new Date(System.currentTimeMillis()))
-//            .setExpiration(new Date(System.currentTimeMillis() + accessToken))
+//            .setExpiration(new Date(System.currentTimeMillis() + access_expiration))
 //            .signWith(key, SignatureAlgorithm.HS256)
 //            .compact();
 //    }
-    public String createAccessToken(Long userId) {
-//        Claims claims = Jwts.claims();
-//        claims.setSubject(String.valueOf(userId));
-
-        return Jwts.builder()
-            .setSubject(String.valueOf(userId))
-            .claim("userId", userId)
-            .setIssuedAt(new Date(System.currentTimeMillis()))
-            .setExpiration(new Date(System.currentTimeMillis() + accessToken))
-            .signWith(key, SignatureAlgorithm.HS256)
-            .compact();
-    }
-
-    public String createRefreshToken(Long userId) {
-        return Jwts.builder()
-            .setSubject(String.valueOf(userId) + "_refresh")
-            .claim("userId", userId)
-            .setIssuedAt(new Date(System.currentTimeMillis()))
-            .setExpiration(new Date(System.currentTimeMillis() + refreshToken))
-            .signWith(key, SignatureAlgorithm.HS256)
-            .compact();
-    }
+//
+//    public String createRefreshToken(Long userId) {
+//        return Jwts.builder()
+//            .setSubject(String.valueOf(userId) + "_refresh")
+//            .claim("userId", userId)
+//            .setIssuedAt(new Date(System.currentTimeMillis()))
+//            .setExpiration(new Date(System.currentTimeMillis() + refresh_expiration))
+//            .signWith(key, SignatureAlgorithm.HS256)
+//            .compact();
+//    }
 
     public Authentication getAuthentication(String token) {
-        Long userId = getUserId(token);
+        Claims claims = parseClaims(token);
 
-        Optional<User> findUser = userRepository.findById(userId);
-        if (findUser.isEmpty()) {
-            return null;
-        }
+        Collection<? extends GrantedAuthority> authorities
+            = Arrays.stream(claims.get("auth").toString()
+                .split(",")).map(SimpleGrantedAuthority::new)
+                .collect(Collectors.toList());
 
-        UserDetails userDetails = new CustomUserDetails(findUser.get());
-        return new UsernamePasswordAuthenticationToken(userDetails, "",
-            userDetails.getAuthorities());
+        org.springframework.security.core.userdetails.User user
+            = new org.springframework.security.core.userdetails.User(claims.getSubject(), "", authorities);
+
+//        Long userId = getUserId(token);
+//        log.info("userId: {}", userId);
+//
+//        Optional<User> findUser = userRepository.findById(userId);
+//        if (findUser.isEmpty()) {
+//            return null;
+//        }
+//        UserDetails userDetails = new CustomUserDetails(findUser.get());
+//        log.info("userDetails: {}", userDetails);
+//        return new UsernamePasswordAuthenticationToken(userDetails, token,
+//            userDetails.getAuthorities());
+        return new UsernamePasswordAuthenticationToken(user, token, authorities);
     }
 
     public Claims parseClaims(String token) {
@@ -105,7 +144,7 @@ public class JwtTokenProvider {
         }
     }
 
-    private Long getUserId(String token) {
+    public Long getUserId(String token) {
         Claims claims = parseClaims(token);
 
         if (claims.get("userId") == null) {
