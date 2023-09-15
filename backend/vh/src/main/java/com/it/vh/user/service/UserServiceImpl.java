@@ -51,7 +51,7 @@ public class UserServiceImpl implements UserService{
                                 .userId(follow.getTo().getUserId())
                                 .UserName(follow.getTo().getNickname())
                                 .statusMsg(follow.getTo().getStatusMsg())
-                                .iamgeUrl(follow.getTo().getProfileImg())
+                                .imageUrl(follow.getTo().getProfileImg())
                                 .build()
         );
     }
@@ -67,7 +67,7 @@ public class UserServiceImpl implements UserService{
                             .userId(follow.getFrom().getUserId())
                             .UserName(follow.getFrom().getNickname())
                             .statusMsg(follow.getFrom().getStatusMsg())
-                            .iamgeUrl(follow.getFrom().getProfileImg())
+                            .imageUrl(follow.getFrom().getProfileImg())
                             .build()
         );
 
@@ -82,7 +82,7 @@ public class UserServiceImpl implements UserService{
                                 .userId(userList.getUserId())
                                 .UserName(userList.getNickname())
                                 .statusMsg(userList.getStatusMsg())
-                                .iamgeUrl(userList.getProfileImg())
+                                .imageUrl(userList.getProfileImg())
                                 .build()
         );
     }
