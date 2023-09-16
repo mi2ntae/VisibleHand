@@ -28,6 +28,8 @@ public class UserServiceImpl implements UserService{
     private final UserRespository userRespository;
     private final FollowRepository followRepository;
     private final int FOLLOWLIST_PAGE_NUM = 10;
+    private final UserRedisService userRedisService;
+
     @Override
     public UserDto getUserProfileByUserId(long userId) throws NonExistUserIdException{
         Optional<User> optionalUser = userRespository.findUserByUserId(userId);
@@ -119,34 +121,45 @@ public class UserServiceImpl implements UserService{
 
     @Transactional
     @Override
-    public void createProfile(UserProfileReqDto userProfileReqDto) {
+    public void createProfile(UserProfileReqDto userProfileReqDto) throws NonExistUserIdException {
+        String snsEmail = userProfileReqDto.getSnsEmail();
+        log.info("email: {}", snsEmail);
+        Optional<User> findUser = userRespository.findBySnsEmail(snsEmail);
+        log.info("user: {}", findUser);
+
+        if(!findUser.isPresent())
+            throw new NonExistUserIdException();
+
         User user = User.builder()
-            .nickname(userProfileReqDto.getProfile().getNickname())
-            .statusMsg(userProfileReqDto.getProfile().getStatusMsg())
-            .profileImg(userProfileReqDto.getProfileImg())
-            .snsEmail(userProfileReqDto.getSnsEmail())
-            .build();
+                .userId(findUser.get().getUserId())
+                .nickname(userProfileReqDto.getProfile().getNickname())
+                .statusMsg(userProfileReqDto.getProfile().getStatusMsg())
+                .profileImg(userProfileReqDto.getProfileImg())
+                .snsEmail(findUser.get().getSnsEmail())
+                .build();
         userRespository.save(user);
     }
 
 
     @Transactional
     @Override
-    public void updateProfile(Long userId, UserProfileReqDto userProfileReqDto) {
+    public void updateProfile(Long userId, UserProfileReqDto userProfileReqDto) throws NonExistUserIdException {
         Optional<User> findUser = userRespository.findUserByUserId(userId);
-        if(findUser.isPresent()) {
-            User user = findUser.get();
-            user.setNickname(userProfileReqDto.getProfile().getNickname());
-            user.setStatusMsg(userProfileReqDto.getProfile().getStatusMsg());
-            user.setProfileImg(userProfileReqDto.getProfileImg());
-            userRespository.save(user);
-        }
+        if(!findUser.isPresent())
+            throw new NonExistUserIdException();
+
+        User user = findUser.get();
+        user.setNickname(userProfileReqDto.getProfile().getNickname());
+        user.setStatusMsg(userProfileReqDto.getProfile().getStatusMsg());
+        user.setProfileImg(userProfileReqDto.getProfileImg());
+        userRespository.save(user);
     }
 
     @Transactional
     @Override
     public void deleteUser(Long userId) {
         userRespository.deleteById(userId);
+        userRedisService.deleteRefreshToken(userId.toString());
     }
 
     @Override
