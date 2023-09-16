@@ -11,12 +11,12 @@ import org.springframework.transaction.annotation.Transactional;
 @Slf4j
 @Transactional(readOnly = true)
 @RequiredArgsConstructor
-//@Service
+@Service
 public class UserRedisServiceImpl implements UserRedisService {
 
     private final RefreshTokenRedisRepository refreshTokenRedisRepository;
 
-    @Value("${spring.redis.refresh-expiration}")
+    @Value("${spring.redis.ttl.refresh_token}")
     private long refresh_expiration;
 
     @Override
