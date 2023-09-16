@@ -76,28 +76,6 @@ public class JwtTokenProvider {
                 .build();
     }
 
-//    public String createAccessToken(Long userId, String snsEmail) {
-//        return Jwts.builder()
-//            .setSubject(String.valueOf(userId))
-//            .claim("userId", userId)
-//            .claim("auth", userId)
-//            .claim("email", snsEmail)
-//            .setIssuedAt(new Date(System.currentTimeMillis()))
-//            .setExpiration(new Date(System.currentTimeMillis() + access_expiration))
-//            .signWith(key, SignatureAlgorithm.HS256)
-//            .compact();
-//    }
-//
-//    public String createRefreshToken(Long userId) {
-//        return Jwts.builder()
-//            .setSubject(String.valueOf(userId) + "_refresh")
-//            .claim("userId", userId)
-//            .setIssuedAt(new Date(System.currentTimeMillis()))
-//            .setExpiration(new Date(System.currentTimeMillis() + refresh_expiration))
-//            .signWith(key, SignatureAlgorithm.HS256)
-//            .compact();
-//    }
-
     public Authentication setAuthentication(User user) {
         String password = PasswordUtil.generateRandomPassword();
 
@@ -155,17 +133,6 @@ public class JwtTokenProvider {
         return userId;
     }
 
-    public String getUserEmail(String token) {
-        Claims claims = parseClaims(token);
-
-        if (claims.get("email") == null) {
-            return null;
-        }
-
-        String snsEmail = claims.get("email").toString();
-        return snsEmail;
-    }
-
     private Header parseHeader(String token) {
         return Jwts.parserBuilder()
                 .setSigningKey(key)
@@ -173,12 +140,6 @@ public class JwtTokenProvider {
                 .parseClaimsJws(token)
                 .getHeader();
     }
-
-//    public boolean isValidateToken(String token) {
-//        Jwts.parserBuilder().setSigningKey(key)
-//                .build().parseClaimsJws(token).getBody();
-//        return true;
-//    }
 
     public boolean isValidateToken(String token) throws JwtException {
         try {

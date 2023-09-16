@@ -23,7 +23,6 @@ public class PasswordUtil {
 
             password.append(charSet[index]);
         }
-        System.out.println(password);
         return password.toString();
     }
 }

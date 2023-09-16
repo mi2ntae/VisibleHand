@@ -14,7 +14,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.MediaType;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.oauth2.client.registration.ClientRegistration;
 import org.springframework.security.oauth2.client.registration.InMemoryClientRegistrationRepository;
 import org.springframework.stereotype.Service;
@@ -53,58 +52,19 @@ public class AuthUserService {
         UserProfile userProfile = UserProfile.from(user);
 
         //권한 설정
-        log.info("----------권한 설정 시작----------");
         Authentication authentication = jwtTokenProvider.setAuthentication(user);
         log.info("등록 중 auth: {}", authentication);
 
         TokenInfo tokenInfo = jwtTokenProvider.generateToken(authentication);
         log.info("등록 중 token: {}", tokenInfo);
-        log.info("----------권한 설정 끝----------");
 
-        log.info("----------권한 확인 시작----------");
-        Authentication auth2 = SecurityContextHolder.getContext().getAuthentication();
-        log.info("등록 후 auth: {}", auth2);
-
-        Long num = Long.parseLong(auth2.getName());
-        log.info("userId 확인: {}", num);
-        log.info("----------권한 확인 끝----------");
+        //권한 확인
+//        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+//        Long userId = Long.parseLong(auth.getName());
+//        log.info("userId: {}", userId);
 
         //레디스에 리프레시 토큰 저장
         userRedisService.saveRefreshToken(String.valueOf(user.getUserId()), token.getRefresh_token());
-
-        //-------------------------------------------------
-        //일단은 DTO로 가지고 있다가 프로필 작성 후 가입 또는 로그인 처리
-//        UserDto userDto = getUser2(token, provider);
-//        log.info("userId: {}", userDto.getUserId());
-
-//        UserProfile userProfile = UserProfile.builder()
-//            .userId(userDto.getUserId())
-//            .nickname(userDto.getNickname())
-//            .statusMsg(userDto.getStatusMsg())
-//            .profileImg(userDto.getProfileImg())
-//            .snsEmail(userDto.getSnsEmail())
-//            .build();
-
-//        //하지만 이미 가입된 회원은
-//        //로그인 시 jwt 토큰 발급
-//        //근데 일단은 이 주소로 요청 들어오면 다 토큰 발급되도록 해놓음
-//        if (userDto.getUserId() != null) {
-//            String accessToken = jwtTokenProvider.createAccessToken(userDto.getUserId());
-//            String refreshToken = jwtTokenProvider.createRefreshToken(userDto.getUserId());
-//
-//            String accessToken = jwtTokenProvider.createAccessToken(userDto.getUserId());
-//            String refreshToken = jwtTokenProvider.createRefreshToken(userDto.getUserId());
-//
-//            TokenInfo tokenInfo = TokenInfo.builder()
-//                .accessToken(accessToken)
-//                .refreshToken(refreshToken)
-//                .build();
-//
-//            return LoginResDto.builder()
-//                .user(userProfile)
-//                .token(tokenInfo)
-//                .build();
-//        }
 
         return LoginResDto.builder()
                 .user(userProfile)
@@ -136,26 +96,7 @@ public class AuthUserService {
         return formData;
     }
 
-    //-------------------------------------------------
-    //일단은 DTO로 가지고 있다가 프로필 작성 후 가입 또는 로그인 처리
-//    private UserDto getUser2(AuthTokenInfo token, ClientRegistration provider) {
-//        Map<String, Object> userAttributes = getUserAttributes(token, provider);
-//
-//        AuthUserInfo oAuth2UserInfo = new KakaoUserInfo(userAttributes);
-//        String snsEmail = oAuth2UserInfo.getEmail();
-//        Optional<User> findUser = userRespository.findBySnsEmail(snsEmail);
-//
-//        if (findUser.isPresent()) {
-//            log.info(">>>>> 이미 등록된 사용자");
-//            Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-//            log.info("auth: {}", auth.getName());
-//            return UserDto.from(findUser.get());
-//        }
-//
-//        UserDto userDto = UserDto.builder().snsEmail(snsEmail).build();
-//        return userDto;
-//    }
-
+    //일단은 DTO로 가지고 있다가 프로필 작성 후 insert 하는 걸로 바꾸는 게 나은가,,,
     @Transactional
     public User getUser(AuthTokenInfo token, ClientRegistration provider) {
         Map<String, Object> userAttributes = getUserAttributes(token, provider);
@@ -170,9 +111,7 @@ public class AuthUserService {
         }
 
         User saveUser = User.builder()
-                .nickname("testNick")
-                .profileImg("testImg")
-                .statusMsg("testMsg")
+                .nickname("")
                 .snsEmail(snsEmail)
                 .build();
         userRespository.save(saveUser);
@@ -193,20 +132,4 @@ public class AuthUserService {
                 })
                 .block();
     }
-
-    public void logout(Long userId) {
-        WebClient.ResponseSpec res = WebClient.create()
-                .post()
-                .uri("https://kapi.kakao.com/v1/user/unlink")
-//            .headers(header -> {
-//               header.setBearerAuth(accessToken);
-//            })
-                .retrieve();
-        log.info("2");
-        //테스트용
-//        userRespository.deleteById(userId);
-        log.info("3");
-    }
-
-    //탈퇴 시 토큰도 만료돼서 다시 동의항목 처리하도록
 }

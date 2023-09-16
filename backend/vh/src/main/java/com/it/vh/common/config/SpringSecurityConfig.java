@@ -22,9 +22,7 @@ import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 @RequiredArgsConstructor
 public class SpringSecurityConfig {
 
-    private final JwtTokenProvider jwtTokenProvider;
     private final ObjectMapper objectMapper;
-    private final UserRedisService userRedisService;
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
