@@ -51,30 +51,30 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
             if (token != null && jwtTokenProvider.isValidateToken(token.getToken())) {
 
                 //리프레시 토큰 확인
-//                if (token.getTokenType() == "REFRESH") {
-//                    Authentication authentication
-//                            = jwtTokenProvider.getAuthentication(token.getToken());
-//                    log.info("[토큰 권한 확인]: {}", authentication);
-//
-//                    String userId = authentication.getName();
-//                    log.info("userId: {}", userId);
-//
-//                    RefreshToken originrefreshToken = userRedisService.getRefreshToken(userId);
-//                    log.info("[refreshToken 확인]: {}", originrefreshToken);
-//
-//                    if (originrefreshToken == null) {
-//                        throw new JwtException(TOKEN_NOTFOUND.getMessage());
-//                    }
-//
-//                    //레디스와 일치하면 만료된 accessToken 재발급 및 refreshToken 재발급
-//                    if (token.getToken().equals(originrefreshToken.getRefreshToken())) {
-//                        TokenInfo reissueToken = reissueTokensAndSaveOnRedis(authentication);
-//
-//                        makeResponse(HttpStatus.CREATED.value(), response,
-//                                ReissueTokenResDto.of(reissueToken));
-//                        return;
-//                    }
-//                }
+                if (token.getTokenType() == "REFRESH") {
+                    Authentication authentication
+                            = jwtTokenProvider.getAuthentication(token.getToken());
+                    log.info("[토큰 권한 확인]: {}", authentication);
+
+                    String userId = authentication.getName();
+                    log.info("userId: {}", userId);
+
+                    RefreshToken originrefreshToken = userRedisService.getRefreshToken(userId);
+                    log.info("[refreshToken 확인]: {}", originrefreshToken);
+
+                    if (originrefreshToken == null) {
+                        throw new JwtException(TOKEN_NOTFOUND.getMessage());
+                    }
+
+                    //레디스와 일치하면 만료된 accessToken 재발급 및 refreshToken 재발급
+                    if (token.getToken().equals(originrefreshToken.getRefreshToken())) {
+                        TokenInfo reissueToken = reissueTokensAndSaveOnRedis(authentication);
+
+                        makeResponse(HttpStatus.CREATED.value(), response,
+                                ReissueTokenResDto.of(reissueToken));
+                        return;
+                    }
+                }
 
                 Authentication authentication = jwtTokenProvider.getAuthentication(token.getToken());
                 log.info("[토큰 권한 확인]: {}", authentication);
