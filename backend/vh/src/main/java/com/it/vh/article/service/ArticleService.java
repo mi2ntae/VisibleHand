@@ -1,6 +1,7 @@
 package com.it.vh.article.service;
 
 import com.it.vh.article.api.dto.response.ArticleResponseDto;
+import com.it.vh.article.api.dto.response.RankRes;
 import com.it.vh.article.domain.entity.Article;
 import com.it.vh.article.domain.entity.Scrap;
 import com.it.vh.article.domain.repository.ArticleRepository;
@@ -15,6 +16,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.ObjectUtils;
 
+import java.util.List;
 import java.util.Objects;
 
 @Service
@@ -68,5 +70,9 @@ public class ArticleService {
                 .kind(article.getKind())
                 .summary(article.getSummary())
                 .thumbnail(article.getThumbnail()).build();
+    }
+
+    public List<RankRes> getArticleRanking() {
+        return articleRepository.getArticleRanking();
     }
 }

@@ -16,6 +16,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 import java.util.Optional;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -50,9 +52,9 @@ public class UserServiceImpl implements UserService{
                 follow ->
                         UserFollowListResDto.builder()
                                 .userId(follow.getTo().getUserId())
-                                .UserName(follow.getTo().getNickname())
+                                .userName(follow.getTo().getNickname())
                                 .statusMsg(follow.getTo().getStatusMsg())
-                                .iamgeUrl(follow.getTo().getProfileImg())
+                                .imageUrl(follow.getTo().getProfileImg())
                                 .build()
         );
     }
@@ -66,9 +68,9 @@ public class UserServiceImpl implements UserService{
                 follow ->
                     UserFollowListResDto.builder()
                             .userId(follow.getFrom().getUserId())
-                            .UserName(follow.getFrom().getNickname())
+                            .userName(follow.getFrom().getNickname())
                             .statusMsg(follow.getFrom().getStatusMsg())
-                            .iamgeUrl(follow.getFrom().getProfileImg())
+                            .imageUrl(follow.getFrom().getProfileImg())
                             .build()
         );
 
@@ -81,9 +83,9 @@ public class UserServiceImpl implements UserService{
                 userList ->
                         UserFollowListResDto.builder()
                                 .userId(userList.getUserId())
-                                .UserName(userList.getNickname())
+                                .userName(userList.getNickname())
                                 .statusMsg(userList.getStatusMsg())
-                                .iamgeUrl(userList.getProfileImg())
+                                .imageUrl(userList.getProfileImg())
                                 .build()
         );
     }
@@ -145,5 +147,11 @@ public class UserServiceImpl implements UserService{
     @Override
     public void deleteUser(Long userId) {
         userRespository.deleteById(userId);
+    }
+
+    @Override
+    public List<UserFollowListResDto> getRecommendUserListByUserId(long userId) {
+        List<UserFollowListResDto> userList = userRespository.findRecommendUserByUserId(userId);
+        return userList;
     }
 }

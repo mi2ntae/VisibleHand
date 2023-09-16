@@ -9,6 +9,7 @@ import com.it.vh.quiz.domain.exception.SolvingQuizException;
 import com.it.vh.quiz.domain.repository.NewsQuizRepository;
 import com.it.vh.quiz.domain.repository.SolvedQuizRepository;
 import com.it.vh.user.api.dto.ReviewnoteResDto;
+import com.it.vh.user.api.dto.StreakResDto;
 import com.it.vh.user.api.dto.UserFollowResDto;
 import com.it.vh.user.domain.dto.UserDto;
 import com.it.vh.user.domain.entity.User;
@@ -23,6 +24,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 @Slf4j
@@ -32,6 +34,8 @@ public class SolvedQuizServiceImpl implements SolvedQuizService {
     private final SolvedQuizRepository solvedQuizRepository;
     private final NewsQuizRepository newsQuizRepository;
     private final DictionaryRepository dictionaryRepository;
+
+    private final int[] streakWeight = new int[]{2, 4, 6, 8}; // 1~2 1단계, 3~4 2단계, 5~6 3단계, 7~8 4단계, 9~ 5단계
     private final int REVIEWNOTE_PAGE_NUM = 8;
     @Override
     public Page<ReviewnoteResDto> getReviewNotesByUserId(long userId, int page) throws NonExistUserIdException {
@@ -57,5 +61,23 @@ public class SolvedQuizServiceImpl implements SolvedQuizService {
             sq.setWord(dictionaryRepository.getReferenceById(req.getWordId()));
         }
         solvedQuizRepository.save(sq);
+    }
+
+    @Override
+    public List<StreakResDto> getUserStreak(long userId) throws NonExistUserIdException {
+        Optional<User> optionalUser = userRespository.findById(userId);
+        if(!optionalUser.isPresent()) throw new NonExistUserIdException();
+        return solvedQuizRepository.findCountOfSolvedQuizByUserId(userId).stream().map(res -> setWeightByScore(res)).collect(Collectors.toList());
+    }
+
+    private StreakResDto setWeightByScore(StreakResDto streakResDto) {
+        for(int i = 0; i < streakWeight.length; i++) {
+            if(streakResDto.getWeight() <= streakWeight[i]) {
+                streakResDto.setWeight(i+1);
+                return streakResDto;
+            }
+        }
+        streakResDto.setWeight(streakWeight.length);
+        return streakResDto;
     }
 }

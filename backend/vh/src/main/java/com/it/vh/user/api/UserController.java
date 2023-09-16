@@ -1,6 +1,6 @@
 package com.it.vh.user.api;
 
-import com.it.vh.feed.api.dto.FeedResDto;
+import com.it.vh.feed.api.dto.FeedRes;
 import com.it.vh.feed.service.FeedService;
 import com.it.vh.quiz.service.SolvedQuizService;
 import com.it.vh.user.api.dto.*;
@@ -10,8 +10,6 @@ import com.it.vh.user.service.UserService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
-import lombok.Value;
-import net.bytebuddy.asm.MemberSubstitution;
 import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -43,15 +41,22 @@ public class UserController {
 
     @ApiOperation(value = "유저 피드 목록 조회", notes = "유저 피드 목록 조회 5개씩.")
     @GetMapping("/feed/{userId}")
-    public ResponseEntity<List<FeedResDto>> getFeedsByUserId(@PathVariable long userId, @RequestParam int searchType, @RequestParam(required = false) String keyword, @RequestParam int page) throws NonExistUserIdException {
+    public ResponseEntity<List<FeedRes>> getFeedsByUserId(@PathVariable long userId, @RequestParam int searchType, @RequestParam(required = false) String keyword, @RequestParam int page) throws NonExistUserIdException {
         return ResponseEntity.ok().body(feedService.getFeedsByUserId(userId, searchType, keyword, page));
     }
 
     @ApiOperation(value = "유저 오답 노트 조회", notes = "유저 오답 노트 조회 8개씩.")
     @GetMapping("/reviewnote/{userId}")
-    public ResponseEntity<Page<UserFollowListResDto>> getFollowingListByUserId(@PathVariable long userId, @RequestParam int page) throws NonExistUserIdException{
-        return ResponseEntity.ok().body(userService.getFollowingListByUserId(userId,page));
+    public ResponseEntity<Page<ReviewnoteResDto>> getReviewNotesByUserId(@PathVariable long userId, @RequestParam int page) throws NonExistUserIdException{
+        return ResponseEntity.ok().body(solvedQuizService.getReviewNotesByUserId(userId, page));
     }
+
+    @ApiOperation(value = "유저 스트릭 조회", notes = "유저의 날짜별 풀이 가중치 조회")
+    @GetMapping("/streak/{userId}")
+    public ResponseEntity<List<StreakResDto>> getUserStreak(@PathVariable long userId) throws NonExistUserIdException{
+        return ResponseEntity.ok().body(solvedQuizService.getUserStreak(userId));
+    }
+
 
     @ApiOperation(value = "유저 팔로잉 목록 조회", notes = "팔로잉 목록 조회 10개씩.")
     @GetMapping("/following/{userId}")
@@ -104,5 +109,12 @@ public class UserController {
     public ResponseEntity<?> deleteUser(@PathVariable Long userId) {
         userService.deleteUser(userId);
         return ResponseEntity.ok().build();
+    }
+
+    @ApiOperation(value = "추천 사용자 조회", notes = "로그인한 유저가 팔로우하는 유저들이 가장 많이 팔로우하는 유저 조회")
+    @GetMapping("/recommend/{userId}")
+    public ResponseEntity<List<UserFollowListResDto>> getRecommendUserByUserId(@PathVariable long userId) {
+        List<UserFollowListResDto> res = userService.getRecommendUserListByUserId(userId);
+        return ResponseEntity.ok().body(res);
     }
 }
