@@ -4,19 +4,15 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.it.vh.common.util.jwt.JwtTokenProvider;
 import com.it.vh.common.util.jwt.filter.JwtAccessDeniedHandler;
 import com.it.vh.common.util.jwt.filter.JwtAuthenticationEntryPoint;
-import com.it.vh.common.util.jwt.filter.JwtAuthenticationFilter;
-import com.it.vh.user.domain.repository.UserRespository;
-import com.it.vh.user.service.UserService;
+import com.it.vh.user.service.UserRedisService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.http.SessionCreationPolicy;
-import org.springframework.security.crypto.factory.PasswordEncoderFactories;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
-import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
@@ -28,31 +24,32 @@ public class SpringSecurityConfig {
 
     private final JwtTokenProvider jwtTokenProvider;
     private final ObjectMapper objectMapper;
-    private final UserRespository userRespository;
+    private final UserRedisService userRedisService;
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
 
         http
-            .cors().configurationSource(corsConfigurationSource())
-            .and()
-            .csrf().disable()
-            .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+                .cors().configurationSource(corsConfigurationSource())
+                .and()
+                .csrf().disable()
+                .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
 
-            .and()
-            //TODO: 허용할 주소 추가
-            .authorizeRequests()
-//            .antMatchers("").authenticated()
-            .regexMatchers("/api/user/\\d+").authenticated()
-            .anyRequest().permitAll()
+                .and()
+                //TODO: 허용할 주소 추가
+                .authorizeRequests()
+                .regexMatchers("/api/user/profile/\\d+").authenticated()
+                .regexMatchers(HttpMethod.DELETE, "/api/user/\\d+").authenticated()
+                .antMatchers(HttpMethod.GET, "/api/user/auth/nickname").permitAll()
+                .antMatchers(HttpMethod.POST, "/api/user/profile").permitAll()
+                .anyRequest().permitAll()
+//                .anyRequest().authenticated()
 
-            .and()
-            .exceptionHandling()
-            .accessDeniedHandler(new JwtAccessDeniedHandler(objectMapper))
-            .authenticationEntryPoint(new JwtAuthenticationEntryPoint(objectMapper))
-            .and()
-            .addFilterBefore(new JwtAuthenticationFilter(jwtTokenProvider, objectMapper, userRespository),
-                UsernamePasswordAuthenticationFilter.class);
+                .and()
+                .exceptionHandling()
+                .accessDeniedHandler(new JwtAccessDeniedHandler(objectMapper))
+                .authenticationEntryPoint(new JwtAuthenticationEntryPoint(objectMapper))
+                .and();
 
         return http.build();
     }
@@ -71,11 +68,6 @@ public class SpringSecurityConfig {
         source.registerCorsConfiguration("/**", configuration);
 
         return source;
-    }
-
-    @Bean
-    public PasswordEncoder passwordEncoder() {
-        return PasswordEncoderFactories.createDelegatingPasswordEncoder();
     }
 
 }
