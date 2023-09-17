@@ -9,6 +9,7 @@ export const Background = styled.div`
   display: flex;
   flex-direction: column;
   color: ${black_grey};
+  padding: 32px;
 `;
 
 export const BannerTitle = styled.div`
@@ -16,7 +17,7 @@ export const BannerTitle = styled.div`
   justify-content: space-between;
   align-items: flex-end;
   margin-bottom: 0.5rem;
-  font-size: 1.23rem;
+  font-size: 1.25rem;
   font-weight: 600;
 `;
 

@@ -19,7 +19,7 @@ export default function ArticleRank() {
   }, []);
 
   return (
-    <Background style={{ padding: 32, gap: 14 }}>
+    <Background style={{ gap: 14 }}>
       <BannerTitle>
         <span>피드에 많이 언급된 기사</span>
         <span

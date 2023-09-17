@@ -5,7 +5,7 @@ import User from "./User";
 
 export default function UserRecommend({ users }) {
   return (
-    <Background style={{ padding: 32, gap: 20 }}>
+    <Background style={{ gap: 20 }}>
       <BannerTitle>나와 잘 맞을것 같은 사용자</BannerTitle>
       {users.map((data, index) => {
         return (
