@@ -1,22 +1,13 @@
 import React from 'react';
 import { useSelector } from 'react-redux';
+import { Background } from 'styled';
 import styled from 'styled-components';
 export default function MyPageLeftBottom({userId, tabs}) {
     const tabNo = useSelector((state) => state.mypageTab.tabNo);
 
     return (
-        <LeftBottomContainer>
+        <Background style={{minHeight: "80vh"}}>
             {tabs.map((tab) => tabNo === tab.no ? tab.content : <span></span>)}
-        </LeftBottomContainer>
+        </Background>
     );
 }
-
-
-const LeftBottomContainer = styled.div`
-    background-color: white;
-    min-height: 50px;
-    margin-top: 1%;
-    height: 90%;
-    border-radius: 20px;
-    box-shadow: 3px 3px 3px lightgrey;
-`;

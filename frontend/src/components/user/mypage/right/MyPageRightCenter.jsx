@@ -2,7 +2,8 @@ import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
 import http from "api/commonHttp";
 import Streak from "react-github-contribution-calendar"
-import color from "lib/style/colorPalette";
+import color, { dark_grey } from "lib/style/colorPalette";
+import { Background, BannerTitle } from 'styled';
 
 export default function MyPageStreak({userId}) {
     const [data, setData] = useState({});
@@ -36,30 +37,24 @@ export default function MyPageStreak({userId}) {
         return k;
     }
     return (
-        <StreakContainer>
-            <Title>활동기록</Title>
-            <Streak weekNames={weekNames} monthNames={monthNames} panelAttributes={{rx: 3, ry: 3}} values={data} panelColors={colors} until={until}>
-           </Streak>
-        </StreakContainer>
+        <Background style={{gap: "1rem"}}>
+            <TitleContainer>
+                <BannerTitle style={{fontWeight: 500}}>활동기록</BannerTitle>
+                <Button>월간</Button>
+            </TitleContainer>
+            <Streak weekNames={weekNames} monthNames={monthNames} panelAttributes={{rx: 3, ry: 3}} values={data} panelColors={colors} until={until}/>
+        </Background>
     );
 }
 
-
-const StreakContainer = styled.div`
-    padding: 15px;
-    margin-top: 10%;
-    justify-content: center;
+const TitleContainer = styled.div`
+    display: flex;
+    justify-content: space-between;
     align-items: center;
-    box-sizing: border-box;
-    background-color: white;
-    width: 100%;
-    border-radius: 20px;
-    box-shadow: 3px 3px 3px lightgrey;
-`;
+`
 
-const Title = styled.div`
-    color: black;
-    margin-bottom: 10px;
-    margin-left: 10px;
-    font-weight: light;
-`;
+const Button = styled.div`
+    font-size: 0.75rem;
+    color: ${dark_grey};
+    font-weight: 400;
+`
