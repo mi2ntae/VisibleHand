@@ -1,12 +1,18 @@
 spring:
   config:
     activate:
-      on-profile: oauth
+      on-profile: auth
 
   security:
     oauth2:
       client:
         registration:
+          google:
+            client-id: 627892398327-lne8q8lf9jkbju5glga1vm9q03vktpjr.apps.googleusercontent.com
+            client-secret: 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
+            scope:
+              - email
+            redirect-uri: http://localhost:8080/login/oauth2/code/google
           kakao:
             client-id: 239963a7ee5248741ccce5709bed01cf
             client-secret: sBx26eKhXzDiGxtDLiFMQ2AlwAGefiCm
@@ -16,7 +22,6 @@ spring:
             authorization-grant-type: authorization_code
             redirect-uri: http://localhost:8080/login/oauth2/code/kakao
             client-authentication-method: POST
-
         provider:
           kakao:
             authorization-uri: https://kauth.kakao.com/oauth/authorize

@@ -1,5 +1,9 @@
 package com.it.vh.common.util.jwt.filter;
 
+import static com.it.vh.common.util.jwt.exception.JwtExceptionList.MALFORMED_HEADER;
+import static com.it.vh.common.util.jwt.exception.JwtExceptionList.NOT_MATCHED_TOKEN;
+import static com.it.vh.common.util.jwt.exception.JwtExceptionList.TOKEN_NOTFOUND;
+
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.it.vh.common.exception.ErrorResponse;
 import com.it.vh.common.util.jwt.JwtTokenProvider;
@@ -10,6 +14,11 @@ import com.it.vh.user.domain.entity.RefreshToken;
 import com.it.vh.user.service.UserRedisService;
 import io.jsonwebtoken.JwtException;
 import io.jsonwebtoken.MalformedJwtException;
+import java.io.IOException;
+import javax.servlet.FilterChain;
+import javax.servlet.ServletException;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpHeaders;
@@ -17,22 +26,11 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
 import org.springframework.web.filter.OncePerRequestFilter;
 
-import javax.servlet.FilterChain;
-import javax.servlet.ServletException;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import java.io.IOException;
-
-import static com.it.vh.common.util.jwt.exception.JwtExceptionList.MALFORMED_HEADER;
-import static com.it.vh.common.util.jwt.exception.JwtExceptionList.TOKEN_NOTFOUND;
-
 @Slf4j
 @RequiredArgsConstructor
-@Component
 public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
     private final JwtTokenProvider jwtTokenProvider;
@@ -42,7 +40,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response,
-                                    FilterChain filterChain) throws ServletException, IOException {
+        FilterChain filterChain) throws ServletException, IOException {
 
         try {
             Token token = getToken(request);
@@ -53,7 +51,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
                 //리프레시 토큰 확인
                 if (token.getTokenType() == "REFRESH") {
                     Authentication authentication
-                            = jwtTokenProvider.getAuthentication(token.getToken());
+                        = jwtTokenProvider.getAuthentication(token.getToken());
                     log.info("[토큰 권한 확인]: {}", authentication);
 
                     String userId = authentication.getName();
@@ -71,12 +69,16 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
                         TokenInfo reissueToken = reissueTokensAndSaveOnRedis(authentication);
 
                         makeResponse(HttpStatus.CREATED.value(), response,
-                                ReissueTokenResDto.of(reissueToken));
+                            ReissueTokenResDto.of(reissueToken));
                         return;
+
+                    } else {
+                        throw new JwtException(NOT_MATCHED_TOKEN.getMessage());
                     }
                 }
 
-                Authentication authentication = jwtTokenProvider.getAuthentication(token.getToken());
+                Authentication authentication = jwtTokenProvider.getAuthentication(
+                    token.getToken());
                 log.info("[토큰 권한 확인]: {}", authentication);
 
                 SecurityContextHolder.getContext().setAuthentication(authentication);
@@ -90,7 +92,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
         } catch (Exception e) {
             makeResponse(HttpStatus.UNAUTHORIZED.value(), response,
-                    ErrorResponse.of(HttpStatus.UNAUTHORIZED.value(), e.getMessage()));
+                ErrorResponse.of(HttpStatus.UNAUTHORIZED.value(), e.getMessage()));
         }
     }
 
@@ -103,9 +105,9 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
             if (token.startsWith("Bearer")) {
                 String accessToken = token.split(" ")[1].trim();
                 return Token.builder()
-                        .tokenType("ACCESS")
-                        .token(accessToken)
-                        .build();
+                    .tokenType("ACCESS")
+                    .token(accessToken)
+                    .build();
             }
             throw new MalformedJwtException(MALFORMED_HEADER.getMessage());
         }
@@ -114,9 +116,9 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         token = request.getHeader("refreshToken");
         if (StringUtils.hasText(token)) {
             return Token.builder()
-                    .tokenType("REFRESH")
-                    .token(token)
-                    .build();
+                .tokenType("REFRESH")
+                .token(token)
+                .build();
         }
 
         return null;
@@ -126,19 +128,20 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         TokenInfo tokenInfo = jwtTokenProvider.generateToken(authentication);
 
         userRedisService.saveRefreshToken(authentication.getName(),
-                tokenInfo.getRefreshToken());
+            tokenInfo.getRefreshToken());
 
         return tokenInfo;
     }
 
-    private void makeResponse(int code, HttpServletResponse response, Object dto) throws IOException {
+    private void makeResponse(int code, HttpServletResponse response, Object dto)
+        throws IOException {
         response.setStatus(code);
         response.setCharacterEncoding("UTF-8");
         response.setContentType(MediaType.APPLICATION_JSON_VALUE);
         response.getWriter().write(
-                objectMapper.writeValueAsString(
-                        dto
-                )
+            objectMapper.writeValueAsString(
+                dto
+            )
         );
     }
 }

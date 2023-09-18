@@ -21,6 +21,7 @@ public class LoginResDto {
         private String statusMsg;
         private String profileImg;
         private String snsEmail;
+        private String provider;
 
         public static UserProfile from(User user) {
             return UserProfile.builder()
@@ -29,6 +30,7 @@ public class LoginResDto {
                     .statusMsg(user.getStatusMsg())
                     .profileImg(user.getProfileImg())
                     .snsEmail(user.getSnsEmail())
+                    .provider(user.getProvider())
                     .build();
         }
     }

@@ -6,8 +6,8 @@ import lombok.Getter;
 @Getter
 @AllArgsConstructor
 public enum JwtExceptionList {
-    ACCESS_DENIED("접근할 수 없습니다."),
-    UNAUTHORIZED("인증되지 않은 회원입니다."),
+    ACCESS_DENIED("접근 불가"),
+    UNAUTHORIZED("인증되지 않은 회원"),
 
     EXPIRED_TOKEN("만료된 토큰"),
     INVALID_TOKEN("유효하지 않은 토큰"),
