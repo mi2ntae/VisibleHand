@@ -83,4 +83,5 @@ public class User {
     @Column(nullable = false, length = 48)
     private String snsEmail;
 
+    private String provider;
 }
