@@ -124,7 +124,10 @@ public class UserServiceImpl implements UserService{
     public void createProfile(UserProfileReqDto userProfileReqDto) throws NonExistUserIdException {
         String snsEmail = userProfileReqDto.getSnsEmail();
         log.info("email: {}", snsEmail);
-        Optional<User> findUser = userRespository.findBySnsEmail(snsEmail);
+        String provider = userProfileReqDto.getProvider();
+        log.info("providerId: {}", provider);
+
+        Optional<User> findUser = userRespository.findBySnsEmailAndProvider(snsEmail, provider);
         log.info("user: {}", findUser);
 
         if(!findUser.isPresent())
@@ -136,6 +139,7 @@ public class UserServiceImpl implements UserService{
                 .statusMsg(userProfileReqDto.getProfile().getStatusMsg())
                 .profileImg(userProfileReqDto.getProfileImg())
                 .snsEmail(findUser.get().getSnsEmail())
+                .provider(findUser.get().getProvider())
                 .build();
         userRespository.save(user);
     }

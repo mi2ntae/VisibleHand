@@ -15,7 +15,7 @@ public interface UserRespository extends JpaRepository<User, Long> {
 
     Page<User>  findUsersByNicknameContains(String keyword, Pageable page);
 
-    Optional<User> findBySnsEmail(String email);
+    Optional<User> findBySnsEmailAndProvider(String snsEmail, String provider);
     Optional<User> findByNickname(String nickname);
 
     @Query(name = "findRecommendUserByUserId", nativeQuery = true)
