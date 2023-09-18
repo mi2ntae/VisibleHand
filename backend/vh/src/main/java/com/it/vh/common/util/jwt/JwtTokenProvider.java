@@ -148,10 +148,9 @@ public class JwtTokenProvider {
             return true;
         } catch (SecurityException | MalformedJwtException | UnsupportedJwtException |
                  IllegalArgumentException e) {
-            throw new SignatureException(INVALID_TOKEN.getMessage());
+            throw new JwtException(INVALID_TOKEN.getMessage());
         } catch (ExpiredJwtException e) {
-            throw new ExpiredJwtException(parseHeader(token), parseClaims(token),
-                    EXPIRED_TOKEN.getMessage());
+            throw new JwtException(EXPIRED_TOKEN.getMessage());
         }
     }
 }

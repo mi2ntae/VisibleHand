@@ -10,6 +10,7 @@ public class UserProfileReqDto {
     private Profile profile;
     private String profileImg;
     private String snsEmail;
+    private String provider;
 
     @Getter
     @Builder

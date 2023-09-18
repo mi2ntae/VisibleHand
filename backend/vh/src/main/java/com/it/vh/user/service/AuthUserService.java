@@ -4,6 +4,7 @@ import com.it.vh.common.util.jwt.JwtTokenProvider;
 import com.it.vh.common.util.jwt.dto.TokenInfo;
 import com.it.vh.user.api.dto.auth.AuthTokenInfo;
 import com.it.vh.user.api.dto.auth.AuthUserInfo;
+import com.it.vh.user.api.dto.auth.GoogleUserInfo;
 import com.it.vh.user.api.dto.auth.KakaoUserInfo;
 import com.it.vh.user.api.dto.auth.LoginResDto;
 import com.it.vh.user.api.dto.auth.LoginResDto.UserProfile;
@@ -39,14 +40,15 @@ public class AuthUserService {
     private final UserRedisService userRedisService;
 
     @Transactional
-    public LoginResDto login(String code) {
-        ClientRegistration provider = inMemoryRepository.findByRegistrationId("kakao");
+    public LoginResDto login(String code, String provider) {
+        ClientRegistration providerInfo = inMemoryRepository.findByRegistrationId(provider);
+        log.info("providerInfo: {}", providerInfo);
 
-        //카카오 토큰 받기
-        AuthTokenInfo token = getToken(code, provider);
+        //토큰 받기
+        AuthTokenInfo token = getToken(code, providerInfo);
 
         //가입 또는 로그인 처리
-        User user = getUser(token, provider);
+        User user = getUser(token, providerInfo, provider);
         log.info("[유저] user: {}", user);
 
         UserProfile userProfile = UserProfile.from(user);
@@ -98,13 +100,18 @@ public class AuthUserService {
 
     //일단은 DTO로 가지고 있다가 프로필 작성 후 insert 하는 걸로 바꾸는 게 나은가,,,
     @Transactional
-    public User getUser(AuthTokenInfo token, ClientRegistration provider) {
-        Map<String, Object> userAttributes = getUserAttributes(token, provider);
+    public User getUser(AuthTokenInfo token, ClientRegistration providerInfo, String provider) {
+        Map<String, Object> userAttributes = getUserAttributes(token, providerInfo);
 
-        AuthUserInfo oAuth2UserInfo = new KakaoUserInfo(userAttributes);
+        AuthUserInfo oAuth2UserInfo = null;
+        if(provider.equals("kakao")) {
+            oAuth2UserInfo = new KakaoUserInfo(userAttributes);
+        } else if(provider.equals("google")) {
+            oAuth2UserInfo = new GoogleUserInfo(userAttributes);
+        }
         String snsEmail = oAuth2UserInfo.getEmail();
 
-        Optional<User> findUser = userRespository.findBySnsEmail(snsEmail);
+        Optional<User> findUser = userRespository.findBySnsEmailAndProvider(snsEmail, provider);
         if (findUser.isPresent()) {
             log.info("[이미 등록된 사용자] userId: {}", findUser.get().getUserId());
             return findUser.get();
@@ -113,6 +120,7 @@ public class AuthUserService {
         User saveUser = User.builder()
                 .nickname("")
                 .snsEmail(snsEmail)
+                .provider(provider)
                 .build();
         userRespository.save(saveUser);
         log.info("[가입완료] userId: {}", saveUser.getUserId());
