@@ -4,7 +4,7 @@ spring:
     group:
       local:
         - common
-        - oauth
+        - auth
         - jwt
         - redis
       prod :
@@ -62,7 +62,7 @@ spring:
     password: root
   jpa:
     hibernate:
-      ddl-auto: validate
+      ddl-auto: create
     show-sql: true
 
 ---
