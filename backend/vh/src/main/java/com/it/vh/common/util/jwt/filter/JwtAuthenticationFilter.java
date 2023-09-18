@@ -32,7 +32,6 @@ import static com.it.vh.common.util.jwt.exception.JwtExceptionList.TOKEN_NOTFOUN
 
 @Slf4j
 @RequiredArgsConstructor
-@Component
 public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
     private final JwtTokenProvider jwtTokenProvider;
