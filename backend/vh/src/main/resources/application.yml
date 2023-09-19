@@ -4,6 +4,9 @@ spring:
     group:
       local:
         - common
+        - auth
+        - jwt
+        - redis
       prod :
         - common
 ---

@@ -11,9 +11,9 @@ export default function MyPageLeft({userId}) {
     const loginId = useSelector((state) => state.user.userId);
 
     const tabs = [
-        {no: 0, tabName: "피드", check: true, content: <MyPageFeed/>, },
-        {no: 1, tabName: "스크랩한 기사", check: false, content: <MyPageScrap/>}, 
-        {no: 2, tabName: "오답 노트", check: false, content: <MyPageReview/>}];
+        {no: 0, tabName: "내 피드", check: true, content: <MyPageFeed/>, },
+        {no: 1, tabName: "스크랩", check: false, content: <MyPageScrap/>}, 
+        {no: 2, tabName: "틀린 문제", check: false, content: <MyPageReview/>}];
     
     console.log(loginId, userId);
     return (
@@ -26,13 +26,8 @@ export default function MyPageLeft({userId}) {
 
 
 const LeftContainer = styled.div`
-    margin-top: 2%;
-    margin-left: 5%;
-    // flex-direction: row;
-    justify-content: flex-start;
-    // min-height: 250px;
-    // max-width: 1240px;
-    min-height: 50px;
-    height: 650px;
-    width: 55%;
+    display: flex;
+    flex-direction: column;
+    flex: 13;
+    gap: 16px;
 `;

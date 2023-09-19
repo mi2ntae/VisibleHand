@@ -18,29 +18,13 @@ export default function Mypage() {
     }, [])
 
     return (
-        <div>
-            <MainContainer>
-                {/* <MyPageTop userId={params.userId}>
-                </MyPageTop>
-                <MyPageDown userId={params.userId}>
-                </MyPageDown> */}
-                <MyPageLeft userId={userId}></MyPageLeft>
-                <MyPageRight userId={userId}></MyPageRight>
-            </MainContainer>
+        <div style={{ display: "flex", padding: "40px 100px", gap: "88px" }}>
+            {/* <MyPageTop userId={params.userId}>
+            </MyPageTop>
+            <MyPageDown userId={params.userId}>
+            </MyPageDown> */}
+            <MyPageLeft userId={userId}></MyPageLeft>
+            <MyPageRight userId={userId}></MyPageRight>
         </div>
     );
 }
-
-const MainContainer = styled.div`
-    display: flex;
-    flex-direction: row;
-    justify-content: flex-start;
-    margin: auto;
-    padding: 20px;
-    box-sizing: border-box;
-    width: 100%;
-    height: 100%
-    max-width: 1240px;
-    min-width: 800px;
-    min-height: calc(100vh - 160px);
-`;
