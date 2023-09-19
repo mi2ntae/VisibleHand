@@ -25,7 +25,7 @@ public class ScrapServiceImpl implements ScrapService {
     private final UserRespository userRespository;
     private final AuthenticationHandler authenticationHandler;
 
-    private final int SCRAP_PAGE_NUm = 8;
+    private final int SCRAP_PAGE_NUm = 6;
 
     @Override
     public Page<ScrapListResDto> getScrapListByUserId(long userId, String keyword, int page) throws AuthenticationAccessForbiddenException, NonExistUserIdException {
