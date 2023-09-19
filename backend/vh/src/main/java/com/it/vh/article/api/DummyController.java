@@ -2,9 +2,11 @@ package com.it.vh.article.api;
 
 import com.it.vh.article.domain.entity.ArticleKind;
 import com.it.vh.article.domain.entity.Article;
+import com.it.vh.article.domain.entity.Cloud;
 import com.it.vh.article.domain.entity.CloudArticle;
 import com.it.vh.article.domain.repository.ArticleRepository;
 import com.it.vh.article.domain.repository.CloudArticleRepository;
+import com.it.vh.article.domain.repository.WordCloudRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -16,10 +18,11 @@ import java.util.ArrayList;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/dummy")
+@RequestMapping("/api/dummy")
 public class DummyController {
     private final ArticleRepository articleRepository;
     private final CloudArticleRepository cloudArticleRepository;
+    private final WordCloudRepository wordCloudRepository;
 
     @GetMapping("/cloud")
     public ResponseEntity<?> second() {
@@ -113,6 +116,23 @@ public class DummyController {
             }
         }
         articleRepository.saveAll(list);
+        return ResponseEntity.ok().build();
+    }
+
+    @GetMapping("/wordcloud")
+    public ResponseEntity<?> wordcloud() {
+        ArrayList<Cloud> list = new ArrayList<>();
+        int day = 15;
+        for(int j=0;j<5;j++) {
+            for(int i=0;i<20;i++) {
+                list.add(Cloud.builder()
+                        .count((int) (Math.random() * 100))
+                        .issueDate(LocalDateTime.of(2023, 9, day-j, 1, 1, 1))
+                        .kind(ArticleKind.FINANCE)
+                        .word(String.valueOf(Math.random()*100)).build());
+            }
+        }
+        wordCloudRepository.saveAll(list);
         return ResponseEntity.ok().build();
     }
 }
