@@ -2,25 +2,26 @@ spring:
   config:
     activate:
       on-profile: auth
+    import: optional:file:.env[.properties]
 
   security:
     oauth2:
       client:
         registration:
           google:
-            client-id: 627892398327-lne8q8lf9jkbju5glga1vm9q03vktpjr.apps.googleusercontent.com
-            client-secret: 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
+            client-id: ${GOOGLE_CLIENT_ID}
+            client-secret: ${GOOGLE_CLIENT_SECRET}
             scope:
               - email
-            redirect-uri: http://localhost:8080/login/oauth2/code/google
+            redirect-uri: ${GOOGLE_REDIRECT_URI}
           kakao:
-            client-id: 239963a7ee5248741ccce5709bed01cf
-            client-secret: sBx26eKhXzDiGxtDLiFMQ2AlwAGefiCm
+            client-id: ${KAKAO_CLIENT_ID}
+            client-secret: ${KAKAO_CLIENT_SECRET}
             scope:
               - account_email
             client-name: Kakao
             authorization-grant-type: authorization_code
-            redirect-uri: http://localhost:8080/login/oauth2/code/kakao
+            redirect-uri: ${KAKAO_REDIRECT_URI}
             client-authentication-method: POST
         provider:
           kakao:
