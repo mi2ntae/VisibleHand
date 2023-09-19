@@ -110,4 +110,11 @@ public class UserController {
         userService.deleteUser(userId);
         return ResponseEntity.ok().build();
     }
+
+    @ApiOperation(value = "추천 사용자 조회", notes = "로그인한 유저가 팔로우하는 유저들이 가장 많이 팔로우하는 유저 조회")
+    @GetMapping("/recommend/{userId}")
+    public ResponseEntity<List<UserFollowListResDto>> getRecommendUserByUserId(@PathVariable long userId) {
+        List<UserFollowListResDto> res = userService.getRecommendUserListByUserId(userId);
+        return ResponseEntity.ok().body(res);
+    }
 }

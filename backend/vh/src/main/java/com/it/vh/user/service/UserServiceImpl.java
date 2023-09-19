@@ -16,7 +16,10 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 import java.util.Optional;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @Slf4j
@@ -25,6 +28,8 @@ public class UserServiceImpl implements UserService{
     private final UserRespository userRespository;
     private final FollowRepository followRepository;
     private final int FOLLOWLIST_PAGE_NUM = 10;
+    private final UserRedisService userRedisService;
+
     @Override
     public UserDto getUserProfileByUserId(long userId) throws NonExistUserIdException{
         Optional<User> optionalUser = userRespository.findUserByUserId(userId);
@@ -49,9 +54,9 @@ public class UserServiceImpl implements UserService{
                 follow ->
                         UserFollowListResDto.builder()
                                 .userId(follow.getTo().getUserId())
-                                .UserName(follow.getTo().getNickname())
+                                .userName(follow.getTo().getNickname())
                                 .statusMsg(follow.getTo().getStatusMsg())
-                                .iamgeUrl(follow.getTo().getProfileImg())
+                                .imageUrl(follow.getTo().getProfileImg())
                                 .build()
         );
     }
@@ -65,9 +70,9 @@ public class UserServiceImpl implements UserService{
                 follow ->
                     UserFollowListResDto.builder()
                             .userId(follow.getFrom().getUserId())
-                            .UserName(follow.getFrom().getNickname())
+                            .userName(follow.getFrom().getNickname())
                             .statusMsg(follow.getFrom().getStatusMsg())
-                            .iamgeUrl(follow.getFrom().getProfileImg())
+                            .imageUrl(follow.getFrom().getProfileImg())
                             .build()
         );
 
@@ -80,9 +85,9 @@ public class UserServiceImpl implements UserService{
                 userList ->
                         UserFollowListResDto.builder()
                                 .userId(userList.getUserId())
-                                .UserName(userList.getNickname())
+                                .userName(userList.getNickname())
                                 .statusMsg(userList.getStatusMsg())
-                                .iamgeUrl(userList.getProfileImg())
+                                .imageUrl(userList.getProfileImg())
                                 .build()
         );
     }
@@ -114,31 +119,56 @@ public class UserServiceImpl implements UserService{
         }
     }
 
+    @Transactional
     @Override
-    public void createProfile(UserProfileReqDto userProfileReqDto) {
+    public void createProfile(UserProfileReqDto userProfileReqDto) throws NonExistUserIdException {
+        String snsEmail = userProfileReqDto.getSnsEmail();
+        log.info("email: {}", snsEmail);
+        String provider = userProfileReqDto.getProvider();
+        log.info("providerId: {}", provider);
+
+        Optional<User> findUser = userRespository.findBySnsEmailAndProvider(snsEmail, provider);
+        log.info("user: {}", findUser);
+
+        if(!findUser.isPresent())
+            throw new NonExistUserIdException();
+
         User user = User.builder()
-            .nickname(userProfileReqDto.getProfile().getNickname())
-            .statusMsg(userProfileReqDto.getProfile().getStatusMsg())
-            .profileImg(userProfileReqDto.getProfileImg())
-            .snsEmail(userProfileReqDto.getSnsEmail())
-            .build();
+                .userId(findUser.get().getUserId())
+                .nickname(userProfileReqDto.getProfile().getNickname())
+                .statusMsg(userProfileReqDto.getProfile().getStatusMsg())
+                .profileImg(userProfileReqDto.getProfileImg())
+                .snsEmail(findUser.get().getSnsEmail())
+                .provider(findUser.get().getProvider())
+                .build();
         userRespository.save(user);
     }
 
+
+    @Transactional
     @Override
-    public void updateProfile(Long userId, UserProfileReqDto userProfileReqDto) {
+    public void updateProfile(Long userId, UserProfileReqDto userProfileReqDto) throws NonExistUserIdException {
         Optional<User> findUser = userRespository.findUserByUserId(userId);
-        if(findUser.isPresent()) {
-            User user = findUser.get();
-            user.setNickname(userProfileReqDto.getProfile().getNickname());
-            user.setStatusMsg(userProfileReqDto.getProfile().getStatusMsg());
-            user.setProfileImg(userProfileReqDto.getProfileImg());
-            userRespository.save(user);
-        }
+        if(!findUser.isPresent())
+            throw new NonExistUserIdException();
+
+        User user = findUser.get();
+        user.setNickname(userProfileReqDto.getProfile().getNickname());
+        user.setStatusMsg(userProfileReqDto.getProfile().getStatusMsg());
+        user.setProfileImg(userProfileReqDto.getProfileImg());
+        userRespository.save(user);
     }
 
+    @Transactional
     @Override
     public void deleteUser(Long userId) {
         userRespository.deleteById(userId);
+        userRedisService.deleteRefreshToken(userId.toString());
+    }
+
+    @Override
+    public List<UserFollowListResDto> getRecommendUserListByUserId(long userId) {
+        List<UserFollowListResDto> userList = userRespository.findRecommendUserByUserId(userId);
+        return userList;
     }
 }

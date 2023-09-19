@@ -17,11 +17,8 @@ export default function MyPageRight({userId}) {
 
 
 const RightContainer = styled.div`
-    margin-top: 2%;
-    margin-left: 5%;
-    // min-height: 250px;
-    // max-width: 1240px;
-    min-height: 50px;
-    height: 650px;
-    width: 30%;
+    flex: 7;
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
 `;

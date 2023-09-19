@@ -6,7 +6,7 @@ import styled from 'styled-components';
 export default function MyPageTabs({tabs}) {
     return (
         <TabContainer>
-            <div class="radio-inputs">
+            <div className="radio-inputs">
                 {tabs.map((tab, index) => (
                     <MyPageTab key={index} no={tab.no} tabName={tab.tabName} isFirst={tab.check}></MyPageTab>
                 ))}
@@ -19,7 +19,7 @@ const TabContainer = styled.div`
     // min-height: 250px;
     // max-width: 1240px;
     min-height: 45px;
-    width: 40%;
+    // width: 35%;
     display: flex;
     text-align: left;
 `;

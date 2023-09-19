@@ -1,23 +1,34 @@
 import {
   black_grey,
-  dark_grey,
+  grey,
   lightest_grey,
   primary,
   white,
 } from "lib/style/colorPalette";
-import React from "react";
-import { Link } from "react-router-dom";
+import React, { useMemo, useRef, useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
 import { ProfileImg } from "styled";
 import styled from "styled-components";
+import Heart from "components/Feed/Heart";
 
 export default function FeedElement({ data }) {
-  const handleLike = () => {
-    // 좋아요 요청을 보내거라
+  const navigate = useNavigate();
+  const moveToProfile = () => {
+    navigate(`/profile/${data.nickname}`);
   };
 
-  const moveToProfile = () => {
-    // 해당 프로필로 이동하거라
-  };
+  const [moreBtn, setMoreBtn] = useState(false);
+  const textLimit = useRef(170);
+  const text = useMemo(() => {
+    const short = data.content.slice(0, textLimit.current);
+    if (data.content.length > textLimit.current) {
+      if (moreBtn) {
+        return data.content;
+      }
+      return short;
+    }
+    return data.content;
+  }, [moreBtn]);
 
   return (
     <Feed>
@@ -26,28 +37,35 @@ export default function FeedElement({ data }) {
           src={data.profileImg}
           alt={data.nickname}
           onClick={moveToProfile}
+          style={{ cursor: "pointer" }}
         />
-        <div style={{ color: black_grey }}>
+        <div style={{ color: black_grey, flex: 1 }}>
           <div style={{ display: "flex", justifyContent: "space-between" }}>
-            <div onClick={moveToProfile} style={{ fontWeight: 600 }}>
+            <div
+              onClick={moveToProfile}
+              style={{ fontWeight: 600, cursor: "pointer" }}
+            >
               {data.nickname}
             </div>
-            <Heart onClick={handleLike}>
-              {data.isHeart ? (
-                <img src="/icons/feed/ic_heart.svg" alt="좋아요" />
-              ) : (
-                <img src="/icons/feed/ic_heart_empty.svg" alt="좋아요" />
-              )}
-              {data.heart}
-            </Heart>
+            <Heart
+              clicked={data.isHeart}
+              cnt={data.heart}
+              feedId={data.feedId}
+            />
           </div>
-          <Content>{data.content}</Content>
+          <Content>
+            {text}
+            <More onClick={() => setMoreBtn(!moreBtn)}>
+              {data.content.length > textLimit.current &&
+                (moreBtn ? " [닫기]" : " ...더보기")}
+            </More>
+          </Content>
         </div>
       </div>
       <div
         style={{ width: "100%", height: "1px", backgroundColor: lightest_grey }}
       />
-      <Article to="/">
+      <Article to={`/news/${data.articleId}`}>
         <Label>{data.category}</Label>
         {data.title}
       </Article>
@@ -61,18 +79,15 @@ const Feed = styled.div`
   background-color: ${white};
 `;
 
-const Heart = styled.div`
-  display: flex;
-  align-items: center;
-  gap: 6px;
-  color: ${dark_grey};
-  font-weight: 500;
-`;
-
 const Content = styled.div`
   margin-top: 8px;
   text-align: justify;
   line-height: 24px;
+`;
+
+const More = styled.span`
+  color: ${grey};
+  cursor: pointer;
 `;
 
 const Article = styled(Link)`

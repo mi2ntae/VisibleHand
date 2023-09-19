@@ -1,6 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
 import http from "api/commonHttp";
+import { Background } from 'styled';
+import { black_grey, dark_grey, darkest_grey, white } from 'lib/style/colorPalette';
 
 export default function MyPageRightTop({userId}) {
     const [profile, setProfile] = useState({
@@ -32,52 +34,32 @@ export default function MyPageRightTop({userId}) {
     }, [])
 
     return (
-        <RightTopContainer>
+        <Background style={{ padding: "3rem", gap: "1.25rem" }}>
             <Div>
-                <ImageContainer>
-                    <Image src={profile.profileImg}></Image>
-                </ImageContainer>
-                <div>
+                <Image src={profile.profileImg}></Image>
+                <div style={{display: "flex", flexDirection: "column", justifyContent: "flex-start", flex: 1}}>
+                    <div style={{display: "flex", justifyContent: "flex-end"}}>
+                        <Button><img src='/icons/mypage/ic_settings.svg' alt='회원정보 수정'/></Button>
+                    </div>
+                    
                     <NickName>{profile.nickname}</NickName>
                     <FollowInfo>
-                        <span>팔로잉 : {followInfo.followingCnt}</span>&nbsp;&nbsp;&nbsp;&nbsp;
-                        <span>팔로워 : {followInfo.followerCnt}</span>
+                        <span>팔로잉</span><span style={{fontWeight: 500}}> {followInfo.followingCnt}</span>&nbsp;&nbsp;
+                        <span>팔로워</span><span style={{fontWeight: 500}}> {followInfo.followerCnt}</span>
                     </FollowInfo>
                 </div>
-                <Button>asd</Button>
-                
             </Div>
-           
             <StatusMsg>{profile.statusMsg}</StatusMsg>
-        </RightTopContainer>
+        </Background>
     );
 }
 
 
-const RightTopContainer = styled.div`
-    justify-content: center;
-    align-items: center;
-    box-sizing: border-box;
-    background-color: white;
-    border-radius: 20px;
-    box-shadow: 3px 3px 3px lightgrey;
-    width: 100%;
-    padding-top: 1px;
-    padding-bottom: 20px;
-`;
-
-const ImageContainer = styled.div`
-    width: 100px;
-    height: 100px; 
-    border: 1px solid lightgray;
-    border-radius: 50%;
-    overflow: hidden;
-    display: inline-block;
-`;
-
 const Image = styled.img`
-    width: 100%;
-    height: 100%;
+    width: 6rem;
+    height: 6rem;
+    border: 1px solid ${dark_grey};
+    border-radius: 3.75rem;
     object-fit: cover;
 `
 
@@ -85,40 +67,29 @@ const Div = styled.div`
     display: flex;
     align-items: center;
     text-align: left;
-    margin-top: 5%;
-    margin-left: 5%;
+    gap: 1.75rem;
 `
 
 const NickName = styled.div`
-    display: inline-block;
-    font-size: 1.5em;
-    font-weight: bold;
-    margin-left: 10%;
+    font-size: 1.5rem;
+    font-weight: 600;
+    color: ${black_grey};
 `
 
 const FollowInfo = styled.div`
-    font-size: 0.8em;
-    font-weight: light;
-    min-width: 120px;
-    margin-top: 5%;
-    margin-left: 10%;
+    font-size: 1rem;
+    font-weight: 400;
+    color: ${black_grey};
+    margin-top: 1.125rem;
 `
 const StatusMsg = styled.div`
-    margin-top: 3%;
-    font-size: 0.9em;
-    font-weight: light;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    width: 100%;
-    text-align: center;
+    color: ${darkest_grey};
+    font-size: 1rem;
 `
 
 const Button = styled.button`
-    margin-right: 5%;
-    margin-bottom: 25%;
-    margin-left: 15%;
-    font-size: 1.0em;
-    font-weight: light;
-    text-align: center;
+    border: none;
+    background-color: ${white};
+    width: 1.125rem;
+    height: 1.125rem;
 `

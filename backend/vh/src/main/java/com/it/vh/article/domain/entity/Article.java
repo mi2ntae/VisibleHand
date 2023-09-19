@@ -1,5 +1,6 @@
 package com.it.vh.article.domain.entity;
 
+import com.it.vh.article.api.dto.response.RankRes;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -12,6 +13,32 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
+@NamedNativeQueries({
+        @NamedNativeQuery(
+                name = "getArticleRanking",
+                query = "SELECT IFNULL(a.article_id, -1) AS articleId, a.title, a.company, a.issue_date AS issueDate, thumbnail " +
+                        "FROM Article a " +
+                        "JOIN (SELECT f.article_id AS articleId, COUNT(f.feed_id) AS feedCount FROM Feed f " +
+                        "WHERE f.create_at >= NOW() - INTERVAL 1 HOUR " +
+                        "GROUP BY articleId ORDER BY feedCount DESC LIMIT 5) " +
+                        "subquery ON a.article_id = subquery.articleId " +
+                        "ORDER BY subquery.feedCount DESC",
+                resultSetMapping = "articleRankingDto"
+        ),
+})
+@SqlResultSetMapping(
+        name = "articleRankingDto",
+        classes = @ConstructorResult(
+                targetClass = RankRes.class,
+                columns = {
+                        @ColumnResult(name = "articleId", type = Long.class),
+                        @ColumnResult(name = "title", type = String.class),
+                        @ColumnResult(name = "company", type = String.class),
+                        @ColumnResult(name = "issueDate", type = String.class),
+                        @ColumnResult(name = "thumbnail", type = String.class),
+                }
+        )
+)
 public class Article {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

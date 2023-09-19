@@ -1,6 +1,7 @@
 package com.it.vh.user.domain.entity;
 
 import com.it.vh.user.api.dto.StreakResDto;
+import com.it.vh.user.api.dto.UserFollowListResDto;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -15,7 +16,7 @@ import java.time.LocalDate;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-@NamedNativeQueries(
+@NamedNativeQueries({
         @NamedNativeQuery(
                 name = "findStreaByUserId",
                 query = "SELECT DATE(s.create_at) as createAt, count(s.solved_id) as weight " +
@@ -23,8 +24,20 @@ import java.time.LocalDate;
                         "WHERE s.correct = true " +
                         "group by DATE(s.create_at)",
                 resultSetMapping = "findStreaByUserId"
-        )
-)
+        ),
+        @NamedNativeQuery(
+                name = "findRecommendUserByUserId",
+                query = "SELECT user_id AS userId, nickname AS userName, status_msg AS statusMsg, IFNULL(profile_img, '기본 이미지 링크') AS imageUrl " +
+                        "FROM User " +
+                        "WHERE user_id IN (" +
+                        "SELECT to_id FROM Follow " +
+                        "WHERE to_id NOT IN (SELECT to_id FROM Follow WHERE from_id = :userId) " +
+                        "AND from_id IN (SELECT to_id FROM Follow WHERE from_id = :userId) " +
+                        "GROUP BY to_id ORDER BY COUNT(*)" +
+                        ") OR user_id IN (SELECT to_id FROM Follow GROUP BY to_id ORDER BY count(*) DESC) LIMIT 5",
+                resultSetMapping = "userFollowListDto"
+        ),
+})
 
 @SqlResultSetMapping(
         name = "findStreaByUserId",
@@ -33,6 +46,21 @@ import java.time.LocalDate;
                 columns = {
                         @ColumnResult(name = "createAt", type = LocalDate.class),
                         @ColumnResult(name = "weight", type = Integer.class),
+                }
+        )
+)
+
+@SqlResultSetMapping(
+
+
+        name = "userFollowListDto",
+        classes = @ConstructorResult(
+                targetClass = UserFollowListResDto.class,
+                columns = {
+                        @ColumnResult(name = "userId", type = Long.class),
+                        @ColumnResult(name = "userName", type = String.class),
+                        @ColumnResult(name = "statusMsg", type = String.class),
+                        @ColumnResult(name = "imageUrl", type = String.class),
                 }
         )
 )
@@ -55,4 +83,6 @@ public class User {
     @Column(nullable = false, length = 48)
     private String snsEmail;
 
+    @Column(length = 10)
+    private String provider;
 }

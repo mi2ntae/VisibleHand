@@ -9,7 +9,7 @@ import lombok.Getter;
 @AllArgsConstructor
 public class UserFollowListResDto {
     private long userId;
-    private String UserName;
+    private String userName;
     private String statusMsg;
-    private String iamgeUrl;
+    private String imageUrl;
 }
