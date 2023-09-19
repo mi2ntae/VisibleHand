@@ -1,17 +1,18 @@
 package com.it.vh.feed.service;
 
-import com.it.vh.feed.api.dto.FeedListOfArticleResDto;
-import com.it.vh.feed.api.dto.FeedResDto;
+import com.it.vh.feed.api.dto.FeedListOfArticleRes;
+import com.it.vh.feed.api.dto.FeedListRes;
+import com.it.vh.feed.api.dto.FeedRes;
 import com.it.vh.feed.api.dto.MyFeedRes;
 
 import java.util.List;
 
 public interface FeedService {
-    List<FeedResDto> getFeedsByUserId(long userId, int searchType, String keyword, int page);
+    List<FeedRes> getFeedsByUserId(long userId, int searchType, String keyword, int page);
 
-    List<FeedResDto> getFollowingFeedsByUserId(long userId, int searchType, String keyword, int page);
+    List<FeedListRes> searchFeedsByUserId(long userId, int searchType, String keyword, int page);
 
-    List<FeedListOfArticleResDto> getFeedsByArticleId(long articleId, long userId, int page);
+    List<FeedListOfArticleRes> getFeedsByArticleId(long articleId, long userId, int page);
 
     void registFeed(long userId, long articleId, String content, boolean isShared);
 

@@ -10,9 +10,7 @@ const Interceptor = ({ children }) => {
   useEffect(() => {
     http.interceptors.request.use(
       function (config) {
-        config.headers.Authorization = `Bearer ${
-          store.getState().member.token
-        }`;
+        config.headers.Authorization = `Bearer ${store.getState().user.token}`;
         return config;
       },
       function (err) {
@@ -21,9 +19,7 @@ const Interceptor = ({ children }) => {
     );
     http.interceptors.response.use(
       (response) => {
-        console.log(response);
-        const res = response.data;
-        return res;
+        return response;
       },
       (err) => {
         alert(err);

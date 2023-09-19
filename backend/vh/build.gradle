@@ -36,6 +36,8 @@ dependencies {
 	// swagger
 	implementation group: 'io.springfox', name: 'springfox-boot-starter', version: '3.0.0'
 	implementation group: 'com.google.guava', name: 'guava', version: '32.0.1-jre'
+
+	implementation 'org.springframework.boot:spring-boot-starter-security'
 }
 
 tasks.named('test') {

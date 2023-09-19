@@ -1,9 +1,11 @@
 import React from 'react';
 import styled from 'styled-components';
+import { useSelector } from 'react-redux';
 
 export default function Articles() {
+    const word = useSelector((state) => state.word);
     return (
-        <Container>뉴스</Container>
+        <Container>{word.word}</Container>
     );
 }
 
@@ -13,5 +15,5 @@ border : 1px solid white;
 background-color: white;
 border-radius : 1rem;
 box-shadow: 4.0px 8.0px 8.0px hsl(0deg 0% 0% / 0.38);
-margin-top: 1%;
+margin-top: 1% 0 ;
 `;

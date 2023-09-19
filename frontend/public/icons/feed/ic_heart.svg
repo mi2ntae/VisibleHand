@@ -1,0 +1,12 @@
+<svg width="16" height="14" viewBox="0 0 16 14" fill="none" xmlns="http://www.w3.org/2000/svg">
+<g id="ic_heart">
+<path fill-rule="evenodd" clip-rule="evenodd" d="M8 1.498C8.61257 0.793333 9.67086 0 11.2846 0C14.1051 0 16 2.60633 16 5.03533C16 10.1127 8.93531 14 8 14C7.06469 14 0 10.1103 0 5.03533C0 2.60867 1.89257 0 4.71543 0C6.32914 0 7.38743 0.793333 8 1.498Z" fill="#FF7171"/>
+<path fill-rule="evenodd" clip-rule="evenodd" d="M8 1.498C8.61257 0.793333 9.67086 0 11.2846 0C14.1051 0 16 2.60633 16 5.03533C16 10.1127 8.93531 14 8 14C7.06469 14 0 10.1103 0 5.03533C0 2.60867 1.89257 0 4.71543 0C6.32914 0 7.38743 0.793333 8 1.498Z" fill="url(#paint0_radial_616_5430)" fill-opacity="0.5"/>
+</g>
+<defs>
+<radialGradient id="paint0_radial_616_5430" cx="0" cy="0" r="1" gradientUnits="userSpaceOnUse" gradientTransform="translate(5 4) rotate(73.3008) scale(10.4403 11.9318)">
+<stop stop-color="white"/>
+<stop offset="1" stop-color="white" stop-opacity="0"/>
+</radialGradient>
+</defs>
+</svg>

@@ -9,14 +9,14 @@ export default function News() {
             <Container>
                 <WordCloud />
                 <Articles />
-                <Hamster/>
+                {/* <Hamster/> */}
             </Container>
     );
 }
 
 const Container = styled.div`
 display : flex;
-padding : 2% 3% 5%;
+padding : 2% 3% 2%;
 height: 100vh;
 box-sizing: border-box;
 justify-content : space-between;
