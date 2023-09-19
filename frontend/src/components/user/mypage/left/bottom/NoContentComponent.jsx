@@ -4,7 +4,7 @@ import styled from 'styled-components';
 
 export default function NoContentComponent({text}) {
     return (
-        <div style={{alignItems: 'center', display: 'flex', marginTop: 50, justifyContent: 'center'}}>
+        <div style={{alignItems: 'center', display: 'flex', justifyContent: 'center'}}>
             <div class="content" style={{display: "inline"}}>
             <svg id="loader" xmlns="http://www.w3.org/2000/svg" width="100" height="100" style={{marginLeft: 50}} viewBox="0 -10 261 355">
                 <g>

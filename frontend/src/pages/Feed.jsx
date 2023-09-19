@@ -1,10 +1,11 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import styled from "styled-components";
 import Search from "components/Feed/Search";
 import FeedElement from "components/Feed/FeedElement";
 import ArticleRank from "components/Feed/Banner/ArticleRank";
 import UserRecommend from "components/Feed/Banner/UserRecommend";
 import http from "api/commonHttp";
+import UserElement from "components/Feed/UserElement";
 
 export default function Feed() {
   const feeds = [
@@ -15,7 +16,7 @@ export default function Feed() {
       nickname: "메론빵",
       feedId: 11,
       content:
-        "신용공포 때문에 주가 변동이 정상적인 수준보다 훨씬 더 원유가격의 변동에 크게 좌우되게 되었다. 대부분의 에너지기업들이 (대부분의 원유수출국처럼) 어려움을 겪는 반면, 투자자들은 조만간 특히 필수소비재나 임의소비재를 생산하는 기업과 같은 저유가로 혜택을 입게 될 업종에 주목하기 시작할 것이다. 유틸리티와 일부 제조업 등 에너지집약형 업종도 역시 혜택을 입게 될 것이지만 에너지부문에의 장비 판매 비중이 큰 경우에는 예외이다. WTI와 S&P 500® 간의 금년 현재까지의 상관관계 70%는 아마도 지속되기 어려울 ... 더보기",
+        "신용공포 때문에 주가 변동이 정상적인 수준보다 훨씬 더 원유가격의 변동에 크게 좌우되게 되었습니다. 대부분의 에너지기업들이 (대부분의 원유수출국처럼) 어려움을 겪는 반면, 투자자들은 조만간 특히 필수소비재나 임의소비재를 생산하는 기업과 같은 저유가로 혜택을 입게 될 업종에 주목하기 시작할 것입니다. 유틸리티와 일부 제조업 등 에너지집약형 업종도 역시 혜택을 입게 될 것이지만 에너지부문에의 장비 판매 비중이 큰 경우에는 예외입니다. WTI와 S&P 500® 간의 금년 현재까지의 상관관계 70%는 아마도 지속되기 어려울 것이나 원유는 당분간은 금융주의 주가에 계속하여 상당한 결정력을 행사할 것입니다.",
       heart: 123,
       isHeart: true,
       articleId: 0,
@@ -30,8 +31,7 @@ export default function Feed() {
         "https://blog.kakaocdn.net/dn/FOcCY/btr5QAbW7Sv/iOSQ86mcRgUNUqQAf9ahRK/img.jpg",
       nickname: "메론빵",
       feedId: 1,
-      content:
-        "신용공포 때문에 주가 변동이 정상적인 수준보다 훨씬 더 원유가격의 변동에 크게 좌우되게 되었다. 대부분의 에너지기업들이 (대부분의 원유수출국처럼) 어려움을 겪는 반면, 투자자들은 조만간 특히 필수소비재나 임의소비재를 생산하는 기업과 같은 저유가로 혜택을 입게 될 업종에 주목하기 시작할 것이다. 유틸리티와 일부 제조업 등 에너지집약형 업종도 역시 혜택을 입게 될 것이지만 에너지부문에의 장비 판매 비중이 큰 경우에는 예외이다. WTI와 S&P 500® 간의 금년 현재까지의 상관관계 70%는 아마도 지속되기 어려울 ... 더보기",
+      content: "신용공포",
       heart: 123,
       isHeart: false,
       articleId: 0,
@@ -239,6 +239,8 @@ export default function Feed() {
   //     });
   // };
 
+  const [searchType, setSearchType] = useState(true);
+
   return (
     <div style={{ display: "flex", padding: "40px 100px", gap: "88px" }}>
       <div
@@ -247,13 +249,18 @@ export default function Feed() {
           flexDirection: "column",
           flex: 13,
           gap: "16px",
+          overFlowY: "auto",
         }}
       >
         <Search />
         <FeedContainer>
-          {feeds.map((data, index) => {
-            return <FeedElement data={data} key={index} />;
-          })}
+          {searchType
+            ? feeds.map((data) => {
+                return <FeedElement data={data} key={data.feedId} />;
+              })
+            : users.map((data) => {
+                return <UserElement user={data} key={data.userId} />;
+              })}
         </FeedContainer>
       </div>
       <BannerContainer>
@@ -275,4 +282,5 @@ const BannerContainer = styled.div`
   display: flex;
   flex-direction: column;
   gap: 24px;
+  overflow-y: auto;
 `;

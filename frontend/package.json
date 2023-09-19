@@ -9,11 +9,13 @@
     "@mui/icons-material": "^5.14.9",
     "@mui/joy": "^5.0.0-beta.5",
     "@mui/material": "^5.14.9",
+    "@mui/x-date-pickers": "^6.13.0",
     "@reduxjs/toolkit": "^1.9.5",
     "@testing-library/jest-dom": "^5.17.0",
     "@testing-library/react": "^13.4.0",
     "@testing-library/user-event": "^13.5.0",
     "axios": "^1.5.0",
+    "dayjs": "^1.11.9",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-github-contribution-calendar": "^2.2.0",
@@ -23,7 +25,12 @@
     "redux": "^4.2.1",
     "redux-persist": "^6.0.0",
     "styled-components": "^6.0.7",
-    "web-vitals": "^2.1.4"
+    "web-vitals": "^2.1.4",
+    "@react-three/drei": "8.7.4",
+    "@react-three/fiber": "7.0.25",
+    "@types/three": "0.137.0",
+    "random-words": "1.1.2",
+    "three": "0.137.4"
   },
   "scripts": {
     "start": "react-scripts start",
