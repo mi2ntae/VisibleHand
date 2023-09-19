@@ -6,7 +6,12 @@ import com.it.vh.article.domain.repository.WordCloudRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
+
+import java.time.LocalDateTime;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 @Service
@@ -25,5 +30,15 @@ public class WordCloudService {
                 .kind(cloud.getKind())
                 .issueDate(cloud.getIssueDate()).build())
                 .collect(Collectors.toList());
+    }
+
+    public Map<String, LocalDateTime> recentAndLastDate() {
+        Cloud recent = cloudRepository.findTopByOrderByIssueDateDesc().orElse(null);
+        Cloud last = cloudRepository.findTopByOrderByIssueDateAsc().orElse(null);
+        if(Objects.isNull(recent) || Objects.isNull(last) ) return null;
+        HashMap<String, LocalDateTime> map = new HashMap<>();
+        map.put("recent",recent.getIssueDate());
+        map.put("last",last.getIssueDate());
+        return map;
     }
 }

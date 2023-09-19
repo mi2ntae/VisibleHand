@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/dict")
+@RequestMapping("/api/dict")
 public class DictionaryController {
 
     private final DictionaryService dictionaryService;

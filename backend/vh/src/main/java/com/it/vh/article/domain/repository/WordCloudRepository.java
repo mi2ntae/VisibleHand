@@ -11,4 +11,8 @@ import java.util.Optional;
 public interface WordCloudRepository extends JpaRepository<Cloud, Long> {
     @Query(value = "select * from cloud where kind = :kind and Date(issue_date) = :selectedDate",nativeQuery = true)
     Optional<List<Cloud>> findByArticleKindAndIssueDate(@Param("selectedDate") String date, @Param("kind") String kind);
+
+    Optional<Cloud> findTopByOrderByIssueDateDesc();
+
+    Optional<Cloud> findTopByOrderByIssueDateAsc();
 }
