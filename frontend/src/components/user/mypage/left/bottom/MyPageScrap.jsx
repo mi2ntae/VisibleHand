@@ -27,6 +27,7 @@ export default function MyPageScrap() {
         await http.get(`article/scrap/${userId}?page=${pageNo-1}`)
         .then(({data}) => {
             setScraps(data.content);
+            setMaxPage(data.totalPages)
             setLoad(true);
         })
         .catch((err) => {
@@ -49,10 +50,10 @@ export default function MyPageScrap() {
     }, [pageNo])
     
     return (
-        <ScrapContainer ref={parent}>
+        <ScrapContainer>
             {(load && scraps.length === 0) ? <NoContentComponent text={"스크랩한 기사가 존재하지 않습니다."}></NoContentComponent> : <span></span>}
 
-            <Scraps>
+            <Scraps ref={parent}>
                 {(load && scraps.length > 0) ? 
                 scraps.map((scrap) => 
                     <ScrapComponent deleteScrap={deleteScrap} scrapId={scrap.scrapId} articleId={scrap.articleId} image={scrap.thumbnail} title={scrap.title}></ScrapComponent>
@@ -62,10 +63,10 @@ export default function MyPageScrap() {
             </Scraps>
             
             {(load && scraps.length > 0) ? 
-                <Pagination count={maxPage} page={pageNo} onChange={(event, value) => setPageNo(value)} style={{position: 'absolute', top: 450, marginLeft: 220}} />
+                <Pagination count={maxPage} page={pageNo} onChange={(event, value) => setPageNo(value)} style={{position: 'absolute', top: 600, left: 600, textAlign: 'center'}} />
                 : <span></span>
             }
-            </ScrapContainer>
+        </ScrapContainer>
     );
 }
 

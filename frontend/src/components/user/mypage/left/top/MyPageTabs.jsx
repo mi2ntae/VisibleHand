@@ -20,6 +20,6 @@ const TabContainer = styled.div`
     // max-width: 1240px;
     min-height: 45px;
     // width: 35%;
-    display: flex;
+    display: inline-block;
     text-align: left;
 `;
