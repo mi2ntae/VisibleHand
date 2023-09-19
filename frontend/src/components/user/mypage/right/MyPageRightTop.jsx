@@ -77,8 +77,7 @@ const NickName = styled.div`
 `
 
 const FollowInfo = styled.div`
-    font-size: 1rem;
-    font-weight: 400;
+    font-size: 0.8rem;
     color: ${black_grey};
     margin-top: 1.125rem;
 `

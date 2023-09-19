@@ -6,7 +6,7 @@ export default function MyPageLeftBottom({userId, tabs}) {
     const tabNo = useSelector((state) => state.mypageTab.tabNo);
 
     return (
-        <Background style={{minHeight: "80vh"}}>
+        <Background style={{minHeight: "71vh"}}>
             {tabs.map((tab) => tabNo === tab.no ? tab.content : <span></span>)}
         </Background>
     );
