@@ -2,8 +2,9 @@ spring:
   config:
     activate:
       on-profile: "jwt"
+    import: optional:file:.env[.properties]
 
 jwt:
-  secret: XUrYUhZfrEWLtykR7h80CrcITM59YLt5CRi3AdqZu33
+  secret: ${JWT_SECRET_KEY}
   access-expiration: 1800000
   refresh-expiration: 1209600000
