@@ -29,8 +29,9 @@ export default function ScrapComponent({deleteScrap, scrapId, articleId, image, 
 const ScrapContainer = styled.div`
     display: flex;
     margin-top: 50px;
-    margin-left: 45px;
+    margin-left: 60px;
     margin-right: 45px;
+    margin-bottom: 80px;
 `;
 
 const Image = styled.img`
@@ -38,8 +39,8 @@ const Image = styled.img`
     top: 30%;
     left: 50%;
     transform: translate(-50%, -50%);
-    width: 100%;
-    height: 70px;
+    width: 120px;
+    height: 100%;
 `;
 
 const Folder = styled.img`
@@ -50,22 +51,26 @@ const Folder = styled.img`
 `;
 
 const Title = styled.div`
-    display: flex;
+    // display: flex;
     position: absolute;
-    top: 90%;
-    left: 50%;
+    top: 120%;
+    left: 55%;
     transform: translate(-50%, -50%);
-    white-space: normal;
-    word-wrap: break-word;
-    width: 100%;
-    height: content;
-    font-size: 0.7em;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    // white-space: normal;
+    // word-wrap: break-word;
+    width: 140px;
+    // height: content;
+    font-weight: bold;
+    font-size: 0.5em;
 `;
 
 const DismissButton = styled.button`
     position: absolute;
-    left: 85%;
-    top: -5%;
+    left: 95%;
+    top: -30%;
     display: flex;
     align-items: center;
     justify-content: center;
