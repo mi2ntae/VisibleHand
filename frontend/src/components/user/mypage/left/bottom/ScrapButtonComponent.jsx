@@ -1,5 +1,4 @@
 import React from 'react';
-import "components/user/mypage/css/MoveArticleBtn.css";
 
 export default function ScrapButtonComponent() {
     return (
