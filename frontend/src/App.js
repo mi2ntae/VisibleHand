@@ -22,9 +22,9 @@ const GlobalStyle = createGlobalStyle`
 
 const Root = styled.div`
   display: flex;
-  height: 100vh;
-  background-color: #EFF4FF;
-`
+  min-height: 100vh;
+  background-color: #eff4ff;
+`;
 
 const Content = styled.div`
   flex-grow: 1;

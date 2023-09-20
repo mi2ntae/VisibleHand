@@ -26,3 +26,8 @@ code {
 	font-display: swap;
 	src: url('lib/fonts/PretendardVariable.woff2') format('woff2-variations');
 }
+
+* {
+  font-family: 'Pretendard';
+  src: url('lib/fonts/PretendardVariable.woff2') format('woff2-variations');
+}
