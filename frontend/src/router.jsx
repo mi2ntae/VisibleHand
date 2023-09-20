@@ -8,9 +8,6 @@ import Dictionary from "./pages/Dictionary";
 import Quiz from "./pages/Quiz";
 import QuizSolve from "components/Quiz/QuizSolve";
 import Mypage from "./pages/Mypage";
-import Login from "pages/Login";
-import Kakao from "pages/Kakao";
-import Google from "pages/Google";
 
 const router = createBrowserRouter([
     {
@@ -23,21 +20,20 @@ const router = createBrowserRouter([
             {path: '/feed', element: <Feed />},
             {path: '/dictionary', element: <Dictionary />},
             {path: '/quiz',
-                children:[
-                    {
-                        path:"",
-                        element: <Quiz />,
-                    },
-                    {
-                        path:"solve",
-                        element:<QuizSolve/>
-                    }
-                ]
-            },
-            {path: '/mypage/:userId', element: <Mypage />},
-            {path: '/login', element: <Login />},
-            {path: '/auth/kakao', element: <Kakao />},
-            {path: '/auth/google', element: <Google />}
+            children:[
+                {
+                    path:"",
+                    element: <Quiz />,
+                },
+                {
+                    path:"solve",
+                    element:<QuizSolve/>
+                }
+            ]
+
+
+        },
+            {path: '/mypage/:userId', element: <Mypage />}
         ]
     },
 ])
