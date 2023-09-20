@@ -12,7 +12,8 @@ public enum DictionaryType {
     과학("SCIENCE"),
     경영("MANAGEMENT"),
     공공("PUBLIC"),
-    금융("FINANCE");
+    금융("FINANCE"),
+    기타("ETC");
 
     private final String type;
 }
