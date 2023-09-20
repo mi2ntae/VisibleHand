@@ -30,8 +30,8 @@ const router = createBrowserRouter([
                     element:<QuizSolve/>
                 }
             ]
-
-
+            
+        
         },
             {path: '/mypage/:userId', element: <Mypage />}
         ]
