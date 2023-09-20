@@ -1,31 +1,27 @@
 import React, {useEffect} from 'react';
 
 export default function Kakao() {
-    // const code = new URL(window.location.href).searchParams.get("code");
-    // console.log(code);
-    
     useEffect(() => {
         const code = new URL(window.location.href).searchParams.get("code");
-        console.log(code)
+        console.log(code);
+
         if (code) {
-            fetch('/api/auth/kakao?code=' + code, {
+            fetch(process.env.REACT_APP_HTTP_URL + '/api/user/auth/kakao?code=' + code, {
                 method: 'GET'
             })
-            .then(response => response.json())
-            .then(message => {
-                console.log("Response from backend:", message);
-            })
-            .catch(error => {
-                console.error("Error sending code to backend:", error);
+            .then((response) => response.json())
+            .then((data) => {
+                const accessToken = data.token.accessToken;
+                const refreshToken = data.token.refreshToken;
+                console.log(accessToken);
+                console.log(refreshToken);
+                // dispatch({ type: 'setUser', payload: { accessToken: accessToken, refreshToken: refreshToken } });
             });
-        } else {
-            console.log("Code not found in URL.");
         }
-    }, []);
+      }, []);
 
     return (
         <div>
-            {/* Auth 컴포넌트의 내용을 정의하세요. */}
         </div>
     );
 }
