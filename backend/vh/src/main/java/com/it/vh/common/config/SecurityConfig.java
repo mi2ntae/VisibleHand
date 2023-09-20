@@ -40,21 +40,21 @@ public class SecurityConfig {
                 .and()
                 //TODO: 허용할 주소 추가
                 .authorizeRequests()
-                .regexMatchers("/api/user/profile/\\d+").authenticated()
-                .regexMatchers(HttpMethod.DELETE, "/api/user/\\d+").authenticated()
-                .antMatchers(HttpMethod.GET, "/api/user/auth/nickname").permitAll()
-                .antMatchers(HttpMethod.POST, "/api/user/profile").permitAll()
-                .anyRequest().permitAll()
+//                .regexMatchers("/api/user/profile/\\d+").authenticated()
+//                .regexMatchers(HttpMethod.DELETE, "/api/user/\\d+").authenticated()
+//                .antMatchers(HttpMethod.GET, "/api/user/auth/nickname").permitAll()
+//                .antMatchers(HttpMethod.POST, "/api/user/profile").permitAll()
+                .anyRequest().permitAll();
 //                .anyRequest().authenticated()
 
-                .and()
-                .exceptionHandling()
-                .accessDeniedHandler(new JwtAccessDeniedHandler(objectMapper))
-                .authenticationEntryPoint(new JwtAuthenticationEntryPoint(objectMapper))
-                .and()
-                .addFilterBefore(
-                        new JwtAuthenticationFilter(jwtTokenProvider, objectMapper, userRedisService),
-                        UsernamePasswordAuthenticationFilter.class);
+//                .and()
+//                .exceptionHandling()
+//                .accessDeniedHandler(new JwtAccessDeniedHandler(objectMapper))
+//                .authenticationEntryPoint(new JwtAuthenticationEntryPoint(objectMapper))
+//                .and()
+//                .addFilterBefore(
+//                        new JwtAuthenticationFilter(jwtTokenProvider, objectMapper, userRedisService),
+//                        UsernamePasswordAuthenticationFilter.class);
 
         return http.build();
     }
