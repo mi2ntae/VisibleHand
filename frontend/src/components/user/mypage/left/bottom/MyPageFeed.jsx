@@ -1,7 +1,16 @@
-import React from 'react';
+import React, { useEffect } from 'react';
+import { useDispatch } from 'react-redux';
 import styled from 'styled-components';
+import { setKeyword } from 'reducer/mypageTabReducer';
 
 export default function Mypage() {
+    const dispatch = useDispatch();
+
+    // useEffect(() => {
+    //     return () => {
+    //         dispatch(setKeyword(""));
+    //     }
+    // }, [])
 
     return (
         <div>
