@@ -10,6 +10,7 @@ import com.it.vh.user.exception.NonExistUserIdException;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -24,6 +25,7 @@ import java.util.Map;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api/article")
+@Slf4j
 public class ArticleController {
     private final ScrapService scrapService;
 
@@ -37,6 +39,7 @@ public class ArticleController {
             @RequestParam String word,
             @RequestParam int page
     ) {
+        log.info("[ArticleController getArticlesByKeyword] kind : {}, date : {}, word: {}, page : {}",kind,date,word,page);
         return ResponseEntity.ok().body(articleService.findArticleForSlice(kind,date,word,page));
     }
 
