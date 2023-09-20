@@ -29,6 +29,7 @@ export default function WordCloudTitle() {
 			dispatch(setDate(dateFormat(data.recent)));
 		})
 	},[])
+
 	return (
 		<Container>
 			<h1>&nbsp;&nbsp;{dayjs(value.selected).get("month")+1}월 {dayjs(value.selected).get("date")}일 <Span>인기 키워드</Span></h1>
