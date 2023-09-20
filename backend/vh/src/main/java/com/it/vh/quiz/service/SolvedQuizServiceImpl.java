@@ -1,19 +1,17 @@
 package com.it.vh.quiz.service;
 
-import com.it.vh.article.domain.repository.ArticleRepository;
-import com.it.vh.article.domain.repository.WordCloudRepository;
 import com.it.vh.dict.domain.repository.DictionaryRepository;
 import com.it.vh.quiz.api.dto.requestDto.SolvedQuizReq;
+import com.it.vh.quiz.domain.dto.ArticleQuizCountDto;
+import com.it.vh.quiz.domain.dto.UserArticleQuizResDto;
+import com.it.vh.quiz.domain.dto.UserWordQuizResDto;
+import com.it.vh.quiz.domain.dto.WordQuizCountDto;
 import com.it.vh.quiz.domain.entity.SolvedQuiz;
 import com.it.vh.quiz.domain.exception.SolvingQuizException;
 import com.it.vh.quiz.domain.repository.NewsQuizRepository;
 import com.it.vh.quiz.domain.repository.SolvedQuizRepository;
-import com.it.vh.user.api.dto.ReviewnoteResDto;
-import com.it.vh.user.api.dto.StreakResDto;
-import com.it.vh.user.api.dto.UserFollowResDto;
-import com.it.vh.user.domain.dto.UserDto;
+import com.it.vh.user.api.dto.*;
 import com.it.vh.user.domain.entity.User;
-import com.it.vh.user.domain.repository.FollowRepository;
 import com.it.vh.user.domain.repository.UserRespository;
 import com.it.vh.user.exception.NonExistUserIdException;
 import lombok.RequiredArgsConstructor;
@@ -68,6 +66,17 @@ public class SolvedQuizServiceImpl implements SolvedQuizService {
         Optional<User> optionalUser = userRespository.findById(userId);
         if(!optionalUser.isPresent()) throw new NonExistUserIdException();
         return solvedQuizRepository.findCountOfSolvedQuizByUserId(userId).stream().map(res -> setWeightByScore(res)).collect(Collectors.toList());
+    }
+
+    @Override
+    public UserQuizStatusResDto getUserQuizStatus(long userId) throws NonExistUserIdException {
+        Optional<User> optionalUser = userRespository.findById(userId);
+        if(!optionalUser.isPresent()) throw new NonExistUserIdException();
+        List<WordQuizCountDto> wordQuizCountDtoList = solvedQuizRepository.countWordSolvedQuizsByCorrectAndUser_UserIdGroupByKind(userId);
+        UserWordQuizResDto userWordQuizResDto = UserWordQuizResDto.from(wordQuizCountDtoList);
+        List<ArticleQuizCountDto> articleQuizCountDtos = solvedQuizRepository.countArticleSolvedQuizsByCorrectAndUser_UserIdGroupByKind(userId);
+        UserArticleQuizResDto articleQuizResDto = UserArticleQuizResDto.from(articleQuizCountDtos);
+        return UserQuizStatusResDto.of(userWordQuizResDto, articleQuizResDto);
     }
 
     private StreakResDto setWeightByScore(StreakResDto streakResDto) {

@@ -57,6 +57,12 @@ public class UserController {
         return ResponseEntity.ok().body(solvedQuizService.getUserStreak(userId));
     }
 
+    @ApiOperation(value = "유저 퀴즈 동향 조회", notes = "유저의 카테고리별 퀴즈 동향 조회")
+    @GetMapping("/quiz/{userId}")
+    public ResponseEntity<UserQuizStatusResDto> getuserQuizStatus(@PathVariable long userId) throws NonExistUserIdException{
+        return ResponseEntity.ok().body(solvedQuizService.getUserQuizStatus(userId));
+    }
+
 
     @ApiOperation(value = "유저 팔로잉 목록 조회", notes = "팔로잉 목록 조회 10개씩.")
     @GetMapping("/following/{userId}")
