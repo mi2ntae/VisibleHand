@@ -8,7 +8,8 @@ import Dictionary from "./pages/Dictionary";
 import Quiz from "./pages/Quiz";
 import Mypage from "./pages/Mypage";
 import Login from "pages/Login";
-import ProfileSetting from "pages/ProfileSetting";
+import Kakao from "pages/Kakao";
+import Google from "pages/Google";
 
 const router = createBrowserRouter([
     {
@@ -23,7 +24,8 @@ const router = createBrowserRouter([
             {path: '/quiz', element: <Quiz />},
             {path: '/mypage/:userId', element: <Mypage />},
             {path: '/login', element: <Login />},
-            {path: '/profilesetting', element: <ProfileSetting />}
+            {path: '/auth/kakao', element: <Kakao />},
+            {path: '/auth/google', element: <Google />}
         ]
     },
 ])
