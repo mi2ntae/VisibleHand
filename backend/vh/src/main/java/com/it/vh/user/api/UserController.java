@@ -85,7 +85,7 @@ public class UserController {
     }
 
     @ApiOperation(value = "유저 닉네임 중복 검사", notes = "유저 닉네임 중복 여부를 검사합니다.")
-    @GetMapping("/auth/nickname")
+    @GetMapping("/auth")
     public ResponseEntity<NicknameResDto> isDuplicatedNickname(@RequestParam("nickname") String nickname) {
         return ResponseEntity.ok().body(userService.isDuplicatedNickname(nickname));
     }
