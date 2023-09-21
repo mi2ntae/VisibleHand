@@ -6,9 +6,12 @@ spring:
         - common
         - auth
         - jwt
-        - redis
+        - redisdev
       prod :
         - common
+        - auth
+        - jwt
+        - redisprod
 ---
 spring:
   config:
