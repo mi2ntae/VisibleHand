@@ -9,7 +9,7 @@ import javax.persistence.*;
 import java.time.LocalDateTime;
 
 @Data
-@Entity
+@Entity(name="article")
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
