@@ -1,0 +1,11 @@
+spring:
+  config:
+    activate:
+      on-profile: "redisprod"
+
+  redis:
+    host: j9a504.p.ssafy.io
+    port: 6379
+    password:
+    ttl:
+      refresh_token: 1209600000
