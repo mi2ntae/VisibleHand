@@ -8,15 +8,16 @@ import Dictionary from "./pages/Dictionary";
 import Quiz from "./pages/Quiz";
 import QuizSolve from "components/Quiz/QuizSolve";
 import Mypage from "./pages/Mypage";
+import NewsDetail from "pages/NewsDetail";
 
-const router = createBrowserRouter([
-    {
+const router = createBrowserRouter([{
         path: '/',
         element: <App />,
         errorElement: <Error />,
         children: [
             {index: true, path: '/', element: <Home />},
             {path: '/news', element: <News />},
+            { path: "/news/:articleId", element: <NewsDetail /> },
             {path: '/feed', element: <Feed />},
             {path: '/dictionary', element: <Dictionary />},
             {path: '/quiz',

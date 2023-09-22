@@ -5,7 +5,7 @@ import {
   primary,
   white,
 } from "lib/style/colorPalette";
-import React, { useMemo, useRef, useState } from "react";
+import React, { useEffect, useMemo, useRef, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { ProfileImg } from "styled";
 import styled from "styled-components";
@@ -29,6 +29,8 @@ export default function FeedElement({ data }) {
     }
     return data.content;
   }, [moreBtn]);
+
+  useEffect(() => console.log(data));
 
   return (
     <Feed>
