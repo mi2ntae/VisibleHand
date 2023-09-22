@@ -5,6 +5,7 @@ import com.it.vh.quiz.domain.exception.SolvingQuizException;
 import com.it.vh.user.api.dto.ReviewnoteResDto;
 import com.it.vh.user.api.dto.StreakResDto;
 import com.it.vh.user.api.dto.UserFollowResDto;
+import com.it.vh.user.api.dto.UserQuizStatusResDto;
 import com.it.vh.user.domain.dto.UserDto;
 import com.it.vh.user.exception.NonExistUserIdException;
 import org.springframework.data.domain.Page;
@@ -17,4 +18,6 @@ public interface SolvedQuizService {
     void solveQuiz(SolvedQuizReq req) throws SolvingQuizException;
 
     List<StreakResDto> getUserStreak(long userId) throws NonExistUserIdException;
+
+    UserQuizStatusResDto getUserQuizStatus(long userId) throws NonExistUserIdException;
 }

@@ -16,13 +16,6 @@ import org.hibernate.annotations.OnDeleteAction;
 import javax.persistence.*;
 import java.time.LocalDateTime;
 
-
-
-@Data
-@Entity
-@NoArgsConstructor
-@AllArgsConstructor
-@Builder
 @NamedNativeQueries({
         @NamedNativeQuery(
                 name = "findFeedsAndHeartAndIsHeartByUserIdWhereTitleIsKeyword",
@@ -189,7 +182,11 @@ import java.time.LocalDateTime;
                 }
         )
 )
-
+@Data
+@Entity(name = "feed")
+@NoArgsConstructor
+@AllArgsConstructor
+@Builder
 public class Feed extends BaseTimeEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

@@ -10,7 +10,7 @@ import org.springframework.data.jpa.repository.Query;
 import java.util.Optional;
 
 public interface ScrapRepository extends JpaRepository<Scrap, Long> {
-    @Query(value = "SELECT new com.it.vh.article.api.dto.ScrapListResDto(s.scrapId, a.articleId, a.thumbnail, a.title) FROM Scrap s JOIN Article a ON s.article.articleId = a.articleId WHERE a.title like %:title% AND s.user.userId = :userId")
+    @Query(value = "SELECT new com.it.vh.article.api.dto.ScrapListResDto(s.scrapId, a.articleId, a.thumbnail, a.title) FROM scrap s JOIN article a ON s.article.articleId = a.articleId WHERE a.title like %:title% AND s.user.userId = :userId")
     Page<ScrapListResDto> findScrapListByUserIdAndTitle(long userId, String title, Pageable page);
 
     Optional<Scrap> findByArticle_ArticleIdAndUser_UserId(Long articleId, Long userId);

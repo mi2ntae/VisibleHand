@@ -1,0 +1,11 @@
+spring:
+  config:
+    activate:
+      on-profile: "redisdev"
+
+  redis:
+    host: localhost
+    port: 6379
+    password:
+    ttl:
+      refresh_token: 1209600000

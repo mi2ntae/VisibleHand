@@ -6,24 +6,37 @@ import News from "./pages/News";
 import Feed from "./pages/Feed";
 import Dictionary from "./pages/Dictionary";
 import Quiz from "./pages/Quiz";
+import QuizSolve from "components/Quiz/QuizSolve";
 import Mypage from "./pages/Mypage";
 import NewsDetail from "pages/NewsDetail";
 
-const router = createBrowserRouter([
-  {
-    path: "/",
-    element: <App />,
-    errorElement: <Error />,
-    children: [
-      { index: true, path: "/", element: <Home /> },
-      { path: "/news", element: <News /> },
-      { path: "/news/:articleId", element: <NewsDetail /> },
-      { path: "/feed", element: <Feed /> },
-      { path: "/dictionary", element: <Dictionary /> },
-      { path: "/quiz", element: <Quiz /> },
-      { path: "/mypage/:userId", element: <Mypage /> },
-    ],
-  },
-]);
+const router = createBrowserRouter([{
+        path: '/',
+        element: <App />,
+        errorElement: <Error />,
+        children: [
+            {index: true, path: '/', element: <Home />},
+            {path: '/news', element: <News />},
+            { path: "/news/:articleId", element: <NewsDetail /> },
+            {path: '/feed', element: <Feed />},
+            {path: '/dictionary', element: <Dictionary />},
+            {path: '/quiz',
+            children:[
+                {
+                    path:"",
+                    element: <Quiz />,
+                },
+                {
+                    path:"solve",
+                    element:<QuizSolve/>
+                }
+            ]
+            
+        
+        },
+            {path: '/mypage/:userId', element: <Mypage />}
+        ]
+    },
+])
 
 export default router;

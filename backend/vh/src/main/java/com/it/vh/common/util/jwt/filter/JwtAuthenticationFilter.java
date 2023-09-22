@@ -55,10 +55,8 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
                     log.info("[토큰 권한 확인]: {}", authentication);
 
                     String userId = authentication.getName();
-                    log.info("userId: {}", userId);
 
                     RefreshToken originrefreshToken = userRedisService.getRefreshToken(userId);
-                    log.info("[refreshToken 확인]: {}", originrefreshToken);
 
                     if (originrefreshToken == null) {
                         throw new JwtException(TOKEN_NOTFOUND.getMessage());
@@ -91,6 +89,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
             filterChain.doFilter(request, response);
 
         } catch (Exception e) {
+            log.info("[filter error]");
             makeResponse(HttpStatus.UNAUTHORIZED.value(), response,
                 ErrorResponse.of(HttpStatus.UNAUTHORIZED.value(), e.getMessage()));
         }
@@ -98,7 +97,6 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
     private Token getToken(HttpServletRequest request) {
         String token = request.getHeader(HttpHeaders.AUTHORIZATION);
-        log.info("token: {}", token);
 
         //토큰 분리
         if (StringUtils.hasText(token)) {
