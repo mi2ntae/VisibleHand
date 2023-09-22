@@ -23,7 +23,6 @@ export default function WordCloud() {
 };
 
 const Container = styled.div`
-// border : 1px solid red;
 width: 60%;
 `;
 

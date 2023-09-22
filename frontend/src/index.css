@@ -11,6 +11,8 @@ body {
   ::-webkit-scrollbar {
     display: none; /* Chrome, Safari, Opera */
     width: 0px;
+
+    
   }
 }
 
@@ -18,6 +20,20 @@ code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
 }
+
+a:link { 
+  text-decoration: none;
+ }
+  
+a:visited { 
+  text-decoration: none;
+}
+
+a:hover { 
+  text-decoration: underline;
+}
+
+
 
 /* @font-face {
   font-family: 'Pretendard';
