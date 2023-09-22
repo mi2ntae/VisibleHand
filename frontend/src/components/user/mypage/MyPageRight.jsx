@@ -10,7 +10,7 @@ export default function MyPageRight({userId}) {
             <MyPageRightTop userId={userId}></MyPageRightTop>
             <MyPageRightCenter userId={userId}>
             </MyPageRightCenter>
-            <MyPageRightBottom></MyPageRightBottom>
+            <MyPageRightBottom userId={userId}></MyPageRightBottom>
         </RightContainer>
     );
 }
