@@ -36,7 +36,7 @@ public interface SolvedQuizRepository extends JpaRepository<SolvedQuiz, Long> {
 
     @Query(value = "SELECT new com.it.vh.quiz.api.dto.responseDto.QuizRankResDto(u.userId, u.nickname, u.profileImg, u.statusMsg, count(s.solvedId)) " +
             "FROM solved_quiz s JOIN s.user u " +
-            "WHERE s.createAt BETWEEN :start AND :end " +
+            "WHERE s.createAt BETWEEN :start AND :end AND s.correct = true " +
             "GROUP BY u.userId " +
             "ORDER BY count(s.solvedId) DESC")
     Page<QuizRankResDto> getQuizRank(LocalDateTime start, LocalDateTime end, Pageable page);
