@@ -11,7 +11,7 @@ import { black_grey, lightest_grey, white, teritary } from "lib/style/colorPalet
 
 function Word({onSelected, num, children, ...props }) {
   const color = new THREE.Color()
-  const fontProps = { font: '/PretendardVariable.ttf', fontSize: 0.5+num/10*3, letterSpacing: -0.05, lineHeight: 1, 'material-toneMapped': false }
+  const fontProps = { font: '/PretendardVariable.ttf', fontSize: 0.4+children.index/10*2, letterSpacing: -0.05, lineHeight: 1, 'material-toneMapped': false }
   const ref = useRef()
   const [hovered, setHovered] = useState(false)
   const over = (e) => (e.stopPropagation(), setHovered(true))
@@ -50,7 +50,7 @@ function Cloud({ wordclouds, count = 200, radius = 20, onSelected }) {
     return temp
   }, [wordclouds, count, radius])
 
-  return words === undefined ? null : words.map(([pos, word], index) => <Word key={index} position={pos} children={word} num={index} onSelected={onSelected} />);
+  return words === undefined ? null : words.map(([pos, word]) => <Word key={word.wordId} position={pos} children={word} onSelected={onSelected} />);
 }
 
 export default function WordCloudWords() {
@@ -61,12 +61,17 @@ export default function WordCloudWords() {
   const onSelected = (word) => {
     dispatch(setWord(word));
   }
+
   useEffect(()=> {
-    if(cloud.date !== '') {
+    if(cloud.date !== '' && cloud.kind !== '') {
       http.get(`/wordcloud?category=${cloud.kind}&date=${cloud.date}`).then(({data}) => {
         if(data) {
           data.sort((a,b)=> a.count-b.count);
           dispatch(setWord(data[data.length-1].word));
+          data.forEach((element, index) => {
+            data[index] = {...element, index}
+          });
+          data.sort(() => Math.random() - 0.5);
         }
         else dispatch(setWord(''))
         setWords(data);

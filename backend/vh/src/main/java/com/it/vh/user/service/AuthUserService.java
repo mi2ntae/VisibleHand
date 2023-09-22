@@ -27,6 +27,8 @@ import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.reactive.function.client.WebClient;
 
+import javax.annotation.PostConstruct;
+
 @Slf4j
 @Transactional(readOnly = true)
 @RequiredArgsConstructor
@@ -37,7 +39,7 @@ public class AuthUserService {
     private final UserRespository userRespository;
     private final JwtTokenProvider jwtTokenProvider;
     private final UserRedisService userRedisService;
-
+    
     @Transactional
     public LoginResDto login(String code, String provider) {
         ClientRegistration providerInfo = inMemoryRepository.findByRegistrationId(provider);
