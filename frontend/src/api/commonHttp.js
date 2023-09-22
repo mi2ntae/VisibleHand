@@ -10,7 +10,7 @@ const Interceptor = ({ children }) => {
   useEffect(() => {
     http.interceptors.request.use(
       function (config) {
-        config.headers.Authorization = `Bearer ${store.getState().user.token}`;
+        config.headers.Authorization = `Bearer ${store.getState().user.accessToken}`;
         return config;
       },
       function (err) {
