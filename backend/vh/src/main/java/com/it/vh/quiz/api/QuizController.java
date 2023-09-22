@@ -1,6 +1,7 @@
 package com.it.vh.quiz.api;
 
 import com.it.vh.quiz.api.dto.requestDto.SolvedQuizReq;
+import com.it.vh.quiz.api.dto.responseDto.QuizRankResDto;
 import com.it.vh.quiz.domain.exception.SolvingQuizException;
 import com.it.vh.quiz.service.QuizService;
 import com.it.vh.quiz.service.SolvedQuizService;
@@ -8,6 +9,8 @@ import io.swagger.annotations.Api;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @Api(value = "퀴즈 API", tags = {"Quiz"})
 @RestController
@@ -27,5 +30,10 @@ public class QuizController {
     @GetMapping("/article/{articleId}")
     public ResponseEntity<?> getNewsquiz(@PathVariable Long articleId) {
         return ResponseEntity.ok().body(quizService.findByArticleId(articleId));
+    }
+
+    @GetMapping("/rank")
+    public ResponseEntity<List<QuizRankResDto>> getQuizRank() {
+        return ResponseEntity.ok().body(quizService.getQuizRank());
     }
 }
