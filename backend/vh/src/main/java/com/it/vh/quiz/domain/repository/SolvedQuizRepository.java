@@ -1,5 +1,6 @@
 package com.it.vh.quiz.domain.repository;
 
+import com.it.vh.quiz.api.dto.responseDto.QuizRankResDto;
 import com.it.vh.quiz.domain.dto.ArticleQuizCountDto;
 import com.it.vh.quiz.domain.dto.WordQuizCountDto;
 import com.it.vh.quiz.domain.entity.SolvedQuiz;
@@ -9,6 +10,8 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 
 public interface SolvedQuizRepository extends JpaRepository<SolvedQuiz, Long> {
@@ -30,4 +33,11 @@ public interface SolvedQuizRepository extends JpaRepository<SolvedQuiz, Long> {
             "WHERE s.correct = true AND s.user.userId = :userId " +
             "GROUP BY a.kind")
     List<ArticleQuizCountDto> countArticleSolvedQuizsByCorrectAndUser_UserIdGroupByKind(long userId);
+
+    @Query(value = "SELECT new com.it.vh.quiz.api.dto.responseDto.QuizRankResDto(u.userId, u.nickname, u.profileImg, u.statusMsg, count(s.solvedId)) " +
+            "FROM solved_quiz s JOIN s.user u " +
+            "WHERE s.createAt BETWEEN :start AND :end " +
+            "GROUP BY u.userId " +
+            "ORDER BY count(s.solvedId) DESC")
+    Page<QuizRankResDto> getQuizRank(LocalDateTime start, LocalDateTime end, Pageable page);
 }

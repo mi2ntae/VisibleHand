@@ -36,6 +36,6 @@ export default function MyPageWordQuizChart({data}) {
     };
 
     return (
-        <Doughnut data={doughnutData}></Doughnut>
+        <Doughnut data={doughnutData} style={{width: "230px", maxHeight: "250px"}} options={{ maintainAspectRatio: false }}></Doughnut>
     );
 }
