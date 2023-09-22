@@ -10,7 +10,7 @@ import javax.persistence.*;
 import java.time.LocalDateTime;
 
 @Data
-@Entity
+@Entity(name="cloud")
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
