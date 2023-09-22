@@ -8,6 +8,7 @@ import com.it.vh.user.api.dto.UserProfileReqDto;
 import com.it.vh.user.domain.dto.UserDto;
 import com.it.vh.user.exception.NonExistUserIdException;
 import org.springframework.data.domain.Page;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 
@@ -26,7 +27,7 @@ public interface UserService {
     void deleteFollow(FollowResDto followResDto);
 
     NicknameResDto isDuplicatedNickname(String nickname);
-    void createProfile(UserProfileReqDto userProfileReqDto);
+    void createProfile(MultipartFile file, UserProfileReqDto userProfileReqDto);
     void updateProfile(Long userId, UserProfileReqDto userProfileReqDto);
     void deleteUser(Long userId);
 

@@ -30,7 +30,6 @@ public class S3Uploader {
     }
 
     private String upload(File uploadFile, String dirName) {
-
         String originalFileName = uploadFile.getName();
         String fileExtension = originalFileName.substring(originalFileName.lastIndexOf(".")); // 파일 확장자 추출
         String newFileName = UUID.randomUUID().toString() + fileExtension; // UUID를 이용해 파일명 중복 방지
