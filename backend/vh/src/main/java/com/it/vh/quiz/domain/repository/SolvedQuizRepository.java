@@ -19,14 +19,14 @@ public interface SolvedQuizRepository extends JpaRepository<SolvedQuiz, Long> {
     List<StreakResDto> findCountOfSolvedQuizByUserId(long userId);
 
     @Query(value = "SELECT new com.it.vh.quiz.domain.dto.WordQuizCountDto(d.type, count(s.solvedId)) " +
-            "FROM solved_quiz s JOIN Dictionary d ON s.word.wordId = d.wordId " +
+            "FROM solved_quiz s JOIN dictionary d ON s.word.wordId = d.wordId " +
             "WHERE s.correct = true AND s.user.userId = :userId " +
             "GROUP BY d.type")
     List<WordQuizCountDto> countWordSolvedQuizsByCorrectAndUser_UserIdGroupByKind(long userId);
 
     @Query(value = "SELECT new com.it.vh.quiz.domain.dto.ArticleQuizCountDto(a.kind, count(s.solvedId)) " +
             "FROM solved_quiz s JOIN news_quiz n ON s.newsquiz.newsquizId = n.newsquizId " +
-            "JOIN Article a ON n.article.articleId = a.articleId " +
+            "JOIN article a ON n.article.articleId = a.articleId " +
             "WHERE s.correct = true AND s.user.userId = :userId " +
             "GROUP BY a.kind")
     List<ArticleQuizCountDto> countArticleSolvedQuizsByCorrectAndUser_UserIdGroupByKind(long userId);

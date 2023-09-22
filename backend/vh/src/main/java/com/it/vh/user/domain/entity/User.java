@@ -11,11 +11,6 @@ import org.hibernate.annotations.ColumnDefault;
 import javax.persistence.*;
 import java.time.LocalDate;
 
-@Data
-@Entity
-@NoArgsConstructor
-@AllArgsConstructor
-@Builder
 @NamedNativeQueries({
         @NamedNativeQuery(
                 name = "findStreaByUserId",
@@ -64,7 +59,11 @@ import java.time.LocalDate;
                 }
         )
 )
-
+@Data
+@Entity(name = "user")
+@NoArgsConstructor
+@AllArgsConstructor
+@Builder
 public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

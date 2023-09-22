@@ -8,11 +8,6 @@ import lombok.NoArgsConstructor;
 import javax.persistence.*;
 import java.time.LocalDateTime;
 
-@Data
-@Entity(name="article")
-@NoArgsConstructor
-@AllArgsConstructor
-@Builder
 @NamedNativeQueries({
         @NamedNativeQuery(
                 name = "getArticleRanking",
@@ -39,6 +34,11 @@ import java.time.LocalDateTime;
                 }
         )
 )
+@Data
+@Entity(name="article")
+@NoArgsConstructor
+@AllArgsConstructor
+@Builder
 public class Article {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

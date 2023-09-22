@@ -11,7 +11,7 @@ import org.hibernate.annotations.OnDeleteAction;
 import javax.persistence.*;
 
 @Data
-@Entity
+@Entity(name="scrap")
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
