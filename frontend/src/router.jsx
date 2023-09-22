@@ -36,8 +36,8 @@ const router = createBrowserRouter([
             },
             {path: '/mypage/:userId', element: <Mypage />},
             {path: '/login', element: <Login />},
-            {path: '/auth/kakao', element: <Kakao />},
-            {path: '/auth/google', element: <Google />}
+            {path: 'auth/kakao', element: <Kakao />},
+            {path: 'auth/google', element: <Google />}
         ]
     },
 ])
