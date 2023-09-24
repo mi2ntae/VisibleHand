@@ -99,33 +99,20 @@ public class UserController {
         return ResponseEntity.ok().body(userService.isDuplicatedNickname(nickname));
     }
 
-//    @ApiOperation(value = "유저 프로필 등록", notes = "유저 프로필을 등록합니다.")
-//    @PostMapping("/profile")
-//    public ResponseEntity<?> createProfile(@RequestBody UserProfileReqDto userProfileReqDto) {
-//        userService.createProfile(userProfileReqDto);
-//        return ResponseEntity.ok().build();
-//    }
-
-
-//    @RequestPart(value = "name") String name,
-
-
-    @ApiOperation(value = "유저 프로필 등록 테스트", notes = "유저 프로필을 등록 테스트.")
-    @PostMapping("/profileTest")
+    @ApiOperation(value = "유저 프로필 등록", notes = "유저 프로필을 등록합니다.")
+    @PutMapping("/auth/profile")
     public ResponseEntity<?> createProfileTest (
             @RequestPart(value = "file", required = false) MultipartFile file,
-            @RequestPart (value = "dto") UserProfileReqDto userProfileReqDto
+            @RequestPart(value = "userProfileReqDto") UserProfileReqDto userProfileReqDto
     ) {
-        log.info("[UserController createProfileTest] reqDto nickname : {}", userProfileReqDto.getProfile().getNickname());
-        log.info("[UserController createProfileTest] file : {}", file.getOriginalFilename());
         userService.createProfile(file, userProfileReqDto);
         return ResponseEntity.ok().build();
     }
 
     @ApiOperation(value = "유저 프로필 수정", notes = "유저 프로필을 수정합니다.")
     @PutMapping("/profile/{userId}")
-    public ResponseEntity<?> updateProfile(@PathVariable Long userId, @RequestBody UserProfileReqDto userProfileReqDto) {
-        userService.updateProfile(userId, userProfileReqDto);
+    public ResponseEntity<?> updateProfile(@PathVariable Long userId, @RequestPart(value = "file", required = false) MultipartFile file, @RequestBody UserProfileReqDto userProfileReqDto) {
+        userService.updateProfile(userId, file, userProfileReqDto);
         return ResponseEntity.ok().build();
     }
 
