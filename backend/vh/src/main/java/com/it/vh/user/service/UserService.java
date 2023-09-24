@@ -28,7 +28,7 @@ public interface UserService {
 
     NicknameResDto isDuplicatedNickname(String nickname);
     void createProfile(MultipartFile file, UserProfileReqDto userProfileReqDto);
-    void updateProfile(Long userId, UserProfileReqDto userProfileReqDto);
+    void updateProfile(Long userId, MultipartFile file, UserProfileReqDto userProfileReqDto);
     void deleteUser(Long userId);
 
     List<UserFollowListResDto> getRecommendUserListByUserId(long userId);
