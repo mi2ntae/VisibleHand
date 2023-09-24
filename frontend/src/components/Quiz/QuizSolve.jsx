@@ -29,9 +29,31 @@ export default function QuizSolve() {
       },
     ]);
   }, []);
+  // 예시 데이터
+  const question = "질문 예시?";
+  const content =
+    "포켓몬 세계에 온 것을 환영한다. 내 이름은 오박사. 모두가 포켓몬 박사라고 부르지!이 세계에는 포켓몬스터, 줄여서 포켓몬이라고 불리는 신비한 생명체들이 도처에 살고 있다.자네는 남자인가?아니면 여자인가?자네의 이름은?";
+  const text = "스타팅포켓몬";
+  const wordId = 1;
+  const [correct, setCorrect] = useState(0);
+  const [wrong, setWrong] = useState(0);
+  const score = (i) => {
+    if (i > 0) {
+      setCorrect((prev) => prev + 1);
+    } else {
+      setWrong((prev) => prev + 1);
+    }
+    //콤보 계산
+  };
   return (
     <MainContainer>
-      <QuizContent></QuizContent>
+      <QuizContent
+        wordId={wordId}
+        question={question}
+        content={content}
+        text={text}
+        score={score}
+      ></QuizContent>
       <RightContainer>
         <RankingContainer>
           <RankingHeader>
