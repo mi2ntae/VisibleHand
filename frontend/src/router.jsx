@@ -9,9 +9,6 @@ import Quiz from "./pages/Quiz";
 import QuizSolve from "components/Quiz/QuizSolve";
 import Mypage from "./pages/Mypage";
 import NewsDetail from "pages/NewsDetail";
-import Login from "pages/Login";
-import Kakao from "pages/Kakao";
-import Google from "pages/Google";
 
 const router = createBrowserRouter([{
         path: '/',
@@ -37,10 +34,7 @@ const router = createBrowserRouter([{
             
         
         },
-            {path: '/mypage/:userId', element: <Mypage />},
-            {path: '/login', element: <Login />},
-            {path: 'auth/kakao', element: <Kakao />},
-            {path: 'auth/google', element: <Google />}
+            {path: '/mypage/:userId', element: <Mypage />}
         ]
     },
 ])
