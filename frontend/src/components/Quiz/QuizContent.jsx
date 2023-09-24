@@ -3,13 +3,33 @@ import { styled } from "styled-components";
 import color from "lib/style/colorPalette";
 import Swal from "sweetalert2";
 import http from "api/commonHttp";
+import { useState, useEffect, useRef } from "react";
 export default function QuizContent({ question, content, text, score }) {
+  const letterRef = useRef([]);
   const correctAnswer = text.split("");
   const sendScore = (i) => {
     score(i);
   };
-  //input 조합해 answer 만들어야함
-  const answer = "스타팅포켓몬";
+  //input 조합해 answer 만들어야함-입력 시마다 answer 한 글자씩 저장할 필요 없나
+  const [answer, setAnswer] = useState("스타팅포켓몬");
+  // const [currentIdx, setCurrentIdx] = useState(0);
+  useEffect(() => {
+    let t = [];
+    for (let i = 0; i < correctAnswer.length; i++) t.push(i);
+    setAnswer(t);
+  }, []);
+  const onChange = (e, idx) => {
+    if (e.target.value.length === 1) {
+      if (
+        letterRef.current.length > 0 &&
+        idx < letterRef.current.length - 1 &&
+        letterRef.current[idx + 1]
+      ) {
+        //useState에서 배열 특정 인덱스 값 어떻게 바꾸냐
+        letterRef.current[idx + 1].focus();
+      }
+    }
+  };
   const mark = () => {
     if (text === answer) {
       //정답
@@ -83,7 +103,11 @@ export default function QuizContent({ question, content, text, score }) {
       </ProgressBar>
       <AnswerContainer>
         {correctAnswer.map((v, i) => (
-          <Letter key={i} maxlength="1"></Letter>
+          <Letter
+            key={i}
+            onChange={(e) => onChange(e, i)}
+            ref={(el) => `letterRef.current[${i}] = el`}
+          ></Letter>
         ))}
       </AnswerContainer>
       <SubmitButton onClick={mark}>제출하기</SubmitButton>
