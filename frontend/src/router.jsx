@@ -8,32 +8,35 @@ import Dictionary from "./pages/Dictionary";
 import Quiz from "./pages/Quiz";
 import QuizSolve from "components/Quiz/QuizSolve";
 import Mypage from "./pages/Mypage";
+import NewsDetail from "pages/NewsDetail";
 import Login from "pages/Login";
 import Kakao from "pages/Kakao";
 import Google from "pages/Google";
 
-const router = createBrowserRouter([
-    {
+const router = createBrowserRouter([{
         path: '/',
         element: <App />,
         errorElement: <Error />,
         children: [
             {index: true, path: '/', element: <Home />},
             {path: '/news', element: <News />},
+            { path: "/news/:articleId", element: <NewsDetail /> },
             {path: '/feed', element: <Feed />},
             {path: '/dictionary', element: <Dictionary />},
             {path: '/quiz',
-                children:[
-                    {
-                        path:"",
-                        element: <Quiz />,
-                    },
-                    {
-                        path:"solve",
-                        element:<QuizSolve/>
-                    }
-                ]
-            },
+            children:[
+                {
+                    path:"",
+                    element: <Quiz />,
+                },
+                {
+                    path:"solve",
+                    element:<QuizSolve/>
+                }
+            ]
+            
+        
+        },
             {path: '/mypage/:userId', element: <Mypage />},
             {path: '/login', element: <Login />},
             {path: 'auth/kakao', element: <Kakao />},
