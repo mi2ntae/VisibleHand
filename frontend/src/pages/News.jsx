@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import styled from 'styled-components';
-import WordCloud from '../components/news/WordCloud';
-import Articles from '../components/news/Articles';
+import WordCloud from '../components/News/WordCloud';
+import Articles from '../components/News/Articles';
 
 export default function News() {
     return (
