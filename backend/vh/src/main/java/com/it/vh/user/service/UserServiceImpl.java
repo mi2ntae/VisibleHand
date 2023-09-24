@@ -1,5 +1,6 @@
 package com.it.vh.user.service;
 
+import com.it.vh.common.util.S3Uploader;
 import com.it.vh.user.api.dto.FollowResDto;
 import com.it.vh.user.api.dto.NicknameResDto;
 import com.it.vh.user.api.dto.UserFollowListResDto;
@@ -17,9 +18,12 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
+import java.io.IOException;
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 
 @Service
 @Slf4j
@@ -29,6 +33,8 @@ public class UserServiceImpl implements UserService{
     private final FollowRepository followRepository;
     private final int FOLLOWLIST_PAGE_NUM = 10;
     private final UserRedisService userRedisService;
+
+    private final S3Uploader uploader;
 
     @Override
     public UserDto getUserProfileByUserId(long userId) throws NonExistUserIdException{
@@ -121,12 +127,22 @@ public class UserServiceImpl implements UserService{
 
     @Transactional
     @Override
-    public void createProfile(UserProfileReqDto userProfileReqDto) throws NonExistUserIdException {
+    public void createProfile(MultipartFile file, UserProfileReqDto userProfileReqDto) throws NonExistUserIdException {
         String snsEmail = userProfileReqDto.getSnsEmail();
         log.info("email: {}", snsEmail);
         String provider = userProfileReqDto.getProvider();
         log.info("providerId: {}", provider);
 
+        String s3ImgUrl = null;
+        if(!Objects.isNull(file)) {
+            log.info("[createProfile]");
+            try {
+                s3ImgUrl = uploader.upload(file, userProfileReqDto.getSnsEmail());
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+        }
+        log.info(s3ImgUrl);
         Optional<User> findUser = userRespository.findBySnsEmailAndProvider(snsEmail, provider);
         log.info("user: {}", findUser);
 
@@ -137,7 +153,7 @@ public class UserServiceImpl implements UserService{
                 .userId(findUser.get().getUserId())
                 .nickname(userProfileReqDto.getProfile().getNickname())
                 .statusMsg(userProfileReqDto.getProfile().getStatusMsg())
-                .profileImg(userProfileReqDto.getProfileImg())
+                .profileImg(s3ImgUrl)
                 .snsEmail(findUser.get().getSnsEmail())
                 .provider(findUser.get().getProvider())
                 .build();

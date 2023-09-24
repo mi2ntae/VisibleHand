@@ -1,7 +1,7 @@
 spring:
   config:
     activate:
-      on-profile: "redis"
+      on-profile: "redisdev"
 
   redis:
     host: localhost

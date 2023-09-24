@@ -29,6 +29,6 @@ public class WordCloudController {
 
     @GetMapping("/recent")
     public ResponseEntity<?> recentAndLastDate() {
-        return ResponseEntity.ok().body(wordCloudService.recentAndLastDate()    );
+        return ResponseEntity.ok().body(wordCloudService.recentAndLastDate());
     }
 }

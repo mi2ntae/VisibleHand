@@ -10,9 +10,11 @@ import com.it.vh.user.service.UserService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.validation.Valid;
 import java.util.List;
@@ -21,6 +23,7 @@ import java.util.List;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api/user")
+@Slf4j
 public class UserController {
     private final UserService userService;
     private final FeedService feedService;
@@ -57,6 +60,12 @@ public class UserController {
         return ResponseEntity.ok().body(solvedQuizService.getUserStreak(userId));
     }
 
+    @ApiOperation(value = "유저 퀴즈 동향 조회", notes = "유저의 카테고리별 퀴즈 동향 조회")
+    @GetMapping("/quiz/{userId}")
+    public ResponseEntity<UserQuizStatusResDto> getuserQuizStatus(@PathVariable long userId) throws NonExistUserIdException{
+        return ResponseEntity.ok().body(solvedQuizService.getUserQuizStatus(userId));
+    }
+
 
     @ApiOperation(value = "유저 팔로잉 목록 조회", notes = "팔로잉 목록 조회 10개씩.")
     @GetMapping("/following/{userId}")
@@ -90,10 +99,26 @@ public class UserController {
         return ResponseEntity.ok().body(userService.isDuplicatedNickname(nickname));
     }
 
-    @ApiOperation(value = "유저 프로필 등록", notes = "유저 프로필을 등록합니다.")
-    @PostMapping("/profile")
-    public ResponseEntity<?> createProfile(@RequestBody UserProfileReqDto userProfileReqDto) {
-        userService.createProfile(userProfileReqDto);
+//    @ApiOperation(value = "유저 프로필 등록", notes = "유저 프로필을 등록합니다.")
+//    @PostMapping("/profile")
+//    public ResponseEntity<?> createProfile(@RequestBody UserProfileReqDto userProfileReqDto) {
+//        userService.createProfile(userProfileReqDto);
+//        return ResponseEntity.ok().build();
+//    }
+
+
+//    @RequestPart(value = "name") String name,
+
+
+    @ApiOperation(value = "유저 프로필 등록 테스트", notes = "유저 프로필을 등록 테스트.")
+    @PostMapping("/profileTest")
+    public ResponseEntity<?> createProfileTest (
+            @RequestPart(value = "file", required = false) MultipartFile file,
+            @RequestPart (value = "dto") UserProfileReqDto userProfileReqDto
+    ) {
+        log.info("[UserController createProfileTest] reqDto nickname : {}", userProfileReqDto.getProfile().getNickname());
+        log.info("[UserController createProfileTest] file : {}", file.getOriginalFilename());
+        userService.createProfile(file, userProfileReqDto);
         return ResponseEntity.ok().build();
     }
 
