@@ -1,7 +1,7 @@
 import http from "api/commonHttp";
 import FeedBannerElement from "components/Feed/Banner/FeedBannerElement";
-import FeedInput from "components/News/Banner/FeedInput";
-import NewsContent from "components/News/NewsContent";
+import FeedInput from "components/news/Banner/FeedInput";
+import NewsContent from "components/news/NewsContent";
 import { lightest_grey } from "lib/style/colorPalette";
 import React, { useEffect, useRef, useState } from "react";
 import { useParams } from "react-router-dom";

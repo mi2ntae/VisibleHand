@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
-import SizeBubble from "components/News/SizeBubble";
-import SummaryBubble from "components/News/SummaryBubble";
+import SizeBubble from "components/news/SizeBubble";
+import SummaryBubble from "components/news/SummaryBubble";
 import {
   grey,
   lightest_grey,

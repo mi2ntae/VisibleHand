@@ -6,137 +6,138 @@ import ArticleRank from "components/Feed/Banner/ArticleRank";
 import UserRecommend from "components/Feed/Banner/UserRecommend";
 import http from "api/commonHttp";
 import UserElement from "components/Feed/UserElement";
+import { background } from "lib/style/colorPalette";
 
 export default function Feed() {
-  const feeds = [
-    {
-      userId: 1,
-      profileImg:
-        "https://blog.kakaocdn.net/dn/FOcCY/btr5QAbW7Sv/iOSQ86mcRgUNUqQAf9ahRK/img.jpg",
-      nickname: "메론빵",
-      feedId: 11,
-      content:
-        "신용공포 때문에 주가 변동이 정상적인 수준보다 훨씬 더 원유가격의 변동에 크게 좌우되게 되었습니다. 대부분의 에너지기업들이 (대부분의 원유수출국처럼) 어려움을 겪는 반면, 투자자들은 조만간 특히 필수소비재나 임의소비재를 생산하는 기업과 같은 저유가로 혜택을 입게 될 업종에 주목하기 시작할 것입니다. 유틸리티와 일부 제조업 등 에너지집약형 업종도 역시 혜택을 입게 될 것이지만 에너지부문에의 장비 판매 비중이 큰 경우에는 예외입니다. WTI와 S&P 500® 간의 금년 현재까지의 상관관계 70%는 아마도 지속되기 어려울 것이나 원유는 당분간은 금융주의 주가에 계속하여 상당한 결정력을 행사할 것입니다.",
-      heart: 123,
-      isHeart: true,
-      articleId: 0,
-      category: "금융/증권",
-      title:
-        "유가 상승·Fed 긴축 장기화 우려에 하락…나스닥 1.06%↓[뉴욕증시 브리핑]",
-      createAt: "2023년 9월 13일 12:34",
-    },
-    {
-      userId: 1,
-      profileImg:
-        "https://blog.kakaocdn.net/dn/FOcCY/btr5QAbW7Sv/iOSQ86mcRgUNUqQAf9ahRK/img.jpg",
-      nickname: "메론빵",
-      feedId: 1,
-      content: "신용공포",
-      heart: 123,
-      isHeart: false,
-      articleId: 0,
-      category: "금융/증권",
-      title:
-        "유가 상승·Fed 긴축 장기화 우려에 하락…나스닥 1.06%↓[뉴욕증시 브리핑]",
-      createAt: "2023년 9월 13일 12:34",
-    },
-    {
-      userId: 1,
-      profileImg:
-        "https://blog.kakaocdn.net/dn/FOcCY/btr5QAbW7Sv/iOSQ86mcRgUNUqQAf9ahRK/img.jpg",
-      nickname: "메론빵",
-      feedId: 1,
-      content:
-        "신용공포 때문에 주가 변동이 정상적인 수준보다 훨씬 더 원유가격의 변동에 크게 좌우되게 되었다. 대부분의 에너지기업들이 (대부분의 원유수출국처럼) 어려움을 겪는 반면, 투자자들은 조만간 특히 필수소비재나 임의소비재를 생산하는 기업과 같은 저유가로 혜택을 입게 될 업종에 주목하기 시작할 것이다. 유틸리티와 일부 제조업 등 에너지집약형 업종도 역시 혜택을 입게 될 것이지만 에너지부문에의 장비 판매 비중이 큰 경우에는 예외이다. WTI와 S&P 500® 간의 금년 현재까지의 상관관계 70%는 아마도 지속되기 어려울 ... 더보기",
-      heart: 123,
-      isHeart: 1,
-      articleId: 0,
-      category: "금융/증권",
-      title:
-        "유가 상승·Fed 긴축 장기화 우려에 하락…나스닥 1.06%↓[뉴욕증시 브리핑]",
-      createAt: "2023년 9월 13일 12:34",
-    },
-    {
-      userId: 1,
-      profileImg:
-        "https://blog.kakaocdn.net/dn/FOcCY/btr5QAbW7Sv/iOSQ86mcRgUNUqQAf9ahRK/img.jpg",
-      nickname: "메론빵",
-      feedId: 1,
-      content:
-        "신용공포 때문에 주가 변동이 정상적인 수준보다 훨씬 더 원유가격의 변동에 크게 좌우되게 되었다. 대부분의 에너지기업들이 (대부분의 원유수출국처럼) 어려움을 겪는 반면, 투자자들은 조만간 특히 필수소비재나 임의소비재를 생산하는 기업과 같은 저유가로 혜택을 입게 될 업종에 주목하기 시작할 것이다. 유틸리티와 일부 제조업 등 에너지집약형 업종도 역시 혜택을 입게 될 것이지만 에너지부문에의 장비 판매 비중이 큰 경우에는 예외이다. WTI와 S&P 500® 간의 금년 현재까지의 상관관계 70%는 아마도 지속되기 어려울 ... 더보기",
-      heart: 123,
-      isHeart: 1,
-      articleId: 0,
-      category: "금융/증권",
-      title:
-        "유가 상승·Fed 긴축 장기화 우려에 하락…나스닥 1.06%↓[뉴욕증시 브리핑]",
-      createAt: "2023년 9월 13일 12:34",
-    },
-    {
-      userId: 1,
-      profileImg:
-        "https://i.namu.wiki/i/WJYT941j_GHh2l4yBQLBxK-OR5XxPV02T0x7PCeEkeNtc3-AdOvdjyutRbP1rYzvYbprKEXpJ8R8o9AKysHgXg.webp",
-      nickname: "메론빵",
-      feedId: 1,
-      content:
-        "신용공포 때문에 주가 변동이 정상적인 수준보다 훨씬 더 원유가격의 변동에 크게 좌우되게 되었다. 대부분의 에너지기업들이 (대부분의 원유수출국처럼) 어려움을 겪는 반면, 투자자들은 조만간 특히 필수소비재나 임의소비재를 생산하는 기업과 같은 저유가로 혜택을 입게 될 업종에 주목하기 시작할 것이다. 유틸리티와 일부 제조업 등 에너지집약형 업종도 역시 혜택을 입게 될 것이지만 에너지부문에의 장비 판매 비중이 큰 경우에는 예외이다. WTI와 S&P 500® 간의 금년 현재까지의 상관관계 70%는 아마도 지속되기 어려울 ... 더보기",
-      heart: 123,
-      isHeart: 1,
-      articleId: 0,
-      category: "금융/증권",
-      title:
-        "유가 상승·Fed 긴축 장기화 우려에 하락…나스닥 1.06%↓[뉴욕증시 브리핑]",
-      createAt: "2023년 9월 13일 12:34",
-    },
-    {
-      userId: 1,
-      profileImg:
-        "https://i.namu.wiki/i/WJYT941j_GHh2l4yBQLBxK-OR5XxPV02T0x7PCeEkeNtc3-AdOvdjyutRbP1rYzvYbprKEXpJ8R8o9AKysHgXg.webp",
-      nickname: "메론빵",
-      feedId: 1,
-      content:
-        "신용공포 때문에 주가 변동이 정상적인 수준보다 훨씬 더 원유가격의 변동에 크게 좌우되게 되었다. 대부분의 에너지기업들이 (대부분의 원유수출국처럼) 어려움을 겪는 반면, 투자자들은 조만간 특히 필수소비재나 임의소비재를 생산하는 기업과 같은 저유가로 혜택을 입게 될 업종에 주목하기 시작할 것이다. 유틸리티와 일부 제조업 등 에너지집약형 업종도 역시 혜택을 입게 될 것이지만 에너지부문에의 장비 판매 비중이 큰 경우에는 예외이다. WTI와 S&P 500® 간의 금년 현재까지의 상관관계 70%는 아마도 지속되기 어려울 ... 더보기",
-      heart: 123,
-      isHeart: 1,
-      articleId: 0,
-      category: "금융/증권",
-      title:
-        "유가 상승·Fed 긴축 장기화 우려에 하락…나스닥 1.06%↓[뉴욕증시 브리핑]",
-      createAt: "2023년 9월 13일 12:34",
-    },
-    {
-      userId: 1,
-      profileImg:
-        "https://i.namu.wiki/i/WJYT941j_GHh2l4yBQLBxK-OR5XxPV02T0x7PCeEkeNtc3-AdOvdjyutRbP1rYzvYbprKEXpJ8R8o9AKysHgXg.webp",
-      nickname: "메론빵",
-      feedId: 1,
-      content:
-        "신용공포 때문에 주가 변동이 정상적인 수준보다 훨씬 더 원유가격의 변동에 크게 좌우되게 되었다. 대부분의 에너지기업들이 (대부분의 원유수출국처럼) 어려움을 겪는 반면, 투자자들은 조만간 특히 필수소비재나 임의소비재를 생산하는 기업과 같은 저유가로 혜택을 입게 될 업종에 주목하기 시작할 것이다. 유틸리티와 일부 제조업 등 에너지집약형 업종도 역시 혜택을 입게 될 것이지만 에너지부문에의 장비 판매 비중이 큰 경우에는 예외이다. WTI와 S&P 500® 간의 금년 현재까지의 상관관계 70%는 아마도 지속되기 어려울 ... 더보기",
-      heart: 123,
-      isHeart: 1,
-      articleId: 0,
-      category: "금융/증권",
-      title:
-        "유가 상승·Fed 긴축 장기화 우려에 하락…나스닥 1.06%↓[뉴욕증시 브리핑]",
-      createAt: "2023년 9월 13일 12:34",
-    },
-    {
-      userId: 1,
-      profileImg:
-        "https://i.namu.wiki/i/WJYT941j_GHh2l4yBQLBxK-OR5XxPV02T0x7PCeEkeNtc3-AdOvdjyutRbP1rYzvYbprKEXpJ8R8o9AKysHgXg.webp",
-      nickname: "메론빵",
-      feedId: 1,
-      content:
-        "신용공포 때문에 주가 변동이 정상적인 수준보다 훨씬 더 원유가격의 변동에 크게 좌우되게 되었다. 대부분의 에너지기업들이 (대부분의 원유수출국처럼) 어려움을 겪는 반면, 투자자들은 조만간 특히 필수소비재나 임의소비재를 생산하는 기업과 같은 저유가로 혜택을 입게 될 업종에 주목하기 시작할 것이다. 유틸리티와 일부 제조업 등 에너지집약형 업종도 역시 혜택을 입게 될 것이지만 에너지부문에의 장비 판매 비중이 큰 경우에는 예외이다. WTI와 S&P 500® 간의 금년 현재까지의 상관관계 70%는 아마도 지속되기 어려울 ... 더보기",
-      heart: 123,
-      isHeart: 1,
-      articleId: 0,
-      category: "금융/증권",
-      title:
-        "유가 상승·Fed 긴축 장기화 우려에 하락…나스닥 1.06%↓[뉴욕증시 브리핑]",
-      createAt: "2023년 9월 13일 12:34",
-    },
-  ];
+  // const feeds = [
+  //   {
+  //     userId: 1,
+  //     profileImg:
+  //       "https://blog.kakaocdn.net/dn/FOcCY/btr5QAbW7Sv/iOSQ86mcRgUNUqQAf9ahRK/img.jpg",
+  //     nickname: "메론빵",
+  //     feedId: 11,
+  //     content:
+  //       "신용공포 때문에 주가 변동이 정상적인 수준보다 훨씬 더 원유가격의 변동에 크게 좌우되게 되었습니다. 대부분의 에너지기업들이 (대부분의 원유수출국처럼) 어려움을 겪는 반면, 투자자들은 조만간 특히 필수소비재나 임의소비재를 생산하는 기업과 같은 저유가로 혜택을 입게 될 업종에 주목하기 시작할 것입니다. 유틸리티와 일부 제조업 등 에너지집약형 업종도 역시 혜택을 입게 될 것이지만 에너지부문에의 장비 판매 비중이 큰 경우에는 예외입니다. WTI와 S&P 500® 간의 금년 현재까지의 상관관계 70%는 아마도 지속되기 어려울 것이나 원유는 당분간은 금융주의 주가에 계속하여 상당한 결정력을 행사할 것입니다.",
+  //     heart: 123,
+  //     isHeart: true,
+  //     articleId: 0,
+  //     category: "금융/증권",
+  //     title:
+  //       "유가 상승·Fed 긴축 장기화 우려에 하락…나스닥 1.06%↓[뉴욕증시 브리핑]",
+  //     createAt: "2023년 9월 13일 12:34",
+  //   },
+  //   {
+  //     userId: 1,
+  //     profileImg:
+  //       "https://blog.kakaocdn.net/dn/FOcCY/btr5QAbW7Sv/iOSQ86mcRgUNUqQAf9ahRK/img.jpg",
+  //     nickname: "메론빵",
+  //     feedId: 1,
+  //     content: "신용공포",
+  //     heart: 123,
+  //     isHeart: false,
+  //     articleId: 0,
+  //     category: "금융/증권",
+  //     title:
+  //       "유가 상승·Fed 긴축 장기화 우려에 하락…나스닥 1.06%↓[뉴욕증시 브리핑]",
+  //     createAt: "2023년 9월 13일 12:34",
+  //   },
+  //   {
+  //     userId: 1,
+  //     profileImg:
+  //       "https://blog.kakaocdn.net/dn/FOcCY/btr5QAbW7Sv/iOSQ86mcRgUNUqQAf9ahRK/img.jpg",
+  //     nickname: "메론빵",
+  //     feedId: 1,
+  //     content:
+  //       "신용공포 때문에 주가 변동이 정상적인 수준보다 훨씬 더 원유가격의 변동에 크게 좌우되게 되었다. 대부분의 에너지기업들이 (대부분의 원유수출국처럼) 어려움을 겪는 반면, 투자자들은 조만간 특히 필수소비재나 임의소비재를 생산하는 기업과 같은 저유가로 혜택을 입게 될 업종에 주목하기 시작할 것이다. 유틸리티와 일부 제조업 등 에너지집약형 업종도 역시 혜택을 입게 될 것이지만 에너지부문에의 장비 판매 비중이 큰 경우에는 예외이다. WTI와 S&P 500® 간의 금년 현재까지의 상관관계 70%는 아마도 지속되기 어려울 ... 더보기",
+  //     heart: 123,
+  //     isHeart: 1,
+  //     articleId: 0,
+  //     category: "금융/증권",
+  //     title:
+  //       "유가 상승·Fed 긴축 장기화 우려에 하락…나스닥 1.06%↓[뉴욕증시 브리핑]",
+  //     createAt: "2023년 9월 13일 12:34",
+  //   },
+  //   {
+  //     userId: 1,
+  //     profileImg:
+  //       "https://blog.kakaocdn.net/dn/FOcCY/btr5QAbW7Sv/iOSQ86mcRgUNUqQAf9ahRK/img.jpg",
+  //     nickname: "메론빵",
+  //     feedId: 1,
+  //     content:
+  //       "신용공포 때문에 주가 변동이 정상적인 수준보다 훨씬 더 원유가격의 변동에 크게 좌우되게 되었다. 대부분의 에너지기업들이 (대부분의 원유수출국처럼) 어려움을 겪는 반면, 투자자들은 조만간 특히 필수소비재나 임의소비재를 생산하는 기업과 같은 저유가로 혜택을 입게 될 업종에 주목하기 시작할 것이다. 유틸리티와 일부 제조업 등 에너지집약형 업종도 역시 혜택을 입게 될 것이지만 에너지부문에의 장비 판매 비중이 큰 경우에는 예외이다. WTI와 S&P 500® 간의 금년 현재까지의 상관관계 70%는 아마도 지속되기 어려울 ... 더보기",
+  //     heart: 123,
+  //     isHeart: 1,
+  //     articleId: 0,
+  //     category: "금융/증권",
+  //     title:
+  //       "유가 상승·Fed 긴축 장기화 우려에 하락…나스닥 1.06%↓[뉴욕증시 브리핑]",
+  //     createAt: "2023년 9월 13일 12:34",
+  //   },
+  //   {
+  //     userId: 1,
+  //     profileImg:
+  //       "https://i.namu.wiki/i/WJYT941j_GHh2l4yBQLBxK-OR5XxPV02T0x7PCeEkeNtc3-AdOvdjyutRbP1rYzvYbprKEXpJ8R8o9AKysHgXg.webp",
+  //     nickname: "메론빵",
+  //     feedId: 1,
+  //     content:
+  //       "신용공포 때문에 주가 변동이 정상적인 수준보다 훨씬 더 원유가격의 변동에 크게 좌우되게 되었다. 대부분의 에너지기업들이 (대부분의 원유수출국처럼) 어려움을 겪는 반면, 투자자들은 조만간 특히 필수소비재나 임의소비재를 생산하는 기업과 같은 저유가로 혜택을 입게 될 업종에 주목하기 시작할 것이다. 유틸리티와 일부 제조업 등 에너지집약형 업종도 역시 혜택을 입게 될 것이지만 에너지부문에의 장비 판매 비중이 큰 경우에는 예외이다. WTI와 S&P 500® 간의 금년 현재까지의 상관관계 70%는 아마도 지속되기 어려울 ... 더보기",
+  //     heart: 123,
+  //     isHeart: 1,
+  //     articleId: 0,
+  //     category: "금융/증권",
+  //     title:
+  //       "유가 상승·Fed 긴축 장기화 우려에 하락…나스닥 1.06%↓[뉴욕증시 브리핑]",
+  //     createAt: "2023년 9월 13일 12:34",
+  //   },
+  //   {
+  //     userId: 1,
+  //     profileImg:
+  //       "https://i.namu.wiki/i/WJYT941j_GHh2l4yBQLBxK-OR5XxPV02T0x7PCeEkeNtc3-AdOvdjyutRbP1rYzvYbprKEXpJ8R8o9AKysHgXg.webp",
+  //     nickname: "메론빵",
+  //     feedId: 1,
+  //     content:
+  //       "신용공포 때문에 주가 변동이 정상적인 수준보다 훨씬 더 원유가격의 변동에 크게 좌우되게 되었다. 대부분의 에너지기업들이 (대부분의 원유수출국처럼) 어려움을 겪는 반면, 투자자들은 조만간 특히 필수소비재나 임의소비재를 생산하는 기업과 같은 저유가로 혜택을 입게 될 업종에 주목하기 시작할 것이다. 유틸리티와 일부 제조업 등 에너지집약형 업종도 역시 혜택을 입게 될 것이지만 에너지부문에의 장비 판매 비중이 큰 경우에는 예외이다. WTI와 S&P 500® 간의 금년 현재까지의 상관관계 70%는 아마도 지속되기 어려울 ... 더보기",
+  //     heart: 123,
+  //     isHeart: 1,
+  //     articleId: 0,
+  //     category: "금융/증권",
+  //     title:
+  //       "유가 상승·Fed 긴축 장기화 우려에 하락…나스닥 1.06%↓[뉴욕증시 브리핑]",
+  //     createAt: "2023년 9월 13일 12:34",
+  //   },
+  //   {
+  //     userId: 1,
+  //     profileImg:
+  //       "https://i.namu.wiki/i/WJYT941j_GHh2l4yBQLBxK-OR5XxPV02T0x7PCeEkeNtc3-AdOvdjyutRbP1rYzvYbprKEXpJ8R8o9AKysHgXg.webp",
+  //     nickname: "메론빵",
+  //     feedId: 1,
+  //     content:
+  //       "신용공포 때문에 주가 변동이 정상적인 수준보다 훨씬 더 원유가격의 변동에 크게 좌우되게 되었다. 대부분의 에너지기업들이 (대부분의 원유수출국처럼) 어려움을 겪는 반면, 투자자들은 조만간 특히 필수소비재나 임의소비재를 생산하는 기업과 같은 저유가로 혜택을 입게 될 업종에 주목하기 시작할 것이다. 유틸리티와 일부 제조업 등 에너지집약형 업종도 역시 혜택을 입게 될 것이지만 에너지부문에의 장비 판매 비중이 큰 경우에는 예외이다. WTI와 S&P 500® 간의 금년 현재까지의 상관관계 70%는 아마도 지속되기 어려울 ... 더보기",
+  //     heart: 123,
+  //     isHeart: 1,
+  //     articleId: 0,
+  //     category: "금융/증권",
+  //     title:
+  //       "유가 상승·Fed 긴축 장기화 우려에 하락…나스닥 1.06%↓[뉴욕증시 브리핑]",
+  //     createAt: "2023년 9월 13일 12:34",
+  //   },
+  //   {
+  //     userId: 1,
+  //     profileImg:
+  //       "https://i.namu.wiki/i/WJYT941j_GHh2l4yBQLBxK-OR5XxPV02T0x7PCeEkeNtc3-AdOvdjyutRbP1rYzvYbprKEXpJ8R8o9AKysHgXg.webp",
+  //     nickname: "메론빵",
+  //     feedId: 1,
+  //     content:
+  //       "신용공포 때문에 주가 변동이 정상적인 수준보다 훨씬 더 원유가격의 변동에 크게 좌우되게 되었다. 대부분의 에너지기업들이 (대부분의 원유수출국처럼) 어려움을 겪는 반면, 투자자들은 조만간 특히 필수소비재나 임의소비재를 생산하는 기업과 같은 저유가로 혜택을 입게 될 업종에 주목하기 시작할 것이다. 유틸리티와 일부 제조업 등 에너지집약형 업종도 역시 혜택을 입게 될 것이지만 에너지부문에의 장비 판매 비중이 큰 경우에는 예외이다. WTI와 S&P 500® 간의 금년 현재까지의 상관관계 70%는 아마도 지속되기 어려울 ... 더보기",
+  //     heart: 123,
+  //     isHeart: 1,
+  //     articleId: 0,
+  //     category: "금융/증권",
+  //     title:
+  //       "유가 상승·Fed 긴축 장기화 우려에 하락…나스닥 1.06%↓[뉴욕증시 브리핑]",
+  //     createAt: "2023년 9월 13일 12:34",
+  //   },
+  // ];
 
   const articles = [
     {
@@ -221,25 +222,47 @@ export default function Feed() {
 
   // 로그인 연결 후 초기값 수정
   const [userId, setUserId] = useState(1);
-  // const [feeds, setFeeds] = useState([]);
-
-  // useEffect(() => {
-  //   // 리덕스에서 userId 가져온다
-  //   fetchData();
-  // });
-
-  // const fetchData = () => {
-  //   http
-  //     .get(`feed/list/${userId}`)
-  //     .then((data) => {
-  //       setFeeds(data);
-  //     })
-  //     .catch((err) => {
-  //       alert(err);
-  //     });
-  // };
-
+  const [feeds, setFeeds] = useState([]);
   const [searchType, setSearchType] = useState(true);
+  const [keyword, setKeyWord] = useState("");
+  const page = useRef(0);
+  const [loading, setLoading] = useState(false);
+  const target = useRef(null);
+
+  useEffect(() => {
+    // 리덕스에서 userId 가져온다
+    fetchData();
+    observer.observe(target.current);
+  }, []);
+
+  function getFeeds() {
+    setLoading(true);
+    fetchData();
+    setLoading(false);
+  }
+
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach((entry) => {
+      if (!entry.isIntersecting) return;
+      if (loading) return;
+
+      getFeeds();
+      page.current += 1;
+    });
+  });
+
+  const fetchData = () => {
+    http
+      .get(
+        `feed/list/${userId}?searchType=${
+          searchType ? 0 : 1
+        }&keyword=${keyword}&page=${page.current}`
+      )
+      .then((data) => setFeeds((prevFeeds) => [...prevFeeds, ...data.data]))
+      .catch((err) => {
+        alert(err);
+      });
+  };
 
   return (
     <div style={{ display: "flex", padding: "40px 100px", gap: "88px" }}>
@@ -252,7 +275,7 @@ export default function Feed() {
           overFlowY: "auto",
         }}
       >
-        <Search />
+        <Search setSearchType={setSearchType} setKeyWord={setKeyWord} />
         <FeedContainer>
           {searchType
             ? feeds.map((data) => {
@@ -261,6 +284,11 @@ export default function Feed() {
             : users.map((data) => {
                 return <UserElement user={data} key={data.userId} />;
               })}
+          <div
+            id="scrollEnd"
+            style={{ height: "1px", backgroundColor: background }}
+            ref={target}
+          ></div>
         </FeedContainer>
       </div>
       <BannerContainer>
