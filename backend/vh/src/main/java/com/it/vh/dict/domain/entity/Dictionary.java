@@ -1,5 +1,6 @@
 package com.it.vh.dict.domain.entity;
 
+import com.it.vh.quiz.api.dto.responseDto.WordQuizEntryDto;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -25,4 +26,5 @@ public class Dictionary {
 
     @Enumerated(EnumType.STRING)
     private DictionaryType type;
+
 }
