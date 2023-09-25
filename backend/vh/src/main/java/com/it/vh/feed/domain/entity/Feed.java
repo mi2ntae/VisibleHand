@@ -82,7 +82,7 @@ import java.time.LocalDateTime;
         @NamedNativeQuery(
                 name = "findFeedsByFollowingUserIdAndTitle",
                 query = "SELECT u.user_id AS userId, u.nickname, u.profile_img AS profileImg, " +
-                        "f.feed_id AS feedId, f.content, f.create_at AS createdAt, " +
+                        "f.feed_id AS feedId, f.content, f.create_at AS createAt, " +
                         "IFNULL((SELECT COUNT(*) FROM Heart AS h WHERE h.feed_id = f.feed_id), 0) AS heart, " +
                         "IF((SELECT COUNT(*) FROM Heart AS h WHERE h.user_id = :userId AND h.feed_id = f.feed_id) > 0, true, false) AS isHeart, " +
                         "a.article_id AS articleId, a.title " +
