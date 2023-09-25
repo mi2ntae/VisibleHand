@@ -9,13 +9,16 @@ export default function Dictionary() {
   const category = ["경영", "경제", "공공", "과학", "금융", "사회"];
   const [wordArr, setWordArr] = useState([]);
   const [type, setType] = useState("");
-  const [currentWord, setCurrentWord] = useState({});
+  const [currentWord, setCurrentWord] = useState({ word: "" });
   const [keyword, setKeyword] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPage, setTotalPage] = useState();
   const selected = {
     backgroundColor: `${color.primary}`,
     color: `${color.white}`,
+  };
+  const selectedWord = {
+    border: `1px solid ${color.primary}`,
   };
   const search = () => {
     http
@@ -100,7 +103,11 @@ export default function Dictionary() {
         </SearchContainer>
         <div className="wordlist">
           {wordArr.map((v, i) => (
-            <WordContainer key={i} onClick={() => setCurrentWord(v)}>
+            <WordContainer
+              style={currentWord === v ? selectedWord : {}}
+              key={i}
+              onClick={() => setCurrentWord(v)}
+            >
               <WordCat>{v.type}</WordCat>
               <div>{v.word}</div>
             </WordContainer>
@@ -124,9 +131,14 @@ export default function Dictionary() {
           >
             {currentWord.type}
           </WordCat>
-          <div>{currentWord.word}</div>
+          <div
+            className="word"
+            style={currentWord.word.length > 30 ? { fontSize: "36px" } : {}}
+          >
+            {currentWord.word}
+          </div>
         </div>
-        <div>{currentWord.meaning}</div>
+        <div className="meaning">{currentWord.meaning}</div>
       </DetailContainer>
     </MainContainer>
   );
@@ -197,15 +209,17 @@ const DetailContainer = styled.div`
     justify-content: center;
     margin-bottom: 44px;
   }
-  & > div:first-child > div:last-child {
+  .word {
     font-size: 48px;
     color: ${color.black_grey};
     font-weight: 600;
     margin-left: 24px;
   }
-  & > div:last-child {
+  .meaning {
     font-size: 20px;
     color: ${color.darkest_grey};
+    overflow-y: auto;
+    text-align: justify;
   }
 `;
 
@@ -233,8 +247,10 @@ const SearchBox = styled.input`
   font-size: 16px;
 `;
 
-const WordContainer = styled.div`
+const WordContainer = styled.button`
   display: flex;
+  outline: none;
+  border: none;
   box-sizing: border-box;
   padding: 0 24px;
   margin-bottom: 16px;
@@ -253,6 +269,7 @@ const WordContainer = styled.div`
   &:focus {
     border: 1px solid ${color.primary};
   }
+  cursor: pointer;
 `;
 
 const WordCat = styled.button`
