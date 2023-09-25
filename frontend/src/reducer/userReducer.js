@@ -5,7 +5,8 @@ const initialState = {
   refreshToken: "",
   userId: 1,
   nickname: "",
-  snsEmail: ""
+  snsEmail: "",
+  provider: ""
 };
 
 const userSlice = createSlice({
@@ -18,6 +19,7 @@ const userSlice = createSlice({
       state.userId = action.payload.user.userId;
       state.nickname = action.payload.user.nickname;
       state.snsEmail = action.payload.user.snsEmail;
+      state.provider = action.payload.user.provider;
     },
     initUser: (state) => {
       state.accessToken = "";
@@ -25,6 +27,7 @@ const userSlice = createSlice({
       state.userId = -1;
       state.nickname = "";
       state.snsEmail = "";
+      state.provider = "";
     },
   },
 });
