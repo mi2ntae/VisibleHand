@@ -3,7 +3,7 @@ import styled from "styled-components";
 import color from "lib/style/colorPalette";
 import { useState } from "react";
 import http from "api/commonHttp";
-import { Pagination, PaginationItem } from "@mui/material";
+import { Pagination } from "@mui/material";
 
 export default function Dictionary() {
   const category = ["경영", "경제", "공공", "과학", "금융", "사회"];
@@ -17,7 +17,8 @@ export default function Dictionary() {
     color: `${color.white}`,
   };
   const onPageChange = (event) => {
-    const nowPageInt = parseInt(event.target.outerText);
+    // console.log(event.target.outerText);
+    const nowPageInt = Number(event.target.outerText);
     setCurrentPage(nowPageInt);
   };
   const search = () => {
@@ -43,7 +44,7 @@ export default function Dictionary() {
   useEffect(() => {
     if (type.length === 0) {
       http
-        .get(`dict?page=${currentPage}`)
+        .get(`dict?page=${currentPage - 1}`)
         .then((res) => {
           setKeyword("");
           setWordArr(res.data.content);
@@ -63,6 +64,9 @@ export default function Dictionary() {
         alert(err);
       });
   }, [type, currentPage]);
+  useEffect(() => {
+    setCurrentPage(1);
+  }, [type]);
   return (
     <MainContainer>
       <ListContainer>
@@ -101,9 +105,10 @@ export default function Dictionary() {
           </WordContainer>
         ))}
         <Pagination
+          count={10}
           onChange={onPageChange}
           page={currentPage}
-          defaultPage={0}
+          defaultPage={1}
         />
       </ListContainer>
       <DetailContainer>
