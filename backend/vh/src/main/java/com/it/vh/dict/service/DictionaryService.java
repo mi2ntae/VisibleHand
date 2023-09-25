@@ -22,7 +22,7 @@ public class DictionaryService {
     private final DictionaryRepository dictionaryRepository;
 
     public Page<DictionaryResponseDto> getwords(int page, Specification<Dictionary> spec) {
-        return dictionaryRepository.findAll(spec, PageRequest.of(page,10)).map(this::CovertDictionaryToDto);
+        return dictionaryRepository.findAll(spec, PageRequest.of(page,7)).map(this::CovertDictionaryToDto);
     }
 
     public DictionaryResponseDto CovertDictionaryToDto(Dictionary dictionary) {
