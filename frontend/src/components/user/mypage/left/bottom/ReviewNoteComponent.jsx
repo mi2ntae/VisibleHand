@@ -10,7 +10,7 @@ export default function ReviewNoteComponent({question, answer}) {
             <div class="flip-card">
                 <div class="flip-card-inner">
                     <div class="flip-card-front">
-                        {/* <Image src='/images/reviewnote/q&a.png' alt="asdasdadss"></Image> */}
+                        <Image src='/images/reviewnote/q&a.png' alt="asdasdadss"></Image>
                         <Text>{question}</Text>
                     </div>
                     <div class="flip-card-back">
@@ -71,10 +71,10 @@ const Button = styled.button`
 
 const Image = styled.img`
     position: absolute;
-    width: 50px;
-    height: 50px;
+    width: 45px;
+    height: 30px;
     transform: translate(-50%, -50%);
-    left: -5%;
+    left: 1%;
     top: 5%;
     object-fit: fill;
 `
