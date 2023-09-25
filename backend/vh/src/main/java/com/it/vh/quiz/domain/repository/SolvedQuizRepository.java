@@ -18,7 +18,7 @@ public interface SolvedQuizRepository extends JpaRepository<SolvedQuiz, Long> {
 
     Page<SolvedQuiz> findByUser_UserIdAndCorrectOrderByCreateAtDesc(long userId, boolean correct, Pageable page);
 
-    @Query(name = "findStreaByUserId", nativeQuery = true)
+    @Query(name = "findStreakByUserId", nativeQuery = true)
     List<StreakResDto> findCountOfSolvedQuizByUserId(long userId);
 
     @Query(value = "SELECT new com.it.vh.quiz.domain.dto.WordQuizCountDto(d.type, count(s.solvedId)) " +
