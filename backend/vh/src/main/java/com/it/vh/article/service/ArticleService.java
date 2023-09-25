@@ -54,7 +54,7 @@ public class ArticleService {
             scrapRepository.save(Scrap.builder()
                     .article(article)
                     .user(user).build());
-        }
+        } else scrapRepository.deleteByUser_UserIdAndArticle_ArticleId(userId, articleId);
         return true;
     }
 
