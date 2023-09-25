@@ -5,7 +5,7 @@ import { setKeyword } from 'reducer/mypageTabReducer';
 import http from 'api/commonHttp';
 import NoContentComponent from './NoContentComponent';
 import { Pagination } from '@mui/material';
-import NoteComponent from './NoteComponent';
+import ReviewNoteComponent from './ReviewNoteComponent';
 
 export default function MyPageReview() {
     const userId = useSelector((state) => state.user.userId);
@@ -46,14 +46,14 @@ export default function MyPageReview() {
                 <Notes>
                     {(load && note.length > 0) ? 
                     note.map((note) => 
-                        <NoteComponent></NoteComponent>
+                        <ReviewNoteComponent question={note.question} answer={note.answer}></ReviewNoteComponent>
                     )
                     : <span></span>
                     }
                 </Notes>
                 
                 {(load && note.length > 0) ? 
-                    <Pagination count={maxPage} page={pageNo} onChange={(event, value) => setPageNo(value)} style={{position: 'absolute', top: 600, left: 600, textAlign: 'center'}} />
+                    <Pagination count={maxPage} page={pageNo} onChange={(event, value) => setPageNo(value)} style={{position: 'absolute', top: 620, left: 600, textAlign: 'center'}} />
                     : <span></span>
                 }
             </ReviewContainer>

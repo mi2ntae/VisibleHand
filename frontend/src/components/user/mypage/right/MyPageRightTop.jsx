@@ -74,7 +74,7 @@ const Div = styled.div`
     display: flex;
     align-items: center;
     text-align: left;
-    gap: 1.75rem;
+    gap: 1.25rem;
 `
 
 const NickName = styled.div`
