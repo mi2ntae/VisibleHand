@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import QuizContent from "./QuizContent";
 import styled from "styled-components";
 import color from "lib/style/colorPalette";
+
 export default function QuizSolve() {
   const [ranking, setRanking] = useState([]);
   useEffect(() => {
@@ -33,7 +34,7 @@ export default function QuizSolve() {
   const question = "질문 예시?";
   const content =
     "포켓몬 세계에 온 것을 환영한다. 내 이름은 오박사. 모두가 포켓몬 박사라고 부르지!이 세계에는 포켓몬스터, 줄여서 포켓몬이라고 불리는 신비한 생명체들이 도처에 살고 있다.자네는 남자인가?아니면 여자인가?자네의 이름은?";
-  const text = "스타팅포켓몬";
+  const text = "CMI(치앙마이 이니셔티브) 다자화 기금";
   const wordId = 1;
   const [correct, setCorrect] = useState(0);
   const [wrong, setWrong] = useState(0);

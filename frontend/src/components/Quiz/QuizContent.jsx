@@ -3,10 +3,50 @@ import { styled } from "styled-components";
 import color from "lib/style/colorPalette";
 import Swal from "sweetalert2";
 import http from "api/commonHttp";
+import Test from "./Test";
 import { useState, useEffect, useRef } from "react";
 export default function QuizContent({ question, content, text, score }) {
   const letterRef = useRef([]);
   const correctAnswer = text.split("");
+  const [hint, setHint] = useState("");
+  useEffect(() => {
+    makeHint();
+  }, []);
+  const makeHint = () => {
+    const cho = [
+      "ㄱ",
+      "ㄲ",
+      "ㄴ",
+      "ㄷ",
+      "ㄸ",
+      "ㄹ",
+      "ㅁ",
+      "ㅂ",
+      "ㅃ",
+      "ㅅ",
+      "ㅆ",
+      "ㅇ",
+      "ㅈ",
+      "ㅉ",
+      "ㅊ",
+      "ㅋ",
+      "ㅌ",
+      "ㅍ",
+      "ㅎ",
+    ];
+    let result = "";
+    for (let i = 0; i < text.length; i++) {
+      let code = text.charCodeAt(i) - 44032;
+      if (text.charCodeAt(i) >= 65 && text.charCodeAt(i) <= 98) {
+        result += "?";
+        continue;
+      }
+      if (code > -1 && code < 11172) result += cho[Math.floor(code / 588)];
+      else result += text.charAt(i);
+    }
+    console.log(result);
+    setHint(result);
+  };
   const sendScore = (i) => {
     score(i);
   };
@@ -91,16 +131,20 @@ export default function QuizContent({ question, content, text, score }) {
           width: "870px",
         }}
       >
-        <Question>{question}</Question>
-        <HintButton>
-          <img src={"/icons/quiz/ic_bulb.svg"} />
-          <button>힌트 보기</button>
-        </HintButton>
+        <div>
+          <Question>{question}</Question>
+          <HintButton>
+            <img src={"/icons/quiz/ic_bulb.svg"} />
+            <button>힌트 보기</button>
+          </HintButton>
+          <div className="hint">힌트: {hint}</div>
+        </div>
       </div>
       <ContentContainer>{content}</ContentContainer>
       <ProgressBar>
         <div></div>
       </ProgressBar>
+      {/* <Test></Test> */}
       <AnswerContainer>
         {correctAnswer.map((v, i) => (
           <Letter
@@ -139,6 +183,12 @@ const HintButton = styled.div`
     color: ${color.primary};
     font-size: 20px;
     font-weight: 500;
+  }
+  .hint {
+    position: relative;
+    width: 200px;
+    height: 120px;
+    background-color: ${color.primary};
   }
 `;
 const ContentContainer = styled.div`
