@@ -11,21 +11,18 @@ export default function Dictionary() {
   const [type, setType] = useState("");
   const [currentWord, setCurrentWord] = useState({});
   const [keyword, setKeyword] = useState("");
-  const [currentPage, setCurrentPage] = useState(0);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [totalPage, setTotalPage] = useState();
   const selected = {
     backgroundColor: `${color.primary}`,
     color: `${color.white}`,
-  };
-  const onPageChange = (event) => {
-    // console.log(event.target.outerText);
-    const nowPageInt = Number(event.target.outerText);
-    setCurrentPage(nowPageInt);
   };
   const search = () => {
     http
       .get(`dict?page=0&type=${type}&keyword=${keyword}`)
       .then((res) => {
         setWordArr(res.data.content);
+        setTotalPage(res.data.totalPages);
       })
       .catch((err) => {
         alert(err);
@@ -36,6 +33,7 @@ export default function Dictionary() {
       .get(`dict?page=0`)
       .then((res) => {
         setWordArr(res.data.content);
+        setTotalPage(res.data.totalPages);
       })
       .catch((err) => {
         alert(err);
@@ -48,6 +46,7 @@ export default function Dictionary() {
         .then((res) => {
           setKeyword("");
           setWordArr(res.data.content);
+          setTotalPage(res.data.totalPages);
         })
         .catch((err) => {
           alert(err);
@@ -59,6 +58,7 @@ export default function Dictionary() {
       .then((res) => {
         setKeyword("");
         setWordArr(res.data.content);
+        setTotalPage(res.data.totalPages);
       })
       .catch((err) => {
         alert(err);
@@ -98,15 +98,17 @@ export default function Dictionary() {
             <img src={"/icons/feed/ic_search.svg"} alt="검색 버튼" />
           </button>
         </SearchContainer>
-        {wordArr.map((v, i) => (
-          <WordContainer key={i} onClick={() => setCurrentWord(v)}>
-            <WordCat>{v.type}</WordCat>
-            <div>{v.word}</div>
-          </WordContainer>
-        ))}
+        <div className="wordlist">
+          {wordArr.map((v, i) => (
+            <WordContainer key={i} onClick={() => setCurrentWord(v)}>
+              <WordCat>{v.type}</WordCat>
+              <div>{v.word}</div>
+            </WordContainer>
+          ))}
+        </div>
         <Pagination
-          count={10}
-          onChange={onPageChange}
+          count={totalPage}
+          onChange={(e, value) => setCurrentPage(value)}
           page={currentPage}
           defaultPage={1}
         />
@@ -149,6 +151,10 @@ const ListContainer = styled.div`
   border-radius: 16px;
   border: 1px solid ${color.lightest_grey};
   margin-right: 36px;
+  .wordlist {
+    height: 630px;
+    margin-bottom: 24px;
+  }
 `;
 
 const CatContainer = styled.div`
