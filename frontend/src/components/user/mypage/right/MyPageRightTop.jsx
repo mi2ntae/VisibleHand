@@ -3,8 +3,10 @@ import styled from 'styled-components';
 import http from "api/commonHttp";
 import { Background } from 'styled';
 import { black_grey, dark_grey, darkest_grey, white } from 'lib/style/colorPalette';
+import { useSelector } from 'react-redux';
 
 export default function MyPageRightTop({userId}) {
+    const loginId = useSelector((state) => state.user.userId);
     const [profile, setProfile] = useState({
         nickname: "",
         statusMsg: "",
@@ -39,7 +41,12 @@ export default function MyPageRightTop({userId}) {
                 <Image src={profile.profileImg}></Image>
                 <div style={{display: "flex", flexDirection: "column", justifyContent: "flex-start", flex: 1}}>
                     <div style={{display: "flex", justifyContent: "flex-end"}}>
+                        {userId == loginId
+                        ?
                         <Button><img src='/icons/mypage/ic_settings.svg' alt='회원정보 수정'/></Button>
+                        :
+                        <span></span>
+                        }
                     </div>
                     
                     <NickName>{profile.nickname}</NickName>
@@ -67,7 +74,7 @@ const Div = styled.div`
     display: flex;
     align-items: center;
     text-align: left;
-    gap: 1.75rem;
+    gap: 1.25rem;
 `
 
 const NickName = styled.div`
