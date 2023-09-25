@@ -22,6 +22,7 @@ public class LoginResDto {
         private String profileImg;
         private String snsEmail;
         private String provider;
+        private int isAlready;
 
         public static UserProfile from(User user) {
             return UserProfile.builder()
