@@ -1,42 +1,110 @@
-import React from "react";
+import React, { useEffect } from "react";
 import styled from "styled-components";
 import color from "lib/style/colorPalette";
 import { useState } from "react";
+import http from "api/commonHttp";
+import { Pagination, PaginationItem } from "@mui/material";
 
 export default function Dictionary() {
   const category = ["경영", "경제", "공공", "과학", "금융", "사회"];
-  const wordArr = [
-    { wordId: 1, category: "경제", word: "혐의거래보고제도" },
-    {
-      wordId: 2,
-      category: "경제",
-      word: "현시선호이론 (Revealed Preference Theory)",
-    },
-    { wordId: 3, category: "경제", word: "협동조합 중간지원기관" },
-  ];
-  const [currentWordId, setCurrentWordId] = useState(1);
+  const [wordArr, setWordArr] = useState([]);
+  const [type, setType] = useState("");
+  const [currentWord, setCurrentWord] = useState({});
+  const [keyword, setKeyword] = useState("");
+  const [currentPage, setCurrentPage] = useState(0);
+  const selected = {
+    backgroundColor: `${color.primary}`,
+    color: `${color.white}`,
+  };
+  const onPageChange = (event) => {
+    const nowPageInt = parseInt(event.target.outerText);
+    setCurrentPage(nowPageInt);
+  };
+  const search = () => {
+    http
+      .get(`dict?page=0&type=${type}&keyword=${keyword}`)
+      .then((res) => {
+        setWordArr(res.data.content);
+      })
+      .catch((err) => {
+        alert(err);
+      });
+  };
+  useEffect(() => {
+    http
+      .get(`dict?page=0`)
+      .then((res) => {
+        setWordArr(res.data.content);
+      })
+      .catch((err) => {
+        alert(err);
+      });
+  }, []);
+  useEffect(() => {
+    if (type.length === 0) {
+      http
+        .get(`dict?page=${currentPage}`)
+        .then((res) => {
+          setKeyword("");
+          setWordArr(res.data.content);
+        })
+        .catch((err) => {
+          alert(err);
+        });
+      return;
+    }
+    http
+      .get(`dict?page=${currentPage - 1}&type=${type}`)
+      .then((res) => {
+        setKeyword("");
+        setWordArr(res.data.content);
+      })
+      .catch((err) => {
+        alert(err);
+      });
+  }, [type, currentPage]);
   return (
     <MainContainer>
       <ListContainer>
         <CatContainer>
-          <CatItem>전체</CatItem>
+          <CatItem
+            style={type === "" ? selected : {}}
+            key="0"
+            onClick={() => setType("")}
+          >
+            전체
+          </CatItem>
           {category.map((v, i) => (
-            <CatItem key={i}>{v}</CatItem>
+            <CatItem
+              style={type === v ? selected : {}}
+              key={i + 1}
+              onClick={() => setType(v)}
+            >
+              {v}
+            </CatItem>
           ))}
-          <CatItem>기타</CatItem>
         </CatContainer>
         <SearchContainer>
-          <SearchBox placeholder="검색어를 입력하세요"></SearchBox>
-          <button>
+          <SearchBox
+            value={keyword}
+            onChange={(e) => setKeyword(e.target.value)}
+            placeholder="검색어를 입력하세요"
+          ></SearchBox>
+          <button onClick={search}>
             <img src={"/icons/feed/ic_search.svg"} alt="검색 버튼" />
           </button>
         </SearchContainer>
         {wordArr.map((v, i) => (
-          <WordContainer key={i} onClick={() => setCurrentWordId(v.wordId)}>
-            <WordCat>{v.category}</WordCat>
+          <WordContainer key={i} onClick={() => setCurrentWord(v)}>
+            <WordCat>{v.type}</WordCat>
             <div>{v.word}</div>
           </WordContainer>
         ))}
+        <Pagination
+          onChange={onPageChange}
+          page={currentPage}
+          defaultPage={0}
+        />
       </ListContainer>
       <DetailContainer>
         <div>
@@ -47,11 +115,11 @@ export default function Dictionary() {
               fontSize: "26px",
             }}
           >
-            {currentWordId}
+            {currentWord.type}
           </WordCat>
-          <div>{currentWordId}</div>
+          <div>{currentWord.word}</div>
         </div>
-        <div>여기는 뜻이 들어갈 자리에요</div>
+        <div>{currentWord.meaning}</div>
       </DetailContainer>
     </MainContainer>
   );
@@ -115,6 +183,7 @@ const DetailContainer = styled.div`
   & > div:first-child {
     display: flex;
     align-items: center;
+    justify-content: center;
     margin-bottom: 44px;
   }
   & > div:first-child > div:last-child {
@@ -161,6 +230,7 @@ const WordContainer = styled.div`
   align-items: center;
   width: 640px;
   height: 76px;
+  max-height: 76px;
   border-radius: 16px;
   background-color: ${color.background};
   box-shadow: 2px 2px 10px ${color.light_grey};
@@ -168,6 +238,9 @@ const WordContainer = styled.div`
     color: ${color.black_grey};
     font-size: 20px;
     font-weight: 600;
+  }
+  &:focus {
+    border: 1px solid ${color.primary};
   }
 `;
 
@@ -177,6 +250,7 @@ const WordCat = styled.button`
   color: ${color.black_grey};
   font-size: 16px;
   width: 66px;
+  min-width: 66px;
   height: 28px;
   border-radius: 12px;
   background-color: ${color.teritary};
