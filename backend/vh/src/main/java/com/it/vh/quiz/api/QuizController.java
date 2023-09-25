@@ -36,4 +36,9 @@ public class QuizController {
     public ResponseEntity<List<QuizRankResDto>> getQuizRank() {
         return ResponseEntity.ok().body(quizService.getQuizRank());
     }
+
+    @GetMapping("/dict/{userId}")
+    public ResponseEntity<?> getDicQuiz(@PathVariable Long userId) {
+        return ResponseEntity.ok().body(quizService.randomQuizs(userId));
+    }
 }
