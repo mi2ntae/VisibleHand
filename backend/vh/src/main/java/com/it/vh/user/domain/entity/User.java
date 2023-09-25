@@ -13,12 +13,12 @@ import java.time.LocalDate;
 
 @NamedNativeQueries({
         @NamedNativeQuery(
-                name = "findStreaByUserId",
+                name = "findStreakByUserId",
                 query = "SELECT DATE(s.create_at) as createAt, count(s.solved_id) as weight " +
                         "FROM solved_quiz s " +
-                        "WHERE s.correct = true " +
+                        "WHERE s.correct = true AND s.user_id = :userId "+
                         "group by DATE(s.create_at)",
-                resultSetMapping = "findStreaByUserId"
+                resultSetMapping = "findStreakByUserId"
         ),
         @NamedNativeQuery(
                 name = "findRecommendUserByUserId",
@@ -35,7 +35,7 @@ import java.time.LocalDate;
 })
 
 @SqlResultSetMapping(
-        name = "findStreaByUserId",
+        name = "findStreakByUserId",
         classes = @ConstructorResult(
                 targetClass = StreakResDto.class,
                 columns = {

@@ -34,7 +34,7 @@ public class SolvedQuizServiceImpl implements SolvedQuizService {
     private final DictionaryRepository dictionaryRepository;
 
     private final int[] streakWeight = new int[]{2, 4, 6, 8}; // 1~2 1단계, 3~4 2단계, 5~6 3단계, 7~8 4단계, 9~ 5단계
-    private final int REVIEWNOTE_PAGE_NUM = 8;
+    private final int REVIEWNOTE_PAGE_NUM = 9;
     @Override
     public Page<ReviewnoteResDto> getReviewNotesByUserId(long userId, int page) throws NonExistUserIdException {
         Optional<User> optionalUser = userRespository.findById(userId);
