@@ -1,6 +1,6 @@
 import React from 'react';
-import "./Login.css";
 import LoginBtn from "components/user/login/LoginBtn";
+import styled from "styled-components";
 
 export default function Login() {
     const GOOGLE_CLIENT_ID=process.env.REACT_APP_GOOGLE_CLIENT_ID;
@@ -21,18 +21,29 @@ export default function Login() {
     };  
 
     return (
-        //중앙으로 옮기는 컴포넌트로 감싸기
-        <div>
-            <LoginBtn background={"white"} title={"구글로 시작하기"} onClick={googleLogin}
-                imgWidth={25} imgHeight={25} imgSrc={"https://upload.wikimedia.org/wikipedia/commons/thumb/5/53/Google_%22G%22_Logo.svg/2048px-Google_%22G%22_Logo.svg.png"} imgAlt={"Google Logo"}
-                imgPadding={10}
-            ></LoginBtn>
-            <LoginBtn background={"#F7E600"} title={"카카오로 시작하기"} onClick={kakaoLogin}
-                imgWidth={45} imgHeight={45} imgSrc={"https://cs.kakao.com/img/cskakaocom/pc/thumb/thumb_kakaotalk.png"} imgAlt={"Kakao Logo"}
-            ></LoginBtn>
-        </div>
-        
-        
+        <ContentWrap>
+            <Container>
+                <LoginBtn background={"white"} title={"구글로 시작하기"} onClick={googleLogin}
+                    imgWidth={25} imgHeight={25} imgSrc={"https://upload.wikimedia.org/wikipedia/commons/thumb/5/53/Google_%22G%22_Logo.svg/2048px-Google_%22G%22_Logo.svg.png"} imgAlt={"Google Logo"}
+                    imgPadding={10}
+                ></LoginBtn>
+                <br></br>
+                <LoginBtn background={"#F7E600"} title={"카카오로 시작하기"} onClick={kakaoLogin}
+                    imgWidth={45} imgHeight={45} imgSrc={"https://cs.kakao.com/img/cskakaocom/pc/thumb/thumb_kakaotalk.png"} imgAlt={"Kakao Logo"}
+                ></LoginBtn>
+             </Container>
+         </ContentWrap>
     );
 }
+
+const ContentWrap = styled.div`
+    position: relative;
+    height: 100vh;
+`;
+const Container = styled.div`
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+`;
 
