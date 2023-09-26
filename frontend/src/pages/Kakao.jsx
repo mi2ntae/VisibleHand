@@ -20,12 +20,11 @@ export default function Kakao() {
         .get("user/auth/kakao?code=" + code)
         .then(({ data }) => {
           dispatch(setUser(data));
-          console.log(user.provider);
-          if(data.user.isAlready===1) {
-            navigate('/');
-          } else if(data.user.isAlready===0) {
+          // if(data.user.isAlready===1) {
+            // navigate('/');
+          // } else if(data.user.isAlready===0) {
             navigate( '/profile');
-          }
+          // }
         })
         .catch((err) => {
           console.log(err);

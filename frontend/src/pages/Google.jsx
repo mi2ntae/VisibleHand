@@ -20,12 +20,11 @@ export default function Google() {
         .get("user/auth/google?code=" + code)
         .then(({ data }) => {
           dispatch(setUser(data));
-          console.log(user.provider);
-          if(data.user.isAlready===1) {
-            navigate('/');
-          } else if(data.user.isAlready===0) {
+          // if(data.user.isAlready===1) {
+            // navigate('/');
+          // } else if(data.user.isAlready===0) {
             navigate('/profile');
-          }
+          // }
         })
         .catch((err) => {
           console.log(err);
