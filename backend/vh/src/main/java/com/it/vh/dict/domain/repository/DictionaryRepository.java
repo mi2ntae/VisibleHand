@@ -24,4 +24,12 @@ public interface DictionaryRepository extends JpaRepository<Dictionary, Long>, J
             "limit 1;",nativeQuery = true)
     Optional<List<Dictionary>> findRandomWordQuiz(@Param("userId") Long userId);
 
+    @Query(value = "SELECT d.*\n" +
+            "FROM dictionary d\n" +
+            "JOIN solved_quiz sq ON d.word_id = sq.word_id\n" +
+            "WHERE sq.correct = false AND sq.user_id = :userId\n" +
+            "order by rand()\n" +
+            "limit 1;",nativeQuery = true)
+    Optional<List<Dictionary>> findRandomRetryWordQuiz(@Param("userId") Long userId);
+
 }

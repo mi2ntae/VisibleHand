@@ -60,7 +60,16 @@ public class QuizServiceImpl implements QuizService{
     @Override
     public WordQuizResDto randomQuizs(Long userId) {
         //userId 검증 안함
-        List<Dictionary> wordQuizs = dictionaryRepository.findRandomWordQuiz(userId).orElse(null);
+        return this.getRandomQuizByRetry(userId, false);
+    }
+
+    @Override
+    public WordQuizResDto randomRetryQuiz(Long userId) {
+        return this.getRandomQuizByRetry(userId, true);
+    }
+
+    private WordQuizResDto getRandomQuizByRetry(Long userId, boolean retry) {
+        List<Dictionary> wordQuizs = (retry ? dictionaryRepository.findRandomRetryWordQuiz(userId) : dictionaryRepository.findRandomWordQuiz(userId)).orElse(null);
         if(CollectionUtils.isEmpty(wordQuizs)) {
             return WordQuizResDto.builder().allSolved(true).build();
         }
