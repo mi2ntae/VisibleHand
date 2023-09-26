@@ -13,11 +13,13 @@ export default function QuizSolve({ retry }) {
   const [ranking, setRanking] = useState([]);
   const [isCombo, setIsCombo] = useState(false);
   const [comboNum, setComboNum] = useState(0);
-  useEffect(() => {
-    http.get(`quiz/rank`).then((res) => {
-      setRanking(res.data);
-    });
-  }, []);
+
+  // useEffect(() => {
+  //   http.get(`quiz/rank`).then((res) => {
+  //     setRanking(res.data);
+  //   });
+  // }, []);
+  
   const [question, setQuestion] = useState("");
   const [content, setContent] = useState("");
   const [wordId, setWordId] = useState(1);
@@ -47,6 +49,7 @@ export default function QuizSolve({ retry }) {
         .catch((err) => alert(err));
     }
   }, []);
+
   const score = (i, c) => {
     let newCorrect = correct;
     let newWrong = wrong;
