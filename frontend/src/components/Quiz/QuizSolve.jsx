@@ -141,7 +141,13 @@ export default function QuizSolve() {
         <ComboContainer>
           <div>{comboNum}</div>
           <div>
-            <div>{isCombo ? "연속 정답 행진!!" : "앗차차~"}</div>
+            <div>
+              {correct === 0 && wrong === 0
+                ? "도전!!!"
+                : isCombo
+                ? "연속 정답 행진!!"
+                : "앗차차~"}
+            </div>
             <div>최고기록: 241</div>
           </div>
         </ComboContainer>
