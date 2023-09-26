@@ -41,4 +41,10 @@ public class QuizController {
     public ResponseEntity<?> getDicQuiz(@PathVariable Long userId) {
         return ResponseEntity.ok().body(quizService.randomQuizs(userId));
     }
+
+    @GetMapping("/retry/{userId}")
+    public ResponseEntity<?> getDicRetryQuiz(@PathVariable Long userId) {
+        return ResponseEntity.ok().body(quizService.randomRetryQuiz(userId));
+    }
 }
+
