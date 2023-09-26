@@ -1,10 +1,25 @@
-import React from 'react';
+import React, { useEffect } from "react";
+import { useNavigate } from "react-router-dom";
+import Swal from "sweetalert2";
 
 export default function Quiz() {
-    return (
-        <div>
-            Quiz
-        </div>
-    );
+  const navigate = useNavigate();
+  useEffect(() => {
+    Swal.fire({
+      title: "누르는 순간 퀴즈가 시작됩니다...!!!!!",
+      showConfirmButton: true,
+      confirmButtonText: "시작하기!",
+      showDenyButton: false,
+      showCancelButton: false,
+    })
+      .then((res) => {
+        if (res.isConfirmed) {
+          navigate("/quiz/solve");
+        } else {
+          navigate("/");
+        }
+      })
+      .catch((err) => alert(err));
+  });
+  return <div>Quiz</div>;
 }
-
