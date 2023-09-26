@@ -17,7 +17,8 @@ export default function MyPageScrap() {
     const [pageNo, setPageNo] = useState(1);
     const keyword = useSelector((state) => state.mypageTab.keyword);
     const dispatch = useDispatch();
-    const deleteScrap = async (scrapId) => {
+    const deleteScrap = async (e, scrapId) => {
+        e.stopPropagation();
         if(!window.confirm("정말 삭제하시겠습니까?")) return;
         await http.delete(`article/scrap/${scrapId}`)
         .then(({data}) => {
