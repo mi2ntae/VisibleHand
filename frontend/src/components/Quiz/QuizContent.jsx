@@ -5,13 +5,20 @@ import Swal from "sweetalert2";
 import http from "api/commonHttp";
 import Test from "./Test";
 import { useState, useEffect, useRef } from "react";
-export default function QuizContent({ question, content, text, score }) {
+export default function QuizContent({
+  wordId,
+  question,
+  content,
+  text,
+  score,
+  userId,
+}) {
   const letterRef = useRef([]);
   const correctAnswer = text.split("");
   const [hint, setHint] = useState("");
   useEffect(() => {
     makeHint();
-  }, []);
+  }, [text]);
   const makeHint = () => {
     const cho = [
       "ㄱ",
@@ -47,8 +54,8 @@ export default function QuizContent({ question, content, text, score }) {
     console.log(result);
     setHint(result);
   };
-  const sendScore = (i) => {
-    score(i);
+  const sendScore = (i, c) => {
+    score(i, c);
   };
   //input 조합해 answer 만들어야함-입력 시마다 answer 한 글자씩 저장할 필요 없나
   const [answer, setAnswer] = useState("스타팅포켓몬");
@@ -74,7 +81,7 @@ export default function QuizContent({ question, content, text, score }) {
     if (text === answer) {
       //정답
       http
-        .put("quiz", { userId: 1, wordId: 0, correct: true })
+        .put("quiz", { userId: userId, wordId: wordId, correct: true })
         .then(() => {
           Swal.fire({
             title: "정답입니다!",
@@ -85,11 +92,10 @@ export default function QuizContent({ question, content, text, score }) {
             denyButtonText: "끝내기",
           }).then((result) => {
             if (result.isConfirmed) {
-              alert("다음 문제로");
+              sendScore(1, true);
             } else if (result.isDenied) {
-              alert("끝내기");
+              sendScore(1, false);
             }
-            sendScore(1);
           });
         })
         .catch((err) => {
@@ -98,7 +104,7 @@ export default function QuizContent({ question, content, text, score }) {
     } else {
       //오답
       http
-        .put("quiz", { userId: 1, wordId: 0, correct: true })
+        .put("quiz", { userId: userId, wordId: wordId, correct: false })
         .then(() => {
           Swal.fire({
             title: "오답입니다!",
@@ -110,11 +116,10 @@ export default function QuizContent({ question, content, text, score }) {
             denyButtonText: "끝내기",
           }).then((result) => {
             if (result.isConfirmed) {
-              alert("다음 문제로");
+              sendScore(-1, true);
             } else if (result.isDenied) {
-              alert("끝내기");
+              sendScore(-1, false);
             }
-            sendScore(-1);
           });
         })
         .catch((err) => {
@@ -244,7 +249,7 @@ const ContentContainer = styled.div`
   height: 507px;
   color: ${color.black_grey};
   border: 1px solid ${color.lightest_grey};
-  font-weight: 24px;
+  font-size: 1.2rem;
   border-radius: 16px;
 `;
 const SubmitButton = styled.button`
