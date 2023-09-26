@@ -1,5 +1,6 @@
 package com.it.vh.quiz.service;
 
+import com.it.vh.common.util.AuthenticationHandler;
 import com.it.vh.dict.domain.repository.DictionaryRepository;
 import com.it.vh.quiz.api.dto.requestDto.SolvedQuizReq;
 import com.it.vh.quiz.domain.dto.ArticleQuizCountDto;
@@ -32,13 +33,14 @@ public class SolvedQuizServiceImpl implements SolvedQuizService {
     private final SolvedQuizRepository solvedQuizRepository;
     private final NewsQuizRepository newsQuizRepository;
     private final DictionaryRepository dictionaryRepository;
+    private final AuthenticationHandler authenticationHandler;
 
     private final int[] streakWeight = new int[]{2, 4, 6, 8}; // 1~2 1단계, 3~4 2단계, 5~6 3단계, 7~8 4단계, 9~ 5단계
     private final int REVIEWNOTE_PAGE_NUM = 9;
     @Override
     public Page<ReviewnoteResDto> getReviewNotesByUserId(long userId, int page) throws NonExistUserIdException {
-        Optional<User> optionalUser = userRespository.findById(userId);
-        if(!optionalUser.isPresent()) throw new NonExistUserIdException();
+        authenticationHandler.checkUserAuthenticate(userId);
+
         return solvedQuizRepository.findByUser_UserIdAndCorrectOrderByCreateAtDesc(userId, false, PageRequest.of(page, REVIEWNOTE_PAGE_NUM))
                 .map(solvedQuiz->
                         ReviewnoteResDto.builder()
