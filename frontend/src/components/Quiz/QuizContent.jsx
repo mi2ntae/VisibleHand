@@ -127,17 +127,22 @@ export default function QuizContent({ question, content, text, score }) {
       <div
         style={{
           display: "flex",
+          alignItems: "center",
           justifyContent: "space-between",
           width: "870px",
+          marginBottom: "32px",
         }}
       >
+        <Question>{question}</Question>
         <div>
-          <Question>{question}</Question>
           <HintButton>
             <img src={"/icons/quiz/ic_bulb.svg"} />
             <button>힌트 보기</button>
+            <div className="hint">
+              <div></div>
+              <div>힌트: {hint}</div>
+            </div>
           </HintButton>
-          <div className="hint">힌트: {hint}</div>
         </div>
       </div>
       <ContentContainer>{content}</ContentContainer>
@@ -166,14 +171,17 @@ const ComponentContainer = styled.div`
   width: 870px;
 `;
 const Question = styled.div`
+  display: flex;
+  height: max-content;
+  align-items: center;
   font-weight: 600;
   font-size: 36px;
   color: ${color.black_grey};
-  margin-bottom: 32px;
 `;
 const HintButton = styled.div`
   display: flex;
   align-items: center;
+  position: relative;
   img {
     padding-bottom: 5px;
   }
@@ -185,10 +193,48 @@ const HintButton = styled.div`
     font-weight: 500;
   }
   .hint {
-    position: relative;
-    width: 200px;
-    height: 120px;
-    background-color: ${color.primary};
+    visibility: hidden;
+    transition: opacity 1s ease-in-out;
+    position: absolute;
+    top: 16px;
+    left: 20px;
+    & > div:first-child {
+      width: 0;
+      height: 0;
+      position: relative;
+      left: 20px;
+      background-color: transparent;
+      border-left: 12px solid transparent;
+      border-top: 12px solid transparent;
+      border-bottom: 12px solid ${color.primary};
+      border-right: 12px solid transparent;
+    }
+    & > div:last-child {
+      background-color: ${color.primary};
+      width: max-content;
+      height: max-content;
+      color: ${color.white};
+      font-weight: 600;
+      font-size: 20px;
+      border-radius: 8px;
+      padding: 12px;
+      box-shadow: 4px 4px 4px ${color.light_grey};
+    }
+  }
+  &:hover {
+    cursor: pointer;
+    .hint {
+      visibility: visible;
+      animation: setMotion 0.2s;
+    }
+    @keyframes setMotion {
+      0% {
+        opacity: 0;
+      }
+      100% {
+        opacity: 1;
+      }
+    }
   }
 `;
 const ContentContainer = styled.div`
