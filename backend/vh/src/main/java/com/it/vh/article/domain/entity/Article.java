@@ -56,10 +56,10 @@ public class Article {
     @Column(nullable = false)
     private LocalDateTime issueDate;
 
-    @Column(nullable = false, length = 50)
+    @Column(nullable = false, length = 255)
     private String company;
 
-    @Column(nullable = false, length = 20)
+    @Column(nullable = false, length = 255)
     private String editor;
 
     @Enumerated(EnumType.STRING)
