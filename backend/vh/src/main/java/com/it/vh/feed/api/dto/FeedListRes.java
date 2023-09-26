@@ -20,4 +20,5 @@ public class FeedListRes {
     private long articleId;
     private String title;
     private LocalDateTime createAt;
+    private String kind;
 }

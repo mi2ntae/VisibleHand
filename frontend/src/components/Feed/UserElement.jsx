@@ -10,9 +10,11 @@ export default function UserElement({ user }) {
   };
   return (
     <UserContainer>
-      <ProfileImg src={user.profileImg} />
+      <ProfileImg src={user.profileImg ? user.profileImg : user.imageUrl} />
       <div style={{ flex: 1 }}>
-        <div style={{ fontWeight: 500 }}>{user.nickname}</div>
+        <div style={{ fontWeight: 500 }}>
+          {user.nickname ? user.nickname : user.userName}
+        </div>
         <div style={{ fontSize: "0.875rem", color: grey }}>
           {user.statusMsg}
         </div>

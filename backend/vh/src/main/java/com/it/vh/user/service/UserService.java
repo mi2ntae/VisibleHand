@@ -31,5 +31,6 @@ public interface UserService {
     void updateProfile(Long userId, UserProfileReqDto userProfileReqDto);
     void deleteUser(Long userId);
 
+    List<UserFollowListResDto> getUsersByKeyword(String keyword, int page);
     List<UserFollowListResDto> getRecommendUserListByUserId(long userId);
 }

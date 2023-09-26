@@ -12,10 +12,17 @@ import React, { useEffect, useState } from "react";
 import { Background, ProfileImg } from "styled";
 import styled from "styled-components";
 
-export default function FeedInput({ articleId, userId }) {
+export default function FeedInput({ articleId, userId, setFeeds }) {
   const [content, setContent] = useState("");
   const [isShared, setIsShared] = useState(true);
   const [feedId, setFeedId] = useState(0);
+
+  function getFeeds() {
+    http
+      .get(`/feed/list/${articleId}/${userId}?page=0`)
+      .then((data) => setFeeds(data.data))
+      .catch((err) => alert(err));
+  }
 
   useEffect(() => {
     http.get(`/feed/${articleId}/${userId}`).then((data) => {
@@ -29,22 +36,28 @@ export default function FeedInput({ articleId, userId }) {
   const handleSubmit = (e) => {
     if (feedId < 0) {
       http
-        .post(
-          "/feed",
-          {
-            articleId: articleId,
-            content: content,
-            shared: isShared,
-            userId: userId,
-          },
-          {
-            headers: {
-              "Content-Type": "application/json",
-            },
-          }
-        )
-        .then(() => console.log("피드가 등록되었습니다."))
+        .post(`/feed`, {
+          articleId: articleId,
+          content: content,
+          shared: isShared,
+          userId: userId,
+        })
+        .then((data) => {
+          setFeedId(data.data);
+          alert("등록이 완료되었습니다.");
+          getFeeds();
+        })
         .catch((err) => console.log(err));
+    } else {
+      http
+        .put(`/feed/${feedId}`, { content: content, shared: isShared })
+        .then(() => {
+          alert("수정이 완료되었습니다.");
+          getFeeds();
+        })
+        .catch((err) => {
+          alert(err);
+        });
     }
   };
   return (

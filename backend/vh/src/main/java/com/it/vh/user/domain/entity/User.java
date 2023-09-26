@@ -32,6 +32,13 @@ import java.time.LocalDate;
                         ") OR user_id IN (SELECT to_id FROM Follow GROUP BY to_id ORDER BY count(*) DESC) LIMIT 5",
                 resultSetMapping = "userFollowListDto"
         ),
+        @NamedNativeQuery(
+                name = "findUsersByNickname",
+                query = "SELECT user_id AS userId, nickname AS userName, status_msg AS statusMsg, IFNULL(profile_img, '기본 이미지 링크') AS imageUrl " +
+                        "FROM User " +
+                        "WHERE nickname LIKE :keyword",
+                resultSetMapping = "userFollowListDto"
+        )
 })
 
 @SqlResultSetMapping(
@@ -46,8 +53,6 @@ import java.time.LocalDate;
 )
 
 @SqlResultSetMapping(
-
-
         name = "userFollowListDto",
         classes = @ConstructorResult(
                 targetClass = UserFollowListResDto.class,

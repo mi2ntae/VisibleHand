@@ -1,5 +1,6 @@
 package com.it.vh.user.domain.repository;
 
+import com.it.vh.feed.api.dto.FeedListRes;
 import com.it.vh.user.api.dto.UserFollowListResDto;
 import com.it.vh.user.domain.entity.User;
 import org.springframework.data.domain.Page;
@@ -14,6 +15,9 @@ public interface UserRespository extends JpaRepository<User, Long> {
     Optional<User> findUserByUserId(long userId);
 
     Page<User>  findUsersByNicknameContains(String keyword, Pageable page);
+
+    @Query(name = "findUsersByNickname", nativeQuery = true)
+    List<UserFollowListResDto> findUsersByNickname(String keyword, Pageable page);
 
     Optional<User> findBySnsEmailAndProvider(String snsEmail, String provider);
     Optional<User> findByNickname(String nickname);

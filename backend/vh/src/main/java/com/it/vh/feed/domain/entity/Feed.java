@@ -45,42 +45,21 @@ import java.time.LocalDateTime;
                 resultSetMapping = "findFeedsAndHeartAndIsHeartByUserIdWhereTitleIsKeyword"
         ),
         @NamedNativeQuery(
-                name = "findFeedsByFollowingUserIdAndContent",
+                name = "findFeedsByContent",
                 query = "SELECT u.user_id AS userId, u.nickname, u.profile_img AS profileImg, " +
-                        "f.feed_id AS feedId, f.content, f.create_at AS createdAt, " +
+                        "f.feed_id AS feedId, f.content, f.create_at AS createAt, " +
                         "IFNULL((SELECT COUNT(*) FROM Heart AS h WHERE h.feed_id = f.feed_id), 0) AS heart, " +
                         "IF((SELECT COUNT(*) FROM Heart AS h WHERE h.user_id = :userId AND h.feed_id = f.feed_id) > 0, true, false) AS isHeart, " +
-                        "a.article_id AS articleId, a.title " +
+                        "a.article_id AS articleId, a.title, a.kind " +
                         "FROM Feed AS f " +
                         "JOIN Article AS a ON f.article_id = a.article_id " +
-                        "JOIN Follow AS ff ON f.user_id = ff.to_id " +
                         "JOIN User AS u ON f.user_id = u.user_id " +
-                        "WHERE a.content LIKE :keyword AND f.share > 0 AND ff.from_id = :userId " +
+                        "WHERE f.content LIKE :keyword AND f.share > 0 " +
                         "ORDER BY f.create_at DESC",
-//                query = "SELECT F.feed_id as feedId, F.content, A.article_id as articleId, A.title, F.create_at as createAt, " +
-//                        "       IF((select count(*) from Heart " +
-//                        "       where Heart.user_id = :userId and Heart.feed_id = F.feed_id) <= 0, false, true) as isHeart, " +
-//                        "       (select count(*) from Heart where Heart.feed_id = F.feed_id) as heart " +
-//                        "       from Feed as F " +
-//                        "       join Article as A " +
-//                        "       on F.article_id = A.article_id " +
-//                        "       join Follow as FF on F.user_id = FF.to_id " +
-//                        "       where F.content like :keyword and F.share >= 1 and FF.from_id = :userId " +
-//                        "       order by createAt desc",
                 resultSetMapping = "feedListDto"
         ),
-        // private long userId;
-        //    private String nickname;
-        //    private String profileImg;
-        //    private long feedId;
-        //    private String content;
-        //    private int heart;
-        //    private boolean isHeart;
-        //    private long articleId;
-        //    private String title;
-        //    private LocalDateTime createAt;
         @NamedNativeQuery(
-                name = "findFeedsByFollowingUserIdAndTitle",
+                name = "findFeedsByTitle",
                 query = "SELECT u.user_id AS userId, u.nickname, u.profile_img AS profileImg, " +
                         "f.feed_id AS feedId, f.content, f.create_at AS createAt, " +
                         "IFNULL((SELECT COUNT(*) FROM Heart AS h WHERE h.feed_id = f.feed_id), 0) AS heart, " +
@@ -88,20 +67,24 @@ import java.time.LocalDateTime;
                         "a.article_id AS articleId, a.title " +
                         "FROM Feed AS f " +
                         "JOIN Article AS a ON f.article_id = a.article_id " +
+                        "JOIN User AS u ON f.user_id = u.user_id " +
+                        "WHERE a.title LIKE :keyword AND f.share > 0 " +
+                        "ORDER BY f.create_at DESC",
+                resultSetMapping = "feedListDto"
+        ),
+        @NamedNativeQuery(
+                name = "findFeedsByFollowerUserId",
+                query = "SELECT u.user_id AS userId, u.nickname, u.profile_img AS profileImg, " +
+                        "f.feed_id AS feedId, f.content, f.create_at AS createAt, " +
+                        "IFNULL((SELECT COUNT(*) FROM Heart AS h WHERE h.feed_id = f.feed_id), 0) AS heart, " +
+                        "IF((SELECT COUNT(*) FROM Heart AS h WHERE h.user_id = :userId AND h.feed_id = f.feed_id) > 0, true, false) AS isHeart, " +
+                        "a.article_id AS articleId, a.title, a.kind " +
+                        "FROM Feed AS f " +
+                        "JOIN Article AS a ON f.article_id = a.article_id " +
                         "JOIN Follow AS ff ON f.user_id = ff.to_id " +
                         "JOIN User AS u ON f.user_id = u.user_id " +
-                        "WHERE a.title LIKE :keyword AND f.share > 0 AND ff.from_id = :userId " +
+                        "WHERE f.share > 0 AND ff.from_id = :userId " +
                         "ORDER BY f.create_at DESC",
-//                query = "SELECT F.feed_id as feedId, F.content, A.article_id as articleId, A.title, F.create_at as createAt, " +
-//                        "       IF((select count(*) from Heart " +
-//                        "       where Heart.user_id = :userId and Heart.feed_id = F.feed_id) <= 0, false, true) as isHeart, " +
-//                        "       (select count(*) from Heart where Heart.feed_id = F.feed_id) as heart " +
-//                        "       from Feed as F " +
-//                        "       join Article as A " +
-//                        "       on F.article_id = A.article_id " +
-//                        "       join Follow as FF on F.user_id = FF.to_id " +
-//                        "       where A.title like :keyword and F.share >= 1 and FF.from_id = :userId " +
-//                        "       order by createAt desc",
                 resultSetMapping = "feedListDto"
         ),
         @NamedNativeQuery(
@@ -162,7 +145,8 @@ import java.time.LocalDateTime;
                         @ColumnResult(name = "isHeart", type = Boolean.class),
                         @ColumnResult(name = "articleId", type = Long.class),
                         @ColumnResult(name = "title", type = String.class),
-                        @ColumnResult(name = "createAt", type = LocalDateTime.class)
+                        @ColumnResult(name = "createAt", type = LocalDateTime.class),
+                        @ColumnResult(name = "kind", type = String.class),
                 }
         )
 )
