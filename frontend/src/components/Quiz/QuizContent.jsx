@@ -44,14 +44,13 @@ export default function QuizContent({
     let result = "";
     for (let i = 0; i < text.length; i++) {
       let code = text.charCodeAt(i) - 44032;
-      if (text.charCodeAt(i) >= 65 && text.charCodeAt(i) <= 98) {
+      if (text.charCodeAt(i) >= 65 && text.charCodeAt(i) <= 122) {
         result += "?";
         continue;
       }
       if (code > -1 && code < 11172) result += cho[Math.floor(code / 588)];
       else result += text.charAt(i);
     }
-    console.log(result);
     setHint(result);
   };
   const sendScore = (i, c) => {
@@ -86,7 +85,9 @@ export default function QuizContent({
           Swal.fire({
             title: "정답입니다!",
             imageUrl: "/icons/quiz/ic_right.svg",
+            width: 600,
             showConfirmButton: true,
+            confirmButtonColor: color.primary,
             showDenyButton: true,
             confirmButtonText: "다음 문제로",
             denyButtonText: "끝내기",
@@ -109,8 +110,10 @@ export default function QuizContent({
           Swal.fire({
             title: "오답입니다!",
             text: `(정답: ${text})`,
+            width: 600,
             imageUrl: "/icons/quiz/ic_wrong.svg",
             showConfirmButton: true,
+            confirmButtonColor: color.primary,
             showDenyButton: true,
             confirmButtonText: "다음 문제로",
             denyButtonText: "끝내기",
