@@ -9,44 +9,38 @@ import Quiz from "./pages/Quiz";
 import QuizSolve from "components/Quiz/QuizSolve";
 import Mypage from "./pages/Mypage";
 import NewsDetail from "pages/NewsDetail";
-import Login from "pages/Login";
-import Kakao from "pages/Kakao";
-import Google from "pages/Google";
-import SignUp from "pages/SignUp";
-import ProfileSetting from "pages/ProfileSetting";
 
-const router = createBrowserRouter([{
-        path: '/',
-        element: <App />,
-        errorElement: <Error />,
+const router = createBrowserRouter([
+  {
+    path: "/",
+    element: <App />,
+    errorElement: <Error />,
+    children: [
+      { index: true, path: "/", element: <Home /> },
+      { path: "/news", element: <News /> },
+      { path: "/news/:articleId", element: <NewsDetail /> },
+      { path: "/feed", element: <Feed /> },
+      { path: "/dictionary", element: <Dictionary /> },
+      {
+        path: "/quiz",
         children: [
-            {index: true, path: '/', element: <Home />},
-            {path: '/news', element: <News />},
-            { path: "/news/:articleId", element: <NewsDetail /> },
-            {path: '/feed', element: <Feed />},
-            {path: '/dictionary', element: <Dictionary />},
-            {path: '/quiz',
-            children:[
-                {
-                    path:"",
-                    element: <Quiz />,
-                },
-                {
-                    path:"solve",
-                    element:<QuizSolve/>
-                }
-            ]
-            
-        
-        },
-            {path: '/mypage/:userId', element: <Mypage />},
-            {path: '/login', element: <Login />},
-            {path: '/auth/kakao', element: <Kakao />},
-            {path: '/auth/google', element: <Google />},
-            {path: '/profile', element: <ProfileSetting />},
-            {path: '/signup', element: <SignUp />}
-        ]
-    },
-])
+          {
+            path: "",
+            element: <Quiz />,
+          },
+          {
+            path: "solve",
+            element: <QuizSolve retry={false} />,
+          },
+          {
+            path: "retry",
+            element: <QuizSolve retry={true} />,
+          },
+        ],
+      },
+      { path: "/mypage/:userId", element: <Mypage /> },
+    ],
+  },
+]);
 
 export default router;
