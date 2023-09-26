@@ -5,7 +5,7 @@ import { Doughnut } from 'react-chartjs-2';
 
 ChartJS.register(ArcElement, Tooltip);
 
-export default function MyPageWordQuizChart({data}) {
+export default function MyPageArticleQuizChart({data}) {
     const options = {
         legend: {
             display: true,
