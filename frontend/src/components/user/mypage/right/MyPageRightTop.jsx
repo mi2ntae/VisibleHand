@@ -36,7 +36,7 @@ export default function MyPageRightTop({userId}) {
     }, [])
 
     return (
-        <Background style={{ padding: "3rem", gap: "1.25rem" }}>
+        <Background style={{ padding: "1.5rem", gap: "1.25rem" }}>
             <Div>
                 <Image src={profile.profileImg}></Image>
                 <div style={{display: "flex", flexDirection: "column", justifyContent: "flex-start", flex: 1}}>
