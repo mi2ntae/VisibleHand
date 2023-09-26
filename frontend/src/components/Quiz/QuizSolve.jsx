@@ -2,33 +2,14 @@ import React, { useState, useEffect } from "react";
 import QuizContent from "./QuizContent";
 import styled from "styled-components";
 import color from "lib/style/colorPalette";
+import http from "api/commonHttp";
 
 export default function QuizSolve() {
   const [ranking, setRanking] = useState([]);
   useEffect(() => {
-    setRanking([
-      {
-        userId: 1,
-        nickname: "루기아",
-        profileImg:
-          "https://blog.kakaocdn.net/dn/FOcCY/btr5QAbW7Sv/iOSQ86mcRgUNUqQAf9ahRK/img.jpg",
-        statusMsg: "하반기 취업왕은 나야나",
-      },
-      {
-        userId: 1,
-        nickname: "루기아",
-        profileImg:
-          "https://blog.kakaocdn.net/dn/FOcCY/btr5QAbW7Sv/iOSQ86mcRgUNUqQAf9ahRK/img.jpg",
-        statusMsg: "하반기 취업왕은 나야나",
-      },
-      {
-        userId: 1,
-        nickname: "루기아",
-        profileImg:
-          "https://blog.kakaocdn.net/dn/FOcCY/btr5QAbW7Sv/iOSQ86mcRgUNUqQAf9ahRK/img.jpg",
-        statusMsg: "하반기 취업왕은 나야나",
-      },
-    ]);
+    http.get(`quiz/rank`).then((res) => {
+      setRanking(res.data);
+    });
   }, []);
   // 예시 데이터
   const question = "질문 예시?";
@@ -78,27 +59,29 @@ export default function QuizSolve() {
                 </div>
                 <div>
                   <div>
-                    <div>{v.nickname}</div>
-                    {i === 0 ? (
-                      <img
-                        src={"/icons/quiz/profile_badge_first.svg"}
-                        alt="1등"
-                      />
-                    ) : i === 1 ? (
-                      <img
-                        src={"/icons/quiz/profile_badge_second.svg"}
-                        alt="2등"
-                      />
-                    ) : i === 2 ? (
-                      <img
-                        src={"/icons/quiz/profile_badge_third.svg"}
-                        alt="3등"
-                      />
-                    ) : (
-                      <></>
-                    )}
+                    <div className="nickname">
+                      {v.nickname}
+                      {i === 0 ? (
+                        <img
+                          src={"/icons/quiz/profile_badge_first.svg"}
+                          alt="1등"
+                        />
+                      ) : i === 1 ? (
+                        <img
+                          src={"/icons/quiz/profile_badge_second.svg"}
+                          alt="2등"
+                        />
+                      ) : i === 2 ? (
+                        <img
+                          src={"/icons/quiz/profile_badge_third.svg"}
+                          alt="3등"
+                        />
+                      ) : (
+                        <></>
+                      )}
+                    </div>
                   </div>
-                  <div>{v.statusMsg}</div>
+                  <div className="statusMsg">{v.statusMsg}</div>
                 </div>
               </RankingItem>
             ))}
@@ -163,17 +146,17 @@ const RankingItem = styled.div`
   }
   div:nth-child(3) {
     margin-left: 12px;
-    & > div:first-child {
-      color: ${color.black_grey};
-      font-size: 16px;
-      display: flex;
-      align-items: center;
-      gap: 4px;
-    }
-    & > div:last-child {
-      color: ${color.grey};
-      font-size: 14px;
-    }
+  }
+  .nickname {
+    color: ${color.black_grey};
+    font-size: 20px;
+    display: flex;
+    align-items: center;
+    gap: 4px;
+  }
+  .statusMsg {
+    color: ${color.grey};
+    font-size: 14px;
   }
 `;
 const ItemContainer = styled.div`
