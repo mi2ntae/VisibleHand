@@ -7,6 +7,7 @@ import React, { useEffect, useRef, useState } from "react";
 import { useParams } from "react-router-dom";
 import { Background } from "styled";
 import styled from "styled-components";
+import color from "lib/style/colorPalette";
 
 export default function NewsDetail() {
   const { articleId } = useParams();
@@ -21,7 +22,6 @@ export default function NewsDetail() {
     if (target.current) {
       observer.observe(target.current);
     }
-
     getFeeds();
   }, []);
 

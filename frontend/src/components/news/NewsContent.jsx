@@ -10,11 +10,15 @@ import {
 } from "lib/style/colorPalette";
 import http from "api/commonHttp";
 import styled from "styled-components";
+import { useSelector } from "react-redux";
+import Swal from "sweetalert2";
 
 export default function NewsContent({ articleId }) {
   const [article, setArticle] = useState([]);
   const [scraped, setScraped] = useState(true);
-  const userId = 1;
+  const [quiz, setQuiz] = useState({});
+  const [text, setText] = useState("");
+  const userId = useSelector((state) => state.user.userId);
   useEffect(() => {
     http
       .get(`/article/${articleId}/${userId}`)
@@ -23,6 +27,14 @@ export default function NewsContent({ articleId }) {
         setScraped(data.data.scraped);
       })
       .catch((error) => alert(error));
+
+    http
+      .get(`quiz/article/${articleId}`)
+      .then((res) => {
+        if (res.data.newsQuizId === -1) return;
+        setQuiz(res.data);
+      })
+      .catch((err) => alert(err));
   }, []);
 
   // 글자크기 모달
@@ -90,6 +102,53 @@ export default function NewsContent({ articleId }) {
     );
   };
 
+  //퀴즈 채점
+  const mark = () => {
+    if (text === quiz.answer) {
+      //정답
+      http
+        .put("quiz", {
+          userId: userId,
+          newsquizId: quiz.newsQuizId,
+          correct: true,
+        })
+        .then(() => {
+          Swal.fire({
+            title: "정답입니다!",
+            imageUrl: "/icons/quiz/ic_right.svg",
+            width: 600,
+            showConfirmButton: false,
+            showDenyButton: false,
+            timer: 1000,
+          }).then(() => {});
+        })
+        .catch((err) => {
+          alert(err);
+        });
+    } else {
+      //오답
+      http
+        .put("quiz", {
+          userId: userId,
+          newsquizId: quiz.newsQuizId,
+          correct: false,
+        })
+        .then(() => {
+          Swal.fire({
+            title: "오답입니다!",
+            text: `(정답: ${text})`,
+            width: 600,
+            imageUrl: "/icons/quiz/ic_wrong.svg",
+            showConfirmButton: false,
+            showDenyButton: false,
+            timer: 1000,
+          }).then(() => {});
+        })
+        .catch((err) => {
+          alert(err);
+        });
+    }
+  };
   return (
     <NewsContainer>
       <div>
@@ -164,6 +223,15 @@ export default function NewsContent({ articleId }) {
           margin: "1.5rem 0",
         }}
       />
+      {Object.keys(quiz).length === 0 ? (
+        <></>
+      ) : (
+        <QuizContainer>
+          <div>{quiz.question}</div>
+          <input type="text" onChange={(e) => setText(e.target.value)} />
+          <button onClick={mark}>제출하기</button>
+        </QuizContainer>
+      )}
     </NewsContainer>
   );
 }
@@ -182,4 +250,11 @@ const Icon = styled.button`
   outline: 0;
   cursor: pointer;
   height: 100%;
+`;
+
+const QuizContainer = styled.div`
+  border-radius: 16px;
+  border: 1px solid ${lightest_grey};
+  width: 996px;
+  font-size: 16px;
 `;
