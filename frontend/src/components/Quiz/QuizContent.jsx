@@ -3,12 +3,58 @@ import { styled } from "styled-components";
 import color from "lib/style/colorPalette";
 import Swal from "sweetalert2";
 import http from "api/commonHttp";
+import Test from "./Test";
 import { useState, useEffect, useRef } from "react";
-export default function QuizContent({ question, content, text, score }) {
+export default function QuizContent({
+  wordId,
+  question,
+  content,
+  text,
+  score,
+  userId,
+}) {
   const letterRef = useRef([]);
   const correctAnswer = text.split("");
-  const sendScore = (i) => {
-    score(i);
+  const [hint, setHint] = useState("");
+  useEffect(() => {
+    makeHint();
+  }, [text]);
+  const makeHint = () => {
+    const cho = [
+      "ㄱ",
+      "ㄲ",
+      "ㄴ",
+      "ㄷ",
+      "ㄸ",
+      "ㄹ",
+      "ㅁ",
+      "ㅂ",
+      "ㅃ",
+      "ㅅ",
+      "ㅆ",
+      "ㅇ",
+      "ㅈ",
+      "ㅉ",
+      "ㅊ",
+      "ㅋ",
+      "ㅌ",
+      "ㅍ",
+      "ㅎ",
+    ];
+    let result = "";
+    for (let i = 0; i < text.length; i++) {
+      let code = text.charCodeAt(i) - 44032;
+      if (text.charCodeAt(i) >= 65 && text.charCodeAt(i) <= 122) {
+        result += "?";
+        continue;
+      }
+      if (code > -1 && code < 11172) result += cho[Math.floor(code / 588)];
+      else result += text.charAt(i);
+    }
+    setHint(result);
+  };
+  const sendScore = (i, c) => {
+    score(i, c);
   };
   //input 조합해 answer 만들어야함-입력 시마다 answer 한 글자씩 저장할 필요 없나
   const [answer, setAnswer] = useState("스타팅포켓몬");
@@ -34,22 +80,23 @@ export default function QuizContent({ question, content, text, score }) {
     if (text === answer) {
       //정답
       http
-        .put("quiz", { userId: 1, wordId: 0, correct: true })
+        .put("quiz", { userId: userId, wordId: wordId, correct: true })
         .then(() => {
           Swal.fire({
             title: "정답입니다!",
             imageUrl: "/icons/quiz/ic_right.svg",
+            width: 600,
             showConfirmButton: true,
+            confirmButtonColor: color.primary,
             showDenyButton: true,
             confirmButtonText: "다음 문제로",
             denyButtonText: "끝내기",
           }).then((result) => {
             if (result.isConfirmed) {
-              alert("다음 문제로");
+              sendScore(1, true);
             } else if (result.isDenied) {
-              alert("끝내기");
+              sendScore(1, false);
             }
-            sendScore(1);
           });
         })
         .catch((err) => {
@@ -58,23 +105,24 @@ export default function QuizContent({ question, content, text, score }) {
     } else {
       //오답
       http
-        .put("quiz", { userId: 1, wordId: 0, correct: true })
+        .put("quiz", { userId: userId, wordId: wordId, correct: false })
         .then(() => {
           Swal.fire({
             title: "오답입니다!",
             text: `(정답: ${text})`,
+            width: 600,
             imageUrl: "/icons/quiz/ic_wrong.svg",
             showConfirmButton: true,
+            confirmButtonColor: color.primary,
             showDenyButton: true,
             confirmButtonText: "다음 문제로",
             denyButtonText: "끝내기",
           }).then((result) => {
             if (result.isConfirmed) {
-              alert("다음 문제로");
+              sendScore(-1, true);
             } else if (result.isDenied) {
-              alert("끝내기");
+              sendScore(-1, false);
             }
-            sendScore(-1);
           });
         })
         .catch((err) => {
@@ -87,20 +135,29 @@ export default function QuizContent({ question, content, text, score }) {
       <div
         style={{
           display: "flex",
+          alignItems: "center",
           justifyContent: "space-between",
           width: "870px",
+          marginBottom: "32px",
         }}
       >
         <Question>{question}</Question>
-        <HintButton>
-          <img src={"/icons/quiz/ic_bulb.svg"} />
-          <button>힌트 보기</button>
-        </HintButton>
+        <div>
+          <HintButton>
+            <img src={"/icons/quiz/ic_bulb.svg"} />
+            <button>힌트 보기</button>
+            <div className="hint">
+              <div></div>
+              <div>힌트: {hint}</div>
+            </div>
+          </HintButton>
+        </div>
       </div>
       <ContentContainer>{content}</ContentContainer>
       <ProgressBar>
         <div></div>
       </ProgressBar>
+      {/* <Test></Test> */}
       <AnswerContainer>
         {correctAnswer.map((v, i) => (
           <Letter
@@ -122,14 +179,17 @@ const ComponentContainer = styled.div`
   width: 870px;
 `;
 const Question = styled.div`
+  display: flex;
+  height: max-content;
+  align-items: center;
   font-weight: 600;
   font-size: 36px;
   color: ${color.black_grey};
-  margin-bottom: 32px;
 `;
 const HintButton = styled.div`
   display: flex;
   align-items: center;
+  position: relative;
   img {
     padding-bottom: 5px;
   }
@@ -140,6 +200,50 @@ const HintButton = styled.div`
     font-size: 20px;
     font-weight: 500;
   }
+  .hint {
+    visibility: hidden;
+    transition: opacity 1s ease-in-out;
+    position: absolute;
+    top: 16px;
+    left: 20px;
+    & > div:first-child {
+      width: 0;
+      height: 0;
+      position: relative;
+      left: 20px;
+      background-color: transparent;
+      border-left: 12px solid transparent;
+      border-top: 12px solid transparent;
+      border-bottom: 12px solid ${color.primary};
+      border-right: 12px solid transparent;
+    }
+    & > div:last-child {
+      background-color: ${color.primary};
+      width: max-content;
+      height: max-content;
+      color: ${color.white};
+      font-weight: 600;
+      font-size: 20px;
+      border-radius: 8px;
+      padding: 12px;
+      box-shadow: 4px 4px 4px ${color.light_grey};
+    }
+  }
+  &:hover {
+    cursor: pointer;
+    .hint {
+      visibility: visible;
+      animation: setMotion 0.2s;
+    }
+    @keyframes setMotion {
+      0% {
+        opacity: 0;
+      }
+      100% {
+        opacity: 1;
+      }
+    }
+  }
 `;
 const ContentContainer = styled.div`
   padding: 40px;
@@ -148,7 +252,7 @@ const ContentContainer = styled.div`
   height: 507px;
   color: ${color.black_grey};
   border: 1px solid ${color.lightest_grey};
-  font-weight: 24px;
+  font-size: 1.2rem;
   border-radius: 16px;
 `;
 const SubmitButton = styled.button`

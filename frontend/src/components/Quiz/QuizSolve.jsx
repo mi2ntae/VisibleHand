@@ -2,46 +2,102 @@ import React, { useState, useEffect } from "react";
 import QuizContent from "./QuizContent";
 import styled from "styled-components";
 import color from "lib/style/colorPalette";
-export default function QuizSolve() {
+import http from "api/commonHttp";
+import { useSelector } from "react-redux";
+import { useNavigate } from "react-router-dom";
+import Swal from "sweetalert2";
+
+export default function QuizSolve({ retry }) {
+  const navigate = useNavigate();
+  const userId = useSelector((state) => state.user.userId);
   const [ranking, setRanking] = useState([]);
+  const [isCombo, setIsCombo] = useState(false);
+  const [comboNum, setComboNum] = useState(0);
   useEffect(() => {
-    setRanking([
-      {
-        userId: 1,
-        nickname: "루기아",
-        profileImg:
-          "https://blog.kakaocdn.net/dn/FOcCY/btr5QAbW7Sv/iOSQ86mcRgUNUqQAf9ahRK/img.jpg",
-        statusMsg: "하반기 취업왕은 나야나",
-      },
-      {
-        userId: 1,
-        nickname: "루기아",
-        profileImg:
-          "https://blog.kakaocdn.net/dn/FOcCY/btr5QAbW7Sv/iOSQ86mcRgUNUqQAf9ahRK/img.jpg",
-        statusMsg: "하반기 취업왕은 나야나",
-      },
-      {
-        userId: 1,
-        nickname: "루기아",
-        profileImg:
-          "https://blog.kakaocdn.net/dn/FOcCY/btr5QAbW7Sv/iOSQ86mcRgUNUqQAf9ahRK/img.jpg",
-        statusMsg: "하반기 취업왕은 나야나",
-      },
-    ]);
+    http.get(`quiz/rank`).then((res) => {
+      setRanking(res.data);
+    });
   }, []);
-  // 예시 데이터
-  const question = "질문 예시?";
-  const content =
-    "포켓몬 세계에 온 것을 환영한다. 내 이름은 오박사. 모두가 포켓몬 박사라고 부르지!이 세계에는 포켓몬스터, 줄여서 포켓몬이라고 불리는 신비한 생명체들이 도처에 살고 있다.자네는 남자인가?아니면 여자인가?자네의 이름은?";
-  const text = "스타팅포켓몬";
-  const wordId = 1;
+  const [question, setQuestion] = useState("");
+  const [content, setContent] = useState("");
+  const [wordId, setWordId] = useState(1);
+  const [text, setText] = useState(""); //퀴즈 답
   const [correct, setCorrect] = useState(0);
   const [wrong, setWrong] = useState(0);
-  const score = (i) => {
-    if (i > 0) {
-      setCorrect((prev) => prev + 1);
+  useEffect(() => {
+    if (retry) {
+      http
+        .get(`quiz/retry/${userId}`)
+        .then((res) => {
+          setQuestion("다음 의미를 가진 경제용어는?");
+          setContent(res.data.entries[0].meaning);
+          setText(res.data.entries[0].word);
+          setWordId(res.data.entries[0].wordId);
+        })
+        .catch((err) => alert(err));
     } else {
-      setWrong((prev) => prev + 1);
+      http
+        .get(`quiz/dict/${userId}`)
+        .then((res) => {
+          setQuestion("다음 의미를 가진 경제용어는?");
+          setContent(res.data.entries[0].meaning);
+          setText(res.data.entries[0].word);
+          setWordId(res.data.entries[0].wordId);
+        })
+        .catch((err) => alert(err));
+    }
+  }, []);
+  const score = (i, c) => {
+    let newCorrect = correct;
+    let newWrong = wrong;
+    if (i > 0) {
+      if (!isCombo) {
+        setIsCombo((prev) => !prev);
+      }
+      setComboNum((prev) => prev + 1);
+      newCorrect = correct + 1;
+    } else {
+      if (isCombo) {
+        setComboNum(0);
+        setIsCombo((prev) => !prev);
+      }
+      newWrong = wrong + 1;
+    }
+    setCorrect(newCorrect);
+    setWrong(newWrong);
+    if (c) {
+      if (retry) {
+        http
+          .get(`quiz/retry/${userId}`)
+          .then((res) => {
+            setQuestion("다음 의미를 가진 경제용어는?");
+            setContent(res.data.entries[0].meaning);
+            setText(res.data.entries[0].word);
+            setWordId(res.data.entries[0].wordId);
+          })
+          .catch((err) => alert(err));
+      } else {
+        http
+          .get(`quiz/dict/${userId}`)
+          .then((res) => {
+            setQuestion("다음 의미를 가진 경제용어는?");
+            setContent(res.data.entries[0].meaning);
+            setText(res.data.entries[0].word);
+            setWordId(res.data.entries[0].wordId);
+          })
+          .catch((err) => alert(err));
+      }
+    } else {
+      const str = newCorrect > newWrong ? "Good job!!" : "분발하세요..!";
+      Swal.fire({
+        title: str,
+        text: `맞춘 단어: ${newCorrect}개 \n틀린 단어: ${newWrong}개`,
+        showConfirmButton: false,
+        showDenyButton: false,
+        timer: 1000,
+      }).then(() => {
+        navigate("/");
+      });
     }
     //콤보 계산
   };
@@ -53,6 +109,7 @@ export default function QuizSolve() {
         content={content}
         text={text}
         score={score}
+        userId={userId}
       ></QuizContent>
       <RightContainer>
         <RankingContainer>
@@ -77,36 +134,44 @@ export default function QuizSolve() {
                 </div>
                 <div>
                   <div>
-                    <div>{v.nickname}</div>
-                    {i === 0 ? (
-                      <img
-                        src={"/icons/quiz/profile_badge_first.svg"}
-                        alt="1등"
-                      />
-                    ) : i === 1 ? (
-                      <img
-                        src={"/icons/quiz/profile_badge_second.svg"}
-                        alt="2등"
-                      />
-                    ) : i === 2 ? (
-                      <img
-                        src={"/icons/quiz/profile_badge_third.svg"}
-                        alt="3등"
-                      />
-                    ) : (
-                      <></>
-                    )}
+                    <div className="nickname">
+                      {v.nickname}
+                      {i === 0 ? (
+                        <img
+                          src={"/icons/quiz/profile_badge_first.svg"}
+                          alt="1등"
+                        />
+                      ) : i === 1 ? (
+                        <img
+                          src={"/icons/quiz/profile_badge_second.svg"}
+                          alt="2등"
+                        />
+                      ) : i === 2 ? (
+                        <img
+                          src={"/icons/quiz/profile_badge_third.svg"}
+                          alt="3등"
+                        />
+                      ) : (
+                        <></>
+                      )}
+                    </div>
                   </div>
-                  <div>{v.statusMsg}</div>
+                  <div className="statusMsg">{v.statusMsg}</div>
                 </div>
               </RankingItem>
             ))}
           </ItemContainer>
         </RankingContainer>
         <ComboContainer>
-          <div>132</div>
+          <div>{comboNum}</div>
           <div>
-            <div>연속 정답 행진!</div>
+            <div>
+              {correct === 0 && wrong === 0
+                ? "도전!!!"
+                : isCombo
+                ? "연속 정답 행진!!"
+                : "앗차차~"}
+            </div>
             <div>최고기록: 241</div>
           </div>
         </ComboContainer>
@@ -162,17 +227,17 @@ const RankingItem = styled.div`
   }
   div:nth-child(3) {
     margin-left: 12px;
-    & > div:first-child {
-      color: ${color.black_grey};
-      font-size: 16px;
-      display: flex;
-      align-items: center;
-      gap: 4px;
-    }
-    & > div:last-child {
-      color: ${color.grey};
-      font-size: 14px;
-    }
+  }
+  .nickname {
+    color: ${color.black_grey};
+    font-size: 20px;
+    display: flex;
+    align-items: center;
+    gap: 4px;
+  }
+  .statusMsg {
+    color: ${color.grey};
+    font-size: 14px;
   }
 `;
 const ItemContainer = styled.div`

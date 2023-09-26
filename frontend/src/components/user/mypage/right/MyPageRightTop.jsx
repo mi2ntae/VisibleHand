@@ -43,7 +43,7 @@ export default function MyPageRightTop({userId}) {
                     <div style={{display: "flex", justifyContent: "flex-end"}}>
                         {userId == loginId
                         ?
-                        <Button><img src='/icons/mypage/ic_settings.svg' alt='회원정보 수정'/></Button>
+                        <Button onClick={() => alert("이동!")}><img src='/icons/mypage/ic_settings.svg' alt='회원정보 수정'/></Button>
                         :
                         <span></span>
                         }

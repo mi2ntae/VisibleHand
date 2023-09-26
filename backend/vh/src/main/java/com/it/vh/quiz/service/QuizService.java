@@ -14,4 +14,6 @@ public interface QuizService {
     List<QuizRankResDto> getQuizRank();
 
     WordQuizResDto randomQuizs(Long userId);
+
+    WordQuizResDto randomRetryQuiz(Long userId);
 }

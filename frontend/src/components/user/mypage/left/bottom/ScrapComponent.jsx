@@ -1,18 +1,19 @@
 import React from 'react';
 import styled from 'styled-components';
 import "components/user/mypage/css/Scrap.css";
+import { useNavigate } from 'react-router-dom';
 
 export default function ScrapComponent({deleteScrap, scrapId, articleId, image, title}) {
-
+    const navi = useNavigate();
     return (
-        <ScrapContainer >
+        <ScrapContainer  onClick={() => {navi(`/news/${articleId}`)}}>
             <div class="card">
                 <div class="card-inner">
                     <div class="card-front">
                         <Folder src='/images/scrap/folder.png'/>
-                        <Image src={image} onClick={() => alert("move")}></Image>
-                        <Title onClick={() => alert("move")}>{title}</Title>
-                        <DismissButton onClick={() => deleteScrap(scrapId)}></DismissButton>
+                        <Image src={image}></Image>
+                        <Title>{title}</Title>
+                        <DismissButton onClick={(e) => deleteScrap(e, scrapId)}></DismissButton>
                     </div>
                 </div>
             </div>
