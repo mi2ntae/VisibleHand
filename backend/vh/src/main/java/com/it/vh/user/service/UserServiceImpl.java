@@ -1,6 +1,7 @@
 package com.it.vh.user.service;
 
 import com.it.vh.common.util.S3Uploader;
+import com.it.vh.feed.api.dto.FeedRes;
 import com.it.vh.user.api.dto.FollowResDto;
 import com.it.vh.user.api.dto.NicknameResDto;
 import com.it.vh.user.api.dto.UserFollowListResDto;
@@ -96,6 +97,12 @@ public class UserServiceImpl implements UserService{
                                 .imageUrl(userList.getProfileImg())
                                 .build()
         );
+    }
+
+    @Override
+    public List<UserFollowListResDto> getUsersByKeyword(String keyword, int page) {
+
+        return userRespository.findUsersByNickname(keyword, PageRequest.of(page, 7));
     }
 
     @Override

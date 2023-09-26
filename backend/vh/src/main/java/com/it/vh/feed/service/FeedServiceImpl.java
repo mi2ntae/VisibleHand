@@ -63,15 +63,8 @@ public class FeedServiceImpl implements FeedService {
         if(!optionalUser.isPresent()) throw new NonExistUserIdException();
 
         authenticationHandler.checkUserAuthenticate(userId);
-        if(keyword == null) return feedRepository.findFeedsByFollowingUserIdAndTitle(userId, "%%", PageRequest.of(page, FEED_PAGE_NUM));
-        switch(searchType) {
-            case 0:
-                return feedRepository.findFeedsByFollowingUserIdAndTitle(userId, "%" + keyword + "%", PageRequest.of(page, FEED_PAGE_NUM));
-            case 1:
-                return feedRepository.findFeedsByFollowingUserIdAndContent(userId, "%"+keyword+"%", PageRequest.of(page, FEED_PAGE_NUM));
-            default:
-                return feedRepository.findFeedsByFollowingUserIdAndTitle(userId, "%%", PageRequest.of(page, FEED_PAGE_NUM));
-        }
+        if(keyword == null || keyword == "") return feedRepository.findFeedsByFollowerUserId(userId, PageRequest.of(page, FEED_PAGE_NUM));
+        return feedRepository.findFeedsByContent(userId, "%" + keyword + "%", PageRequest.of(page, FEED_PAGE_NUM));
     }
 
     @Override
@@ -91,7 +84,7 @@ public class FeedServiceImpl implements FeedService {
     }
 
     @Override
-    public void registFeed(long userId, long articleId, String content, boolean isShared) {
+    public long registFeed(long userId, long articleId, String content, boolean isShared) {
         Optional<User> optionalUser = userRespository.findById(userId);
         if(!optionalUser.isPresent()) throw new NonExistUserIdException();
 
@@ -109,6 +102,7 @@ public class FeedServiceImpl implements FeedService {
 
         System.out.println(feed.toString());
         feedRepository.save(feed);
+        return feed.getFeedId();
     }
 
     @Override

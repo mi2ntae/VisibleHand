@@ -14,7 +14,7 @@ public interface FeedService {
 
     List<FeedListOfArticleRes> getFeedsByArticleId(long articleId, long userId, int page);
 
-    void registFeed(long userId, long articleId, String content, boolean isShared);
+    long registFeed(long userId, long articleId, String content, boolean isShared);
 
     MyFeedRes getFeedByArticleIdAndUserId(long articleId, long userId);
 

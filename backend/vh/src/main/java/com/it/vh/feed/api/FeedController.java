@@ -5,9 +5,11 @@ import com.it.vh.feed.exception.NonExistFeedIdException;
 import com.it.vh.feed.service.FeedService;
 import com.it.vh.feed.service.HeartService;
 import com.it.vh.user.exception.NonExistUserIdException;
+import com.it.vh.user.service.UserService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -20,11 +22,22 @@ import java.util.List;
 public class FeedController {
     private final FeedService feedService;
     private final HeartService heartService;
+    private final UserService userService;
 
     @ApiOperation(value = "피드 목록 조회", notes = "로그인한 유저에 따른 피드 목록 조회")
     @GetMapping("/list/{userId}")
-    public ResponseEntity<List<FeedListRes>> getFeedsByUserId(@PathVariable long userId, @RequestParam int searchType, @RequestParam(required = false) String keyword, @RequestParam int page) throws NonExistUserIdException {
-        List<FeedListRes> res = feedService.searchFeedsByUserId(userId, searchType, keyword, page);
+    public ResponseEntity<List<?>> getFeedsByUserId(@PathVariable long userId, @RequestParam int searchType, @RequestParam(required = false) String keyword, @RequestParam int page) throws NonExistUserIdException {
+        List<?> res;
+        switch(searchType) {
+            case 0:
+                res = feedService.searchFeedsByUserId(userId, searchType, keyword, page);
+                break;
+            case 1:
+                res = userService.getUsersByKeyword("%" + keyword + "%", page);
+                break;
+            default:
+                res = feedService.searchFeedsByUserId(userId, searchType, keyword, page);
+        }
         return ResponseEntity.ok().body(res);
     }
 
@@ -51,10 +64,10 @@ public class FeedController {
 
 
     @ApiOperation(value = "뉴스 피드 등록", notes = "로그인한 유저의 계정으로 해당 뉴스에 대한 피드 등록")
-    @PostMapping("/")
-    public ResponseEntity<Void> writeFeed(@RequestBody FeedReq feedReq) {
-        feedService.registFeed(feedReq.getUserId(), feedReq.getArticleId(), feedReq.getContent(), feedReq.isShared());
-        return ResponseEntity.ok().build();
+    @PostMapping("")
+    public ResponseEntity<Long> writeFeed(@RequestBody FeedReq feedReq) {
+        long feedId = feedService.registFeed(feedReq.getUserId(), feedReq.getArticleId(), feedReq.getContent(), feedReq.isShared());
+        return ResponseEntity.ok().body(feedId);
     }
 
     @ApiOperation(value = "뉴스에 대한 내 피드 조회", notes = "해당 뉴스에 대한 내 피드 조회")
