@@ -64,8 +64,9 @@ export default function QuizSolve() {
         })
         .catch((err) => alert(err));
     } else {
+      const str = newCorrect > newWrong ? "Good job!!" : "분발하세요..!";
       Swal.fire({
-        title: "Good job!!",
+        title: str,
         text: `맞춘 단어: ${newCorrect}개 \n틀린 단어: ${newWrong}개`,
         showConfirmButton: false,
         showDenyButton: false,
