@@ -29,7 +29,7 @@ export default function MyPageRightBottom({userId}) {
             <MyPageWordQuizChart data={wordCnt}></MyPageWordQuizChart>
             :
             <NoContent>
-                퀴즈를 먼저 풀어주세요.
+                퀴즈를 풀지 않았어요!
             </NoContent>
         }
             

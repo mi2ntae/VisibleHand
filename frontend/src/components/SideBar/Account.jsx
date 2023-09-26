@@ -1,14 +1,15 @@
 import React from "react";
-// import { useSelector } from "react-redux";
+import { useSelector } from "react-redux";
 import { Link } from "react-router-dom";
 import styled from "styled-components";
 
 export default function Account() {
-  // const loginId = useSelector((state) => state.user.userId);
+  const loginId = useSelector((state) => state.user.userId);
+
   return (
     <div style={{ gap: "240px" }}>
       <hr style={{ border: "0.5px solid #EDEDED", margin: "24px 0px" }} />
-      <StyledLink to={`/mypage/${1}`}>
+      <StyledLink to={`/mypage/${loginId}`}>
         <img src="/icons/header/ic_dictionary.svg" alt="dictionary" />
         nickname
       </StyledLink>

@@ -23,6 +23,7 @@ export default function MyPageScrap() {
         await http.delete(`article/scrap/${scrapId}`)
         .then(({data}) => {
             console.log(data);
+            setPageNo(1);
         })
         .catch((err) => {
             console.log(err);
