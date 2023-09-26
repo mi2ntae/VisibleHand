@@ -27,8 +27,6 @@ import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.reactive.function.client.WebClient;
 
-import javax.annotation.PostConstruct;
-
 @Slf4j
 @Transactional(readOnly = true)
 @RequiredArgsConstructor
@@ -51,7 +49,30 @@ public class AuthUserService {
         User user = getUser(token, providerInfo, provider);
         log.info("[사용자] user: {}", user);
 
-        UserProfile userProfile = UserProfile.from(user);
+        UserProfile userProfile = null;
+        if(user.getNickname()=="") {
+            userProfile = UserProfile.builder()
+                .userId(user.getUserId())
+                .nickname(user.getNickname())
+                .statusMsg(user.getStatusMsg())
+                .profileImg(user.getProfileImg())
+                .snsEmail(user.getSnsEmail())
+                .provider(user.getProvider())
+                .isAlready(0)
+                .build();
+        } else {
+            userProfile = UserProfile.builder()
+                .userId(user.getUserId())
+                .nickname(user.getNickname())
+                .statusMsg(user.getStatusMsg())
+                .profileImg(user.getProfileImg())
+                .snsEmail(user.getSnsEmail())
+                .provider(user.getProvider())
+                .isAlready(1)
+                .build();
+        }
+
+        log.info("userProfile: {}", userProfile);
 
         //권한 설정
         Authentication authentication = jwtTokenProvider.setAuthentication(user);
@@ -96,7 +117,6 @@ public class AuthUserService {
         return formData;
     }
 
-    //일단은 DTO로 가지고 있다가 프로필 작성 후 insert 하는 걸로 바꾸는 게 나은가,,,
     @Transactional
     public User getUser(AuthTokenInfo token, ClientRegistration providerInfo, String provider) {
         Map<String, Object> userAttributes = getUserAttributes(token, providerInfo);
