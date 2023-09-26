@@ -38,11 +38,15 @@ public class QuizServiceImpl implements QuizService{
 
     @Override
     public NewsQuizRes findByArticleId(Long articleId) throws NonExistNewsQuizException {
-        NewsQuiz nq=newsQuizRepository.findByArticle_ArticleId(articleId);
+        Optional<NewsQuiz> nq=newsQuizRepository.findByArticle_ArticleId(articleId);
         NewsQuizRes nqr=new NewsQuizRes();
-        nqr.setQuestion(nq.getQuestion());
-        nqr.setAnswer(nq.getAnswer());
-        nqr.setNewsQuizId(nq.getNewsquizId());
+        if(nq.isEmpty()) {
+            nqr.setNewsQuizId(Long.valueOf(-1));
+            return nqr;
+        }
+        nqr.setQuestion(nq.get().getQuestion());
+        nqr.setAnswer(nq.get().getAnswer());
+        nqr.setNewsQuizId(nq.get().getNewsquizId());
         return nqr;
     }
 
