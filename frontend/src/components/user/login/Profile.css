@@ -1,0 +1,139 @@
+  .form-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 100vh;
+  }
+
+  .form {
+    position: relative;
+    display: flex;
+    align-items: flex-start;
+    flex-direction: column;
+    gap: 5px;
+    width: 70%;
+    border-radius: 10px;
+    height: 90%;
+  }
+  
+  .form .title {
+    color: #6A74C9;
+    font-size: 30px;
+    font-weight: 600;
+    letter-spacing: -1px;
+    line-height: 30px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .center {
+    margin: auto;
+  }
+
+  .profile {
+    width: 100px; 
+    height: 120px; 
+    border-radius: 50%; 
+    overflow: hidden;
+    border: 3px solid white;
+    position: relative;
+
+    filter: brightness(1);
+  }
+
+  .profile:hover {
+    filter: brightness(0.5);
+  }
+
+  .profileImg {
+    display: none;
+  }
+
+  /* .profileImg-label {
+    margin-top: 10px;
+    padding-left: 10px;
+    font-weight: bold;
+    font-size: 13px;
+    color: #0095f6;
+    display: inline-block;
+    cursor: pointer;
+  } */
+
+  .input-container {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 10px;
+}
+
+  .inputNick {
+    flex: 2;
+    outline: 0;
+    border: 1px solid rgb(219, 213, 213);
+    padding-left: 14px;
+    border-radius: 8px;
+    width: 540px;
+    height: 50px;
+  }
+
+  .form textarea {
+    border-radius: 8px;
+    height: 100px;
+    width: 600px;
+    resize: none;
+    outline: 0;
+    padding: 8px 14px;
+    border: 1px solid rgb(219, 213, 213);
+  }
+
+  .inputEmail {
+    outline: 0;
+    border: 1px solid rgb(219, 213, 213);
+    padding: 8px 14px;
+    border-radius: 8px;
+    width: 600px;
+    height: 50px;
+  }
+  
+  .dupbtn {
+    padding: 8px;
+    outline: 0;
+    border: 0;
+    border-radius: 8px;
+    font-size: 15px;
+    font-weight: 500;
+    background-color: #6A74C9;
+    color: #fff;
+    cursor: pointer;
+  }
+
+  .subbtn {
+    height: 40px;
+    width: 100%;
+    border-radius: 5px;
+    border: none;
+    cursor: pointer;
+    background-color: #6A74C9;
+    color: white;
+    transition: 0.5s;
+    text-transform: uppercase;
+    font-size: 15px;
+    font-weight: 500;
+    letter-spacing: 2px;
+    margin-top: 10px;
+    margin-bottom: 3em;
+  }
+  
+  .subbtn:hover {
+    color: black;
+  }
+
+  .invalid {
+    color: red;
+    font-size: 7px;
+    display: inline-block;
+    margin-left: 10px; 
+  }
+
