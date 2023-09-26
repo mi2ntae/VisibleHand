@@ -7,9 +7,26 @@ import {
 } from "lib/style/colorPalette.js";
 import styled from "styled-components";
 
-export default function Search({ setSearchType, setKeyWord }) {
+export default function Search({
+  setSearchType,
+  setKeyWord,
+  btnClick,
+  setBtnClick,
+}) {
   const [type, setType] = useState(true);
   const [content, setContent] = useState("");
+
+  const handleButton = () => {
+    setKeyWord(content);
+    setSearchType(type);
+    setBtnClick(!btnClick);
+  };
+
+  const handleKeyPress = (e) => {
+    if (e.key === "Enter") {
+      handleButton();
+    }
+  };
   return (
     <SearchContainer>
       <select
@@ -36,12 +53,7 @@ export default function Search({ setSearchType, setKeyWord }) {
           setContent(e.target.value);
         }}
       />
-      <SearchBtn
-        onClick={() => {
-          setKeyWord(content);
-          setSearchType(type);
-        }}
-      >
+      <SearchBtn onClick={handleButton} onKeyDown={handleKeyPress}>
         <img src="/icons/feed/ic_search.svg" alt="검색" />
       </SearchBtn>
     </SearchContainer>
@@ -77,4 +89,5 @@ const SearchBtn = styled.button`
   height: 3.25rem;
   border-radius: 0px 16px 16px 0px;
   border: none;
+  outline: none;
 `;
