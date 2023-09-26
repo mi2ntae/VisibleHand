@@ -7,7 +7,7 @@ import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import Swal from "sweetalert2";
 
-export default function QuizSolve() {
+export default function QuizSolve({ retry }) {
   const navigate = useNavigate();
   const userId = useSelector((state) => state.user.userId);
   const [ranking, setRanking] = useState([]);
@@ -25,15 +25,27 @@ export default function QuizSolve() {
   const [correct, setCorrect] = useState(0);
   const [wrong, setWrong] = useState(0);
   useEffect(() => {
-    http
-      .get(`quiz/dict/${userId}`)
-      .then((res) => {
-        setQuestion("다음 의미를 가진 경제용어는?");
-        setContent(res.data.entries[0].meaning);
-        setText(res.data.entries[0].word);
-        setWordId(res.data.entries[0].wordId);
-      })
-      .catch((err) => alert(err));
+    if (retry) {
+      http
+        .get(`quiz/retry/${userId}`)
+        .then((res) => {
+          setQuestion("다음 의미를 가진 경제용어는?");
+          setContent(res.data.entries[0].meaning);
+          setText(res.data.entries[0].word);
+          setWordId(res.data.entries[0].wordId);
+        })
+        .catch((err) => alert(err));
+    } else {
+      http
+        .get(`quiz/dict/${userId}`)
+        .then((res) => {
+          setQuestion("다음 의미를 가진 경제용어는?");
+          setContent(res.data.entries[0].meaning);
+          setText(res.data.entries[0].word);
+          setWordId(res.data.entries[0].wordId);
+        })
+        .catch((err) => alert(err));
+    }
   }, []);
   const score = (i, c) => {
     let newCorrect = correct;
@@ -54,15 +66,27 @@ export default function QuizSolve() {
     setCorrect(newCorrect);
     setWrong(newWrong);
     if (c) {
-      http
-        .get(`quiz/dict/${userId}`)
-        .then((res) => {
-          setQuestion("다음 의미를 가진 경제용어는?");
-          setContent(res.data.entries[0].meaning);
-          setText(res.data.entries[0].word);
-          setWordId(res.data.entries[0].wordId);
-        })
-        .catch((err) => alert(err));
+      if (retry) {
+        http
+          .get(`quiz/retry/${userId}`)
+          .then((res) => {
+            setQuestion("다음 의미를 가진 경제용어는?");
+            setContent(res.data.entries[0].meaning);
+            setText(res.data.entries[0].word);
+            setWordId(res.data.entries[0].wordId);
+          })
+          .catch((err) => alert(err));
+      } else {
+        http
+          .get(`quiz/dict/${userId}`)
+          .then((res) => {
+            setQuestion("다음 의미를 가진 경제용어는?");
+            setContent(res.data.entries[0].meaning);
+            setText(res.data.entries[0].word);
+            setWordId(res.data.entries[0].wordId);
+          })
+          .catch((err) => alert(err));
+      }
     } else {
       const str = newCorrect > newWrong ? "Good job!!" : "분발하세요..!";
       Swal.fire({
