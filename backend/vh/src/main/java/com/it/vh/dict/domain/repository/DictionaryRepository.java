@@ -19,7 +19,7 @@ public interface DictionaryRepository extends JpaRepository<Dictionary, Long>, J
     @Query(value = "SELECT d.*\n" +
             "FROM dictionary d\n" +
             "left JOIN solved_quiz sq ON d.word_id = sq.word_id AND sq.user_id = :userId\n" +
-            "WHERE sq.word_id IS NULL\n" +
+            "WHERE sq.word_id IS NULL and length(d.word) < 10\n" +
             "order by rand()\n" +
             "limit 1;",nativeQuery = true)
     Optional<List<Dictionary>> findRandomWordQuiz(@Param("userId") Long userId);

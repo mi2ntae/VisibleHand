@@ -1,9 +1,9 @@
-import React from "react";
+import React, { useCallback } from "react";
 import { styled } from "styled-components";
 import color from "lib/style/colorPalette";
 import Swal from "sweetalert2";
 import http from "api/commonHttp";
-import Test from "./Test";
+import ProgressTimeBar from "./ProgressTimeBar";
 import { useState, useEffect, useRef } from "react";
 export default function QuizContent({
   wordId,
@@ -13,12 +13,28 @@ export default function QuizContent({
   score,
   userId,
 }) {
+  const [answer, setAnswer] = useState([]);
   const letterRef = useRef([]);
   const correctAnswer = text.split("");
   const [hint, setHint] = useState("");
+  const [time, setTime] = useState(false);
   useEffect(() => {
+    letterRef.current = [];
+    let t = []; 
+    for (let i = 0; i < correctAnswer.length; i++) {
+      if(isSymbol(correctAnswer[i])) t.push(correctAnswer[i]);
+      else t.push(-1);
+    }
+    setAnswer(t);
+    setTime(true)
     makeHint();
   }, [text]);
+  useEffect(() => {
+    letterRef.current[0]?.focus();
+     // Focus on the first element if it exists
+  }, [letterRef.current.length]); 
+  console.log(answer)
+  console.log(text)
   const makeHint = () => {
     const cho = [
       "ㄱ",
@@ -56,28 +72,52 @@ export default function QuizContent({
   const sendScore = (i, c) => {
     score(i, c);
   };
-  //input 조합해 answer 만들어야함-입력 시마다 answer 한 글자씩 저장할 필요 없나
-  const [answer, setAnswer] = useState("스타팅포켓몬");
-  // const [currentIdx, setCurrentIdx] = useState(0);
-  useEffect(() => {
-    let t = [];
-    for (let i = 0; i < correctAnswer.length; i++) t.push(i);
-    setAnswer(t);
-  }, []);
-  const onChange = (e, idx) => {
-    if (e.target.value.length === 1) {
-      if (
-        letterRef.current.length > 0 &&
-        idx < letterRef.current.length - 1 &&
-        letterRef.current[idx + 1]
-      ) {
-        //useState에서 배열 특정 인덱스 값 어떻게 바꾸냐
-        letterRef.current[idx + 1].focus();
+
+  const isSymbol = (ch) => {
+    const symbols = "-&.()%+,:/ ";
+    if(symbols.includes(ch)) return true;
+    else return false;
+  }
+
+  const onKeyDown = (e, i) => {
+    console.log(e.key)
+    if(letterRef.current.length === 0 ) return;
+    if(e.key==="ArrowRight") {
+      for(let j=i+1; j<=letterRef.current.length-1; j++) {
+        if(!isSymbol(correctAnswer[j])) { 
+          letterRef.current[j].focus()
+          break;
+        }
       }
+    }
+    else if(e.key==="ArrowLeft") {
+      for(let j=i-1; j>=0; j--) {
+        if(!isSymbol(correctAnswer[j])) {
+          letterRef.current[j].focus()
+          break;
+        }
+      }
+    }
+    else if(e.key==="Enter") {
+      mark()
+    }
+  }
+
+  const onChange = (e, idx) => {
+    letterRef.current = [];
+    if (e.target.value.length >= 1) {
+      e.target.value = e.target.value.substring(e.target.value.length-1)
+      let temp = [];
+      for (let index = 0; index < answer.length; index++) {
+        if(idx === index) temp.push(e.target.value)
+        else temp.push(answer[index])
+      }
+      setAnswer(temp);
     }
   };
   const mark = () => {
-    if (text === answer) {
+    setTime(false)
+    if (text === answer.join("")) {
       //정답
       http
         .put("quiz", { userId: userId, wordId: wordId, correct: true })
@@ -129,6 +169,8 @@ export default function QuizContent({
           alert(err);
         });
     }
+    setAnswer([]);
+    letterRef.current=[]
   };
   return (
     <ComponentContainer>
@@ -154,17 +196,22 @@ export default function QuizContent({
         </div>
       </div>
       <ContentContainer>{content}</ContentContainer>
-      <ProgressBar>
+      {/* <ProgressBar>
         <div></div>
-      </ProgressBar>
-      {/* <Test></Test> */}
+      </ProgressBar> */}
+      <ProgressTimeBar mark={mark} time={time}></ProgressTimeBar>
       <AnswerContainer>
-        {correctAnswer.map((v, i) => (
+        {answer.map((v, i) => (
+          (v===" " ? <div ref={(el) =>{letterRef.current.push(el);}} style={{width:'35px'}}></div> :
           <Letter
             key={i}
             onChange={(e) => onChange(e, i)}
-            ref={(el) => `letterRef.current[${i}] = el`}
+            ref={(el) =>{letterRef.current[i] = (el);}}
+            value={v!==-1 ? v : null}
+            disabled={isSymbol(v)}
+            onKeyDown={(e) => onKeyDown(e, i)}
           ></Letter>
+          )
         ))}
       </AnswerContainer>
       <SubmitButton onClick={mark}>제출하기</SubmitButton>
@@ -256,7 +303,7 @@ const ContentContainer = styled.div`
   border-radius: 16px;
 `;
 const SubmitButton = styled.button`
-  margin-top: 56px;
+  margin-top: 16px;
   color: ${color.white};
   border: none;
   background-color: #8071fc;
