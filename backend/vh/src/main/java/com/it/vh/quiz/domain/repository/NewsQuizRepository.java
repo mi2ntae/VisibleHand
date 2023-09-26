@@ -6,5 +6,5 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import java.util.Optional;
 
 public interface NewsQuizRepository extends JpaRepository<NewsQuiz, Long> {
-    NewsQuiz findByArticle_ArticleId(Long articleId);
+    Optional<NewsQuiz> findByArticle_ArticleId(Long articleId);
 }
