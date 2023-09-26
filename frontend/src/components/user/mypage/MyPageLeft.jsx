@@ -17,7 +17,7 @@ export default function MyPageLeft({userId}) {
     }, [])
     
     const tabs = [
-        {no: 0, tabName: "내 피드", check: true, content: <MyPageFeed/>, },
+        {no: 0, tabName: "피드", check: true, content: <MyPageFeed/>, },
         {no: 1, tabName: "스크랩", check: false, content: <MyPageScrap/>}, 
         {no: 2, tabName: "틀린 문제", check: false, content: <MyPageReview/>}];
     
