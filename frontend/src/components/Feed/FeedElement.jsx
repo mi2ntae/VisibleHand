@@ -30,7 +30,17 @@ export default function FeedElement({ data }) {
     return data.content;
   }, [moreBtn]);
 
-  useEffect(() => console.log(data));
+  const types = [
+    { kor: "금융", eng: "FINANCE" },
+    { kor: "증권", eng: "STOCK" },
+    { kor: "산업/재계", eng: "INDUSTRY" },
+    { kor: "중기/벤처", eng: "VENTURE" },
+    { kor: "부동산", eng: "REAL_ESTATE" },
+    { kor: "글로벌 경제", eng: "GLOBAL" },
+    { kor: "생활경제", eng: "LIVING" },
+    { kor: "경제 일반", eng: "GENERAL" },
+  ];
+  const kindKor = types.find((type) => type.eng === data.kind)?.kor || "기타";
 
   return (
     <Feed>
@@ -68,7 +78,7 @@ export default function FeedElement({ data }) {
         style={{ width: "100%", height: "1px", backgroundColor: lightest_grey }}
       />
       <Article to={`/news/${data.articleId}`}>
-        <Label>{data.category}</Label>
+        <Label>{kindKor}</Label>
         {data.title}
       </Article>
     </Feed>
@@ -112,4 +122,5 @@ const Label = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
+  text-decoration: none;
 `;
