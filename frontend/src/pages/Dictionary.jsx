@@ -124,16 +124,16 @@ export default function Dictionary() {
         <div>
           <WordCat
             style={{
-              width: "89px",
-              height: "38px",
-              fontSize: "26px",
+              width: "64px",
+              height: "28px",
+              fontSize: "20px",
             }}
           >
             {currentWord.type}
           </WordCat>
           <div
             className="word"
-            style={currentWord.word.length > 30 ? { fontSize: "36px" } : {}}
+            style={currentWord.word.length > 30 ? { fontSize: "24px" } : {}}
           >
             {currentWord.word}
           </div>
@@ -147,7 +147,7 @@ export default function Dictionary() {
 const MainContainer = styled.div`
   height: 100%;
   display: flex;
-  padding: 0px 100px;
+  padding: 0px 70px;
   align-items: center;
   border-radius: 16px;
 `;
@@ -158,20 +158,20 @@ const ListContainer = styled.div`
   flex-direction: column;
   align-items: center;
   background-color: ${color.white};
-  width: 696px;
-  height: 848px;
+  width: 507px;
+  height: 618px;
   border-radius: 16px;
   border: 1px solid ${color.lightest_grey};
   margin-right: 36px;
   .wordlist {
-    height: 630px;
-    margin-bottom: 24px;
+    margin-bottom: 12px;
+    height: 457px;
   }
 `;
 
 const CatContainer = styled.div`
-  margin: 24px 0 12px;
-  width: 640px;
+  margin: 16px 0 12px;
+  width: 466px;
   display: flex;
   flex-wrap: nowrap;
   align-items: center;
@@ -179,13 +179,13 @@ const CatContainer = styled.div`
 `;
 
 const CatItem = styled.button`
-  width: 73px;
-  height: 36px;
+  width: 53px;
+  height: 26px;
   border: 1px solid ${color.primary};
   background-color: ${color.teritary};
   border-radius: 16px;
   color: ${color.primary};
-  font-size: 16px;
+  font-size: 12px;
   &:focus {
     background-color: ${color.primary};
     color: ${color.white};
@@ -194,13 +194,13 @@ const CatItem = styled.button`
 
 const DetailContainer = styled.div`
   box-sizing: border-box;
-  padding: 64px 96px 0;
+  padding: 54px 70px 0;
   display: flex;
   flex-direction: column;
   align-items: center;
   background-color: ${color.white};
-  width: 696px;
-  height: 848px;
+  width: 507px;
+  height: 618px;
   border-radius: 16px;
   border: 1px solid ${color.lightest_grey};
   & > div:first-child {
@@ -210,13 +210,13 @@ const DetailContainer = styled.div`
     margin-bottom: 44px;
   }
   .word {
-    font-size: 48px;
+    font-size: 32px;
     color: ${color.black_grey};
     font-weight: 600;
     margin-left: 24px;
   }
   .meaning {
-    font-size: 20px;
+    font-size: 14px;
     color: ${color.darkest_grey};
     overflow-y: auto;
     text-align: justify;
@@ -225,12 +225,12 @@ const DetailContainer = styled.div`
 
 const SearchContainer = styled.div`
   box-sizing: border-box;
-  padding: 0 24px;
-  margin-bottom: 28px;
+  padding: 0 12px;
+  margin-bottom: 20px;
   display: flex;
   align-items: center;
-  width: 640px;
-  height: 52px;
+  width: 466px;
+  height: 36px;
   border: 1px solid ${color.primary};
   border-radius: 16px;
   button {
@@ -244,7 +244,7 @@ const SearchBox = styled.input`
   height: 90%;
   border: none;
   outline: none;
-  font-size: 16px;
+  font-size: 12px;
 `;
 
 const WordContainer = styled.button`
@@ -253,17 +253,17 @@ const WordContainer = styled.button`
   border: none;
   box-sizing: border-box;
   padding: 0 24px;
-  margin-bottom: 16px;
+  margin-bottom: 12px;
   align-items: center;
-  width: 640px;
-  height: 76px;
-  max-height: 76px;
+  width: 466px;
+  height: 55px;
+  max-height: 55px;
   border-radius: 16px;
   background-color: ${color.background};
-  box-shadow: 2px 2px 10px ${color.light_grey};
+  box-shadow: 2px 2px 8px ${color.light_grey};
   & > div:last-child {
     color: ${color.black_grey};
-    font-size: 20px;
+    font-size: 14px;
     font-weight: 600;
   }
   &:focus {
@@ -276,9 +276,9 @@ const WordCat = styled.button`
   margin-right: 16px;
   border: none;
   color: ${color.black_grey};
-  font-size: 16px;
-  width: 66px;
-  min-width: 66px;
+  font-size: 12px;
+  width: 64px;
+  min-width: 64px;
   height: 28px;
   border-radius: 12px;
   background-color: ${color.teritary};
