@@ -7,9 +7,10 @@ import UserRecommend from "components/Feed/Banner/UserRecommend";
 import http from "api/commonHttp";
 import UserElement from "components/Feed/UserElement";
 import { background } from "lib/style/colorPalette";
+import { useSelector } from "react-redux";
 
 export default function Feed() {
-  const [userId, setUserId] = useState(1);
+  const userId = useSelector((state) => state.user.userId);
   const [feeds, setFeeds] = useState([]);
   const [users, setUsers] = useState([]);
   const [searchType, setSearchType] = useState(true);
@@ -19,6 +20,7 @@ export default function Feed() {
   const target = useRef(null);
   const [btnClick, setBtnClick] = useState(false);
   const [showObserver, setShowObserver] = useState(true);
+  const [recommendUsers, setRecommendUsers] = useState([]);
   useEffect(() => {
     console.log("Keyword changed:", keyword);
   }, [keyword]);
@@ -29,25 +31,19 @@ export default function Feed() {
       if (loading) return;
       console.log(keyword);
       setLoading(true);
-      console.log(
-        "ffkeyword : " +
-          keyword +
-          ", searchType : " +
-          (searchType ? "true" : "false") +
-          ", page : " +
-          page.current
-      );
       http
         .get(
           `feed/list/${userId}?searchType=${
             searchType ? 0 : 1
           }&keyword=${keyword}&page=${page.current}`
         )
-        .then((data) =>
+        .then((data) => {
+          console.log(data);
           searchType
             ? setFeeds((prevFeeds) => [...prevFeeds, ...data.data])
-            : setUsers((prevUsers) => [...prevUsers, ...data.data])
-        )
+            : setUsers((prevUsers) => [...prevUsers, ...data.data]);
+          console.log(data.data);
+        })
         .catch((err) => {
           alert(err);
         });
@@ -58,22 +54,17 @@ export default function Feed() {
   });
 
   useEffect(() => {
-    // 리덕스에서 userId 가져오는 코드
     observer.observe(target.current);
+    http
+      .get(`user/recommend/${userId}`)
+      .then((data) => setRecommendUsers(data.data))
+      .catch((err) => console.log(err));
   }, []);
 
   useEffect(() => {
     setLoading(true);
     setShowObserver(true);
     page.current = 0;
-    console.log(
-      "keyword : " +
-        keyword +
-        ", searchType : " +
-        (searchType ? "true" : "false") +
-        ", page : " +
-        page.current
-    );
     http
       .get(
         `feed/list/${userId}?searchType=${
@@ -129,7 +120,7 @@ export default function Feed() {
       </div>
       <BannerContainer>
         <ArticleRank />
-        <UserRecommend users={users} />
+        <UserRecommend users={recommendUsers} />
       </BannerContainer>
     </div>
   );

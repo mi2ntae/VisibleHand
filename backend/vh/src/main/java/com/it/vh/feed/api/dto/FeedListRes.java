@@ -16,7 +16,7 @@ public class FeedListRes {
     private long feedId;
     private String content;
     private int heart;
-    private boolean isHeart;
+    private int isHeart;
     private long articleId;
     private String title;
     private LocalDateTime createAt;

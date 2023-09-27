@@ -8,10 +8,15 @@ export default function User({ user }) {
     e.preventDefault();
   };
   return (
-    <BannerElement to={`/${user.nickname}`}>
-      <ProfileImg src={user.profileImg} alt={user.nickname} />
+    <BannerElement to={`/${user.nickname ? user.nickname : user.userName}`}>
+      <ProfileImg
+        src={user.profileImg ? user.profileImg : user.imageUrl}
+        alt={user.nickname ? user.nickname : user.userName}
+      />
       <div style={{ flex: 1 }}>
-        <div style={{ fontWeight: 500 }}>{user.nickname}</div>
+        <div style={{ fontWeight: 500 }}>
+          {user.nickname ? user.nickname : user.userName}
+        </div>
         <div style={{ fontSize: "0.875rem", color: grey }}>
           {user.statusMsg}
         </div>

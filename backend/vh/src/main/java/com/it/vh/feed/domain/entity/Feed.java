@@ -49,7 +49,7 @@ import java.time.LocalDateTime;
                 query = "SELECT u.user_id AS userId, u.nickname, u.profile_img AS profileImg, " +
                         "f.feed_id AS feedId, f.content, f.create_at AS createAt, " +
                         "IFNULL((SELECT COUNT(*) FROM Heart AS h WHERE h.feed_id = f.feed_id), 0) AS heart, " +
-                        "IF((SELECT COUNT(*) FROM Heart AS h WHERE h.user_id = :userId AND h.feed_id = f.feed_id) > 0, true, false) AS isHeart, " +
+                        "IF((SELECT COUNT(*) FROM Heart AS h WHERE h.user_id = :userId AND h.feed_id = f.feed_id) > 0, 1, 0) AS isHeart, " +
                         "a.article_id AS articleId, a.title, a.kind " +
                         "FROM Feed AS f " +
                         "JOIN Article AS a ON f.article_id = a.article_id " +
@@ -77,7 +77,7 @@ import java.time.LocalDateTime;
                 query = "SELECT u.user_id AS userId, u.nickname, u.profile_img AS profileImg, " +
                         "f.feed_id AS feedId, f.content, f.create_at AS createAt, " +
                         "IFNULL((SELECT COUNT(*) FROM Heart AS h WHERE h.feed_id = f.feed_id), 0) AS heart, " +
-                        "IF((SELECT COUNT(*) FROM Heart AS h WHERE h.user_id = :userId AND h.feed_id = f.feed_id) > 0, true, false) AS isHeart, " +
+                        "IF((SELECT COUNT(*) FROM Heart AS h WHERE h.user_id = :userId AND h.feed_id = f.feed_id) > 0, 1, 0) AS isHeart, " +
                         "a.article_id AS articleId, a.title, a.kind " +
                         "FROM Feed AS f " +
                         "JOIN Article AS a ON f.article_id = a.article_id " +
@@ -142,7 +142,7 @@ import java.time.LocalDateTime;
                         @ColumnResult(name = "feedId", type = Long.class),
                         @ColumnResult(name = "content", type = String.class),
                         @ColumnResult(name = "heart", type = Integer.class),
-                        @ColumnResult(name = "isHeart", type = Boolean.class),
+                        @ColumnResult(name = "isHeart", type = Integer.class),
                         @ColumnResult(name = "articleId", type = Long.class),
                         @ColumnResult(name = "title", type = String.class),
                         @ColumnResult(name = "createAt", type = LocalDateTime.class),
