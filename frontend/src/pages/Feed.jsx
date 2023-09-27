@@ -138,4 +138,7 @@ const BannerContainer = styled.div`
   flex-direction: column;
   gap: 24px;
   overflow-y: auto;
+  position: sticky;
+  align-self: flex-start;
+  top: 40px;
 `;

@@ -29,7 +29,7 @@ import java.time.LocalDate;
                         "WHERE to_id NOT IN (SELECT to_id FROM Follow WHERE from_id = :userId) " +
                         "AND from_id IN (SELECT to_id FROM Follow WHERE from_id = :userId) " +
                         "GROUP BY to_id ORDER BY COUNT(*)" +
-                        ") OR user_id IN (SELECT to_id FROM Follow GROUP BY to_id ORDER BY count(*) DESC) LIMIT 5",
+                        ") OR user_id IN (SELECT to_id FROM Follow GROUP BY to_id ORDER BY count(*) DESC) LIMIT 3",
                 resultSetMapping = "userFollowListDto"
         ),
         @NamedNativeQuery(
