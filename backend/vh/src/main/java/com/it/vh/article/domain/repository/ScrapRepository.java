@@ -15,5 +15,5 @@ public interface ScrapRepository extends JpaRepository<Scrap, Long> {
 
     Optional<Scrap> findByArticle_ArticleIdAndUser_UserId(Long articleId, Long userId);
 
-    boolean deleteByUser_UserIdAndArticle_ArticleId(long userId, long articleId);
+    int deleteByUser_UserIdAndArticle_ArticleId(long userId, long articleId);
 }

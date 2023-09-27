@@ -2,17 +2,17 @@ import http from "api/commonHttp";
 import FeedBannerElement from "components/Feed/Banner/FeedBannerElement";
 import FeedInput from "components/news/Banner/FeedInput";
 import NewsContent from "components/news/NewsContent";
-import { lightest_grey } from "lib/style/colorPalette";
 import React, { useEffect, useRef, useState } from "react";
 import { useParams } from "react-router-dom";
 import { Background } from "styled";
 import styled from "styled-components";
-import color from "lib/style/colorPalette";
+import { useSelector } from "react-redux";
+import { white } from "lib/style/colorPalette";
 
 export default function NewsDetail() {
   const { articleId } = useParams();
   const [feeds, setFeeds] = useState([]);
-  const [userId, setUserId] = useState(1);
+  const userId = useSelector((state) => state.user.userId);
   const page = useRef(0);
 
   const target = useRef(null);
@@ -39,7 +39,7 @@ export default function NewsDetail() {
     entries.forEach((entry) => {
       if (!entry.isIntersecting) return;
       if (loading) return;
-
+      console.log("보인당");
       getFeeds();
       page.current += 1;
     });
@@ -62,26 +62,29 @@ export default function NewsDetail() {
             "해당 기사가 언급된 피드가 없습니다.새로운 피드를 등록해보세요!"
           </Background>
         ) : (
-          <FeedListContainer>
-            {feeds.map((data, index) => {
-              return (
-                <React.Fragment key={data.feedId}>
-                  <FeedBannerElement
-                    data={data}
-                    isLast={index + 1 === feeds.length}
-                  />
-                </React.Fragment>
-              );
-            })}
-            <div
-              style={{ height: "20px", backgroundColor: "red" }}
-              ref={target}
-            />
-          </FeedListContainer>
+          <>
+            <FeedListContainer>
+              {feeds.map((data, index) => {
+                return (
+                  <React.Fragment key={data.feedId}>
+                    <FeedBannerElement
+                      data={data}
+                      isLast={index + 1 === feeds.length}
+                    />
+                  </React.Fragment>
+                );
+              })}
+              <div
+                style={{ minHeight: "1px", backgroundColor: white }}
+                ref={target}
+              />
+            </FeedListContainer>
+          </>
         )}
 
         <FeedInput articleId={articleId} userId={userId} setFeeds={setFeeds} />
       </BannerContainer>
+      <div></div>
     </div>
   );
 }
@@ -92,12 +95,11 @@ const BannerContainer = styled.div`
   gap: 1rem;
   position: sticky;
   align-self: flex-start;
+  top: 40px;
 `;
 
 const FeedListContainer = styled(Background)`
   height: 420px;
-  display: flex;
-  flex-direction: column;
   overflow-y: scroll;
   &::-webkit-scrollbar {
     display: none;

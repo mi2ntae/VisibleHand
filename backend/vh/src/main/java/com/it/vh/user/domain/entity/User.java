@@ -22,7 +22,7 @@ import java.time.LocalDate;
         ),
         @NamedNativeQuery(
                 name = "findRecommendUserByUserId",
-                query = "SELECT user_id AS userId, nickname AS userName, status_msg AS statusMsg, IFNULL(profile_img, '기본 이미지 링크') AS imageUrl " +
+                query = "SELECT user_id AS userId, nickname AS userName, status_msg AS statusMsg, IFNULL(profile_img, 'https://visiblehand-bucket.s3.ap-northeast-2.amazonaws.com/user_default.png') AS imageUrl " +
                         "FROM User " +
                         "WHERE user_id IN (" +
                         "SELECT to_id FROM Follow " +
@@ -34,7 +34,7 @@ import java.time.LocalDate;
         ),
         @NamedNativeQuery(
                 name = "findUsersByNickname",
-                query = "SELECT user_id AS userId, nickname AS userName, status_msg AS statusMsg, IFNULL(profile_img, '기본 이미지 링크') AS imageUrl " +
+                query = "SELECT user_id AS userId, nickname AS userName, status_msg AS statusMsg, IFNULL(profile_img, 'https://visiblehand-bucket.s3.ap-northeast-2.amazonaws.com/user_default.png') AS imageUrl " +
                         "FROM User " +
                         "WHERE nickname LIKE :keyword",
                 resultSetMapping = "userFollowListDto"
