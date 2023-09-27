@@ -10,7 +10,7 @@ export default function ReviewNoteComponent({question, answer}) {
             <div class="flip-card">
                 <div class="flip-card-inner">
                     <div class="flip-card-front">
-                        <Image src='/images/reviewnote/q&a.png' alt="asdasdadss"></Image>
+                        {/* <Image src='/images/reviewnote/q&a.png' alt="asdasdadss"></Image> */}
                         <Text>{question}</Text>
                     </div>
                     <div class="flip-card-back">
