@@ -5,7 +5,7 @@ import {
   primary,
   white,
 } from "lib/style/colorPalette";
-import React, { useEffect, useMemo, useRef, useState } from "react";
+import React, { useMemo, useRef, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { ProfileImg } from "styled";
 import styled from "styled-components";
@@ -46,7 +46,9 @@ export default function FeedElement({ data }) {
     <Feed>
       <div style={{ display: "flex", padding: "32px 32px", gap: "12px" }}>
         <ProfileImg
-          src={data.profileImg}
+          src={
+            data.profileImg ? data.profileImg : "/images/user/user_default.png"
+          }
           alt={data.nickname}
           onClick={moveToProfile}
           style={{ cursor: "pointer" }}

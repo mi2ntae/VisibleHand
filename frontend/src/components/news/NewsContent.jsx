@@ -10,31 +10,33 @@ import {
 } from "lib/style/colorPalette";
 import http from "api/commonHttp";
 import styled from "styled-components";
-import { useSelector } from "react-redux";
-import Swal from "sweetalert2";
 
 export default function NewsContent({ articleId }) {
   const [article, setArticle] = useState([]);
   const [scraped, setScraped] = useState(true);
-  const [quiz, setQuiz] = useState({});
-  const [text, setText] = useState("");
-  const userId = useSelector((state) => state.user.userId);
+  const [category, setCategory] = useState("");
+  const userId = 1;
   useEffect(() => {
     http
       .get(`/article/${articleId}/${userId}`)
       .then((data) => {
+        const types = [
+          { kor: "금융", eng: "FINANCE" },
+          { kor: "증권", eng: "STOCK" },
+          { kor: "산업/재계", eng: "INDUSTRY" },
+          { kor: "중기/벤처", eng: "VENTURE" },
+          { kor: "부동산", eng: "REAL_ESTATE" },
+          { kor: "글로벌 경제", eng: "GLOBAL" },
+          { kor: "생활경제", eng: "LIVING" },
+          { kor: "경제 일반", eng: "GENERAL" },
+        ];
+        setCategory(
+          types.find((type) => type.eng === data.kind)?.kor || "기타"
+        );
         setArticle(data.data.article);
         setScraped(data.data.scraped);
       })
       .catch((error) => alert(error));
-
-    http
-      .get(`quiz/article/${articleId}`)
-      .then((res) => {
-        if (res.data.newsQuizId === -1) return;
-        setQuiz(res.data);
-      })
-      .catch((err) => alert(err));
   }, []);
 
   // 글자크기 모달
@@ -46,15 +48,9 @@ export default function NewsContent({ articleId }) {
 
   // 북마크 로직
   const handleBookmark = () => {
-    if (scraped) {
-      http
-        .delete(`article/scrap/${articleId}/${userId}`)
-        .then(() => setScraped(false));
-    } else {
-      http.post(`article/scrap/${articleId}/${userId}`).then(() => {
-        setScraped(true);
-      });
-    }
+    http.post(`article/scrap/${articleId}/${userId}`).then(() => {
+      setScraped(!scraped);
+    });
   };
 
   const transformLazyLoad = (content) => {
@@ -102,53 +98,6 @@ export default function NewsContent({ articleId }) {
     );
   };
 
-  //퀴즈 채점
-  const mark = () => {
-    if (text === quiz.answer) {
-      //정답
-      http
-        .put("quiz", {
-          userId: userId,
-          newsquizId: quiz.newsQuizId,
-          correct: true,
-        })
-        .then(() => {
-          Swal.fire({
-            title: "정답입니다!",
-            imageUrl: "/icons/quiz/ic_right.svg",
-            width: 600,
-            showConfirmButton: false,
-            showDenyButton: false,
-            timer: 1000,
-          }).then(() => {});
-        })
-        .catch((err) => {
-          alert(err);
-        });
-    } else {
-      //오답
-      http
-        .put("quiz", {
-          userId: userId,
-          newsquizId: quiz.newsQuizId,
-          correct: false,
-        })
-        .then(() => {
-          Swal.fire({
-            title: "오답입니다!",
-            text: `(정답: ${text})`,
-            width: 600,
-            imageUrl: "/icons/quiz/ic_wrong.svg",
-            showConfirmButton: false,
-            showDenyButton: false,
-            timer: 1000,
-          }).then(() => {});
-        })
-        .catch((err) => {
-          alert(err);
-        });
-    }
-  };
   return (
     <NewsContainer>
       <div>
@@ -161,8 +110,8 @@ export default function NewsContent({ articleId }) {
           }}
         >
           <div style={{ fontSize: "0.75rem", color: grey }}>
-            <span style={{ color: primary }}>{article.kind}</span>
-            <span>{article.company} </span>
+            <span style={{ color: primary }}>{category} </span>
+            <span>| {article.company} | </span>
             <span>{article.issueDate}</span>
           </div>
           <div
@@ -223,15 +172,6 @@ export default function NewsContent({ articleId }) {
           margin: "1.5rem 0",
         }}
       />
-      {Object.keys(quiz).length === 0 ? (
-        <></>
-      ) : (
-        <QuizContainer>
-          <div>{quiz.question}</div>
-          <input type="text" onChange={(e) => setText(e.target.value)} />
-          <button onClick={mark}>제출하기</button>
-        </QuizContainer>
-      )}
     </NewsContainer>
   );
 }
@@ -250,11 +190,4 @@ const Icon = styled.button`
   outline: 0;
   cursor: pointer;
   height: 100%;
-`;
-
-const QuizContainer = styled.div`
-  border-radius: 16px;
-  border: 1px solid ${lightest_grey};
-  width: 996px;
-  font-size: 16px;
 `;
