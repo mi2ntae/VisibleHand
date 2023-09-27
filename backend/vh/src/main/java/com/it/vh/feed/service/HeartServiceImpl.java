@@ -33,9 +33,16 @@ public class HeartServiceImpl implements HeartService {
 
     @Override
     @Transactional
-    public void deleteHeartByFeedId(HeartReq heartReq) {
-        Optional<Feed> optionalFeed = feedRepository.findById(heartReq.getFeedId());
+    public void deleteHeartByFeedId(long feedId) {
+        Optional<Feed> optionalFeed = feedRepository.findById(feedId);
         if(!optionalFeed.isPresent()) throw new NonExistFeedIdException();
-        heartRepository.deleteByFeed_FeedIdAndUser_UserId(heartReq.getFeedId(), authenticationHandler.getLoginUserId());
+        heartRepository.deleteByFeed_FeedIdAndUser_UserId(feedId, authenticationHandler.getLoginUserId());
     }
+
+    @Override
+    public int getHeartByFeedId(long feedId){
+        return heartRepository.getHeartByFeedId(feedId);
+    }
+
+
 }
