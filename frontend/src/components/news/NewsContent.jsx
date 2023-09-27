@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import SizeBubble from "components/news/SizeBubble";
 import SummaryBubble from "components/news/SummaryBubble";
 import {
+  black_grey,
   grey,
   lightest_grey,
   primary,
@@ -10,12 +11,17 @@ import {
 } from "lib/style/colorPalette";
 import http from "api/commonHttp";
 import styled from "styled-components";
+import { useSelector } from "react-redux";
 
 export default function NewsContent({ articleId }) {
   const [article, setArticle] = useState([]);
   const [scraped, setScraped] = useState(true);
   const [category, setCategory] = useState("");
-  const userId = 1;
+  const userId = useSelector((state) => state.user.userId);
+  const [quiz, setQuiz] = useState({});
+  const [text, setText] = useState("");
+  const [hint, setHint] = useState("");
+  const userId = useSelector((state) => state.user.userId);
   useEffect(() => {
     http
       .get(`/article/${articleId}/${userId}`)
@@ -37,7 +43,51 @@ export default function NewsContent({ articleId }) {
         setScraped(data.data.scraped);
       })
       .catch((error) => alert(error));
+
+    http
+      .get(`quiz/article/${articleId}`)
+      .then((res) => {
+        if (res.data.newsQuizId === -1) return;
+        setQuiz(res.data);
+        makeHint(res.data.answer);
+      })
+      .catch((err) => alert(err));
   }, []);
+
+  const makeHint = (str) => {
+    const cho = [
+      "ㄱ",
+      "ㄲ",
+      "ㄴ",
+      "ㄷ",
+      "ㄸ",
+      "ㄹ",
+      "ㅁ",
+      "ㅂ",
+      "ㅃ",
+      "ㅅ",
+      "ㅆ",
+      "ㅇ",
+      "ㅈ",
+      "ㅉ",
+      "ㅊ",
+      "ㅋ",
+      "ㅌ",
+      "ㅍ",
+      "ㅎ",
+    ];
+    let result = "";
+    for (let i = 0; i < str.length; i++) {
+      let code = str.charCodeAt(i) - 44032;
+      if (str.charCodeAt(i) >= 65 && str.charCodeAt(i) <= 122) {
+        result += "?";
+        continue;
+      }
+      if (code > -1 && code < 11172) result += cho[Math.floor(code / 588)];
+      else result += str.charAt(i);
+    }
+    setHint(result);
+  };
 
   // 글자크기 모달
   const [fSize, setFSize] = useState("1rem");
@@ -98,6 +148,55 @@ export default function NewsContent({ articleId }) {
     );
   };
 
+  //퀴즈 채점
+  const mark = () => {
+    if (text === quiz.answer) {
+      //정답
+      http
+        .put("quiz", {
+          userId: userId,
+          newsquizId: quiz.newsQuizId,
+          correct: true,
+        })
+        .then(() => {
+          Swal.fire({
+            title: "정답입니다!",
+            imageUrl: "/icons/quiz/ic_right.svg",
+            width: 600,
+            showConfirmButton: false,
+            showDenyButton: false,
+            timer: 1000,
+          }).then(() => {
+            setText("");
+          });
+        })
+        .catch((err) => {
+          alert(err);
+        });
+    } else {
+      //오답
+      http
+        .put("quiz", {
+          userId: userId,
+          newsquizId: quiz.newsQuizId,
+          correct: false,
+        })
+        .then(() => {
+          Swal.fire({
+            title: "오답입니다!",
+            text: `(힌트: ${hint})`,
+            width: 600,
+            imageUrl: "/icons/quiz/ic_wrong.svg",
+            showConfirmButton: false,
+            showDenyButton: false,
+            timer: 1000,
+          }).then(() => {});
+        })
+        .catch((err) => {
+          alert(err);
+        });
+    }
+  };
   return (
     <NewsContainer>
       <div>
@@ -172,6 +271,26 @@ export default function NewsContent({ articleId }) {
           margin: "1.5rem 0",
         }}
       />
+      {Object.keys(quiz).length === 0 ? (
+        <></>
+      ) : (
+        <QuizContainer>
+          <div>
+            <img src={"/icons/news/ic_quiz.svg"} alt="퀴즈 이미지" />
+            QUIZ
+          </div>
+          <div>{quiz.question}</div>
+          <div className="blank">
+            <input
+              placeholder="정답을 입력해주세요!"
+              type="text"
+              value={text}
+              onChange={(e) => setText(e.target.value)}
+            />
+            <button onClick={mark}>제출하기</button>
+          </div>
+        </QuizContainer>
+      )}
     </NewsContainer>
   );
 }
@@ -190,4 +309,53 @@ const Icon = styled.button`
   outline: 0;
   cursor: pointer;
   height: 100%;
+`;
+
+const QuizContainer = styled.div`
+  border-radius: 8px;
+  border: 1px solid ${lightest_grey};
+  width: 996px;
+  font-size: 16px;
+  padding-top: 28px;
+  & > div:nth-child(1) {
+    img {
+      margin-right: 8px;
+    }
+    display: flex;
+    align-items: center;
+    padding: 0px 28px 16px;
+    color: ${black_grey};
+  }
+  & > div:nth-child(2) {
+    padding: 0px 28px 28px;
+  }
+  .blank {
+    display: flex;
+    border-radius: 0 0 8px 8px;
+    border-top: 1px solid ${lightest_grey};
+    input {
+      flex: 1 0 auto;
+      padding: 16px 28px;
+      border: none;
+      outline: none;
+      color: ${black_grey};
+      font-size: 16px;
+      height: inherit;
+      border-radius: 0 0 0 8px;
+    }
+    input:focus {
+      outline: none;
+    }
+    button {
+      padding: 16px 28px;
+      font-size: 16px;
+      background-color: ${primary};
+      color: ${white};
+      font-weight: 600;
+      height: inherit;
+      outline: none;
+      border: none;
+      border-radius: 0 0px 8px 0;
+    }
+  }
 `;

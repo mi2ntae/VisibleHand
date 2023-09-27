@@ -20,21 +20,21 @@ export default function QuizContent({
   const [time, setTime] = useState(false);
   useEffect(() => {
     letterRef.current = [];
-    let t = []; 
+    let t = [];
     for (let i = 0; i < correctAnswer.length; i++) {
-      if(isSymbol(correctAnswer[i])) t.push(correctAnswer[i]);
+      if (isSymbol(correctAnswer[i])) t.push(correctAnswer[i]);
       else t.push(-1);
     }
     setAnswer(t);
-    setTime(true)
+    setTime(true);
     makeHint();
   }, [text]);
   useEffect(() => {
     letterRef.current[0]?.focus();
-     // Focus on the first element if it exists
-  }, [letterRef.current.length]); 
-  console.log(answer)
-  console.log(text)
+    // Focus on the first element if it exists
+  }, [letterRef.current.length]);
+  console.log(answer);
+  console.log(text);
   const makeHint = () => {
     const cho = [
       "ㄱ",
@@ -75,48 +75,46 @@ export default function QuizContent({
 
   const isSymbol = (ch) => {
     const symbols = "-&.()%+,:/ ";
-    if(symbols.includes(ch)) return true;
+    if (symbols.includes(ch)) return true;
     else return false;
-  }
+  };
 
   const onKeyDown = (e, i) => {
-    console.log(e.key)
-    if(letterRef.current.length === 0 ) return;
-    if(e.key==="ArrowRight") {
-      for(let j=i+1; j<=letterRef.current.length-1; j++) {
-        if(!isSymbol(correctAnswer[j])) { 
-          letterRef.current[j].focus()
+    console.log(e.key);
+    if (letterRef.current.length === 0) return;
+    if (e.key === "ArrowRight") {
+      for (let j = i + 1; j <= letterRef.current.length - 1; j++) {
+        if (!isSymbol(correctAnswer[j])) {
+          letterRef.current[j].focus();
           break;
         }
       }
-    }
-    else if(e.key==="ArrowLeft") {
-      for(let j=i-1; j>=0; j--) {
-        if(!isSymbol(correctAnswer[j])) {
-          letterRef.current[j].focus()
+    } else if (e.key === "ArrowLeft") {
+      for (let j = i - 1; j >= 0; j--) {
+        if (!isSymbol(correctAnswer[j])) {
+          letterRef.current[j].focus();
           break;
         }
       }
+    } else if (e.key === "Enter") {
+      mark();
     }
-    else if(e.key==="Enter") {
-      mark()
-    }
-  }
+  };
 
   const onChange = (e, idx) => {
     letterRef.current = [];
     if (e.target.value.length >= 1) {
-      e.target.value = e.target.value.substring(e.target.value.length-1)
+      e.target.value = e.target.value.substring(e.target.value.length - 1);
       let temp = [];
       for (let index = 0; index < answer.length; index++) {
-        if(idx === index) temp.push(e.target.value)
-        else temp.push(answer[index])
+        if (idx === index) temp.push(e.target.value);
+        else temp.push(answer[index]);
       }
       setAnswer(temp);
     }
   };
   const mark = () => {
-    setTime(false)
+    setTime(false);
     if (text === answer.join("")) {
       //정답
       http
@@ -170,7 +168,7 @@ export default function QuizContent({
         });
     }
     setAnswer([]);
-    letterRef.current=[]
+    letterRef.current = [];
   };
   return (
     <ComponentContainer>
@@ -179,7 +177,7 @@ export default function QuizContent({
           display: "flex",
           alignItems: "center",
           justifyContent: "space-between",
-          width: "870px",
+          width: "634px",
           marginBottom: "32px",
         }}
       >
@@ -201,36 +199,45 @@ export default function QuizContent({
       </ProgressBar> */}
       <ProgressTimeBar mark={mark} time={time}></ProgressTimeBar>
       <AnswerContainer>
-        {answer.map((v, i) => (
-          (v===" " ? <div ref={(el) =>{letterRef.current.push(el);}} style={{width:'35px'}}></div> :
-          <Letter
-            key={i}
-            onChange={(e) => onChange(e, i)}
-            ref={(el) =>{letterRef.current[i] = (el);}}
-            value={v!==-1 ? v : null}
-            disabled={isSymbol(v)}
-            onKeyDown={(e) => onKeyDown(e, i)}
-          ></Letter>
+        {answer.map((v, i) =>
+          v === " " ? (
+            <div
+              ref={(el) => {
+                letterRef.current.push(el);
+              }}
+              style={{ width: "35px" }}
+            ></div>
+          ) : (
+            <Letter
+              key={i}
+              onChange={(e) => onChange(e, i)}
+              ref={(el) => {
+                letterRef.current[i] = el;
+              }}
+              value={v !== -1 ? v : null}
+              disabled={isSymbol(v)}
+              onKeyDown={(e) => onKeyDown(e, i)}
+            ></Letter>
           )
-        ))}
+        )}
       </AnswerContainer>
       <SubmitButton onClick={mark}>제출하기</SubmitButton>
     </ComponentContainer>
   );
 }
 const ComponentContainer = styled.div`
-  margin: 0px 100px;
+  margin: 0px 70px;
   display: flex;
   flex-direction: column;
   align-items: center;
-  width: 870px;
+  width: 634px;
 `;
 const Question = styled.div`
   display: flex;
   height: max-content;
   align-items: center;
   font-weight: 600;
-  font-size: 36px;
+  font-size: 24px;
   color: ${color.black_grey};
 `;
 const HintButton = styled.div`
@@ -244,20 +251,20 @@ const HintButton = styled.div`
     border: none;
     background-color: transparent;
     color: ${color.primary};
-    font-size: 20px;
+    font-size: 16px;
     font-weight: 500;
   }
   .hint {
     visibility: hidden;
     transition: opacity 1s ease-in-out;
     position: absolute;
-    top: 16px;
-    left: 20px;
+    top: 12px;
+    left: 16px;
     & > div:first-child {
       width: 0;
       height: 0;
       position: relative;
-      left: 20px;
+      left: 16px;
       background-color: transparent;
       border-left: 12px solid transparent;
       border-top: 12px solid transparent;
@@ -270,7 +277,7 @@ const HintButton = styled.div`
       height: max-content;
       color: ${color.white};
       font-weight: 600;
-      font-size: 20px;
+      font-size: 16px;
       border-radius: 8px;
       padding: 12px;
       box-shadow: 4px 4px 4px ${color.light_grey};
@@ -293,13 +300,14 @@ const HintButton = styled.div`
   }
 `;
 const ContentContainer = styled.div`
-  padding: 40px;
+  padding: 30px;
   background-color: ${color.white};
-  width: 790px;
-  height: 507px;
+  width: 634px;
+  min-height: 370px;
+  height: fit-content;
   color: ${color.black_grey};
   border: 1px solid ${color.lightest_grey};
-  font-size: 1.2rem;
+  font-size: 18px;
   border-radius: 16px;
 `;
 const SubmitButton = styled.button`
@@ -307,9 +315,9 @@ const SubmitButton = styled.button`
   color: ${color.white};
   border: none;
   background-color: #8071fc;
-  width: 208px;
-  height: 60px;
-  font-size: 24px;
+  width: 151px;
+  height: 43px;
+  font-size: 18px;
   border-radius: 16px;
   font-weight: 600;
   &:focus {
@@ -342,16 +350,16 @@ const AnswerContainer = styled.div`
 `;
 const Letter = styled.input`
   border: none;
-  width: 92px;
-  height: 92px;
+  width: 66px;
+  height: 66px;
   background-color: ${color.white};
   border-radius: 12px;
   font-size: 36px;
   text-align: center;
   &:focus {
     outline: none;
-    width: 88px;
-    height: 88px;
+    width: 62px;
+    height: 62px;
     background-color: ${color.white};
     border: 2px solid ${color.teritary};
   }
