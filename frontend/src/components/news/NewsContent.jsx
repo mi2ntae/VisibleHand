@@ -12,6 +12,7 @@ import {
 import http from "api/commonHttp";
 import styled from "styled-components";
 import { useSelector } from "react-redux";
+import Swal from "sweetalert2";
 
 export default function NewsContent({ articleId }) {
   const [article, setArticle] = useState([]);
@@ -21,7 +22,6 @@ export default function NewsContent({ articleId }) {
   const [quiz, setQuiz] = useState({});
   const [text, setText] = useState("");
   const [hint, setHint] = useState("");
-  const userId = useSelector((state) => state.user.userId);
   useEffect(() => {
     http
       .get(`/article/${articleId}/${userId}`)
