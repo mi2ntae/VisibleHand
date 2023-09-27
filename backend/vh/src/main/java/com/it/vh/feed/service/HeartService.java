@@ -5,5 +5,7 @@ import com.it.vh.feed.api.dto.HeartReq;
 public interface HeartService {
     void createHeartByFeedId(HeartReq heartReq);
 
-    void deleteHeartByFeedId(HeartReq heartReq);
+    void deleteHeartByFeedId(long feedId);
+
+    int getHeartByFeedId(long feedId);
 }
