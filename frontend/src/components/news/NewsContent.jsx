@@ -21,7 +21,6 @@ export default function NewsContent({ articleId }) {
   const [quiz, setQuiz] = useState({});
   const [text, setText] = useState("");
   const [hint, setHint] = useState("");
-  const userId = useSelector((state) => state.user.userId);
   useEffect(() => {
     http
       .get(`/article/${articleId}/${userId}`)
