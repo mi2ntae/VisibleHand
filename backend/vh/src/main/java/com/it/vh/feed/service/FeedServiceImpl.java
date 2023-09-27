@@ -34,13 +34,13 @@ public class FeedServiceImpl implements FeedService {
     private final int FEED_PAGE_NUM = 6;
 
     @Override
-    public List<FeedRes> getFeedsByUserId(long userId, int searchType, String keyword, int page) {
+    public List<FeedListRes> getFeedsByUserId(long userId, int searchType, String keyword, int page) {
         Optional<User> optionalUser = userRespository.findUserByUserId(userId);
         if(!optionalUser.isPresent()) throw new NonExistUserIdException();
 
         long myId = authenticationHandler.getLoginUserId();
 
-        List<FeedRes> feedResDtoList = null;
+        List<FeedListRes> feedResDtoList = null;
         boolean isMe = userId == myId ? true : false;
         if(keyword == null) return feedRepository.findFeedsAndHeartAndIsHeartByUserIdWhereTitleIsKeyword(userId, myId, "%%", !isMe, PageRequest.of(page, FEED_PAGE_NUM));
         switch(searchType) {
