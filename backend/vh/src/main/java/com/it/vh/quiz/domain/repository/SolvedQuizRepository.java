@@ -4,6 +4,7 @@ import com.it.vh.dict.domain.entity.Dictionary;
 import com.it.vh.quiz.api.dto.responseDto.QuizRankResDto;
 import com.it.vh.quiz.domain.dto.ArticleQuizCountDto;
 import com.it.vh.quiz.domain.dto.WordQuizCountDto;
+import com.it.vh.quiz.domain.entity.NewsQuiz;
 import com.it.vh.quiz.domain.entity.SolvedQuiz;
 import com.it.vh.user.api.dto.StreakResDto;
 import org.springframework.data.domain.Page;
@@ -44,4 +45,6 @@ public interface SolvedQuizRepository extends JpaRepository<SolvedQuiz, Long> {
     Page<QuizRankResDto> getQuizRank(LocalDateTime start, LocalDateTime end, Pageable page);
 
     Optional<SolvedQuiz> findSolvedQuizByWord(Dictionary word);
+
+    Optional<SolvedQuiz> findSolvedQuizByNewsquiz(NewsQuiz nq);
 }
