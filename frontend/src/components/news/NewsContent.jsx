@@ -12,20 +12,33 @@ import {
 import http from "api/commonHttp";
 import styled from "styled-components";
 import { useSelector } from "react-redux";
-import Swal from "sweetalert2";
 
 export default function NewsContent({ articleId }) {
   const [article, setArticle] = useState([]);
   const [scraped, setScraped] = useState(true);
+  const [category, setCategory] = useState("");
+  const userId = useSelector((state) => state.user.userId);
   const [quiz, setQuiz] = useState({});
   const [text, setText] = useState("");
   const [hint, setHint] = useState("");
-
   const userId = useSelector((state) => state.user.userId);
   useEffect(() => {
     http
       .get(`/article/${articleId}/${userId}`)
       .then((data) => {
+        const types = [
+          { kor: "금융", eng: "FINANCE" },
+          { kor: "증권", eng: "STOCK" },
+          { kor: "산업/재계", eng: "INDUSTRY" },
+          { kor: "중기/벤처", eng: "VENTURE" },
+          { kor: "부동산", eng: "REAL_ESTATE" },
+          { kor: "글로벌 경제", eng: "GLOBAL" },
+          { kor: "생활경제", eng: "LIVING" },
+          { kor: "경제 일반", eng: "GENERAL" },
+        ];
+        setCategory(
+          types.find((type) => type.eng === data.kind)?.kor || "기타"
+        );
         setArticle(data.data.article);
         setScraped(data.data.scraped);
       })
@@ -85,15 +98,9 @@ export default function NewsContent({ articleId }) {
 
   // 북마크 로직
   const handleBookmark = () => {
-    if (scraped) {
-      http
-        .delete(`article/scrap/${articleId}/${userId}`)
-        .then(() => setScraped(false));
-    } else {
-      http.post(`article/scrap/${articleId}/${userId}`).then(() => {
-        setScraped(true);
-      });
-    }
+    http.post(`article/scrap/${articleId}/${userId}`).then(() => {
+      setScraped(!scraped);
+    });
   };
 
   const transformLazyLoad = (content) => {
@@ -202,8 +209,8 @@ export default function NewsContent({ articleId }) {
           }}
         >
           <div style={{ fontSize: "0.75rem", color: grey }}>
-            <span style={{ color: primary }}>{article.kind}</span>
-            <span>{article.company} </span>
+            <span style={{ color: primary }}>{category} </span>
+            <span>| {article.company} | </span>
             <span>{article.issueDate}</span>
           </div>
           <div

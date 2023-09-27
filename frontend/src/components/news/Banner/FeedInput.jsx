@@ -16,6 +16,7 @@ export default function FeedInput({ articleId, userId, setFeeds }) {
   const [content, setContent] = useState("");
   const [isShared, setIsShared] = useState(true);
   const [feedId, setFeedId] = useState(0);
+  const [profileImage, setProfileImage] = useState("");
 
   function getFeeds() {
     http
@@ -31,6 +32,10 @@ export default function FeedInput({ articleId, userId, setFeeds }) {
         setContent(data.data.content);
       }
     });
+
+    http
+      .get(`/user/profile/${userId}`)
+      .then((data) => setProfileImage(data.data.profileImg));
   }, []);
 
   const handleSubmit = (e) => {
@@ -70,7 +75,9 @@ export default function FeedInput({ articleId, userId, setFeeds }) {
           gap: "1rem",
         }}
       >
-        <ProfileImg src="?" />
+        <ProfileImg
+          src={profileImage ? profileImage : "/images/user/user_default.png"}
+        />
         <div style={{ flex: 1 }}>
           <Switch>
             <SwitchInput

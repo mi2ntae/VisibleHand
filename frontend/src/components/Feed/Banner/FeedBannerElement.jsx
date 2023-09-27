@@ -4,11 +4,15 @@ import { ProfileImg } from "styled";
 import Heart from "../Heart";
 import styled from "styled-components";
 
-export default function FeedBannerElement({ data, isLast, target }) {
+export default function FeedBannerElement({ data, isLast }) {
   return (
     <div style={{ width: "100%" }}>
       <ProfileContainer>
-        <ProfileImg src={data.profileImg} />
+        <ProfileImg
+          src={
+            data.profileImg ? data.profileImg : "/images/user/user_default.png"
+          }
+        />
         <div
           style={{
             flex: 1,
