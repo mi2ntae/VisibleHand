@@ -6,6 +6,6 @@ spring:
   redis:
     host: j9a504.p.ssafy.io
     port: 6379
-    password:
+    password: ${REDIS_PASSWORD}
     ttl:
       refresh_token: 1209600000
