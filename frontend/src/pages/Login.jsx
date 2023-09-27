@@ -20,6 +20,8 @@ export default function Login() {
         window.location.href = kakaoLink;
     };  
 
+    //로그인 풀리면 refreshToken확인해서 재발급하는 거 추가
+
     return (
         <ContentWrap>
             <Container>

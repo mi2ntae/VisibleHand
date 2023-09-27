@@ -11,7 +11,7 @@ export default function ProfileUpdate() {
     const navigate = useNavigate();
     const dispatch = useDispatch();
 
-    // 닉네임, 상태메시지 유효성
+    //닉네임, 상태메시지 유효성
     const [nickname, setNickname] = useState("");
     const [statusMsg, setStatusMsg] = useState("");
 
@@ -105,6 +105,7 @@ export default function ProfileUpdate() {
     const [img, setImg] = useState(imgUrl);
 
     //프로필 가져오기
+    //이미지 있으면 이미지 띄우고 없으면 기본 이미지로
     const getProfile = () => {
         http.get('/user/profile/'+user.userId,
         )
@@ -132,7 +133,7 @@ export default function ProfileUpdate() {
         });   
     }
 
-    //프로필 수정 변경하기!!!
+    //프로필 수정
     const updateProfile = (event) => {
         event.preventDefault();
 
@@ -190,6 +191,21 @@ export default function ProfileUpdate() {
         });   
     }
 
+    //탈퇴
+    //카카오에서도 연결 끊기
+    const deleteUser = () => {
+        //모달 띄워서 진짜 탈퇴할 거냐고 묻기
+
+        http
+        .delete('/user/'+user.userId)
+        .then(response => {
+            console.log(response);
+        })
+        .catch(error => {
+            console.log(error);
+        });  
+    }
+
     return (
         <div>
             <div>
@@ -209,7 +225,7 @@ export default function ProfileUpdate() {
             >
             </Profile>
             <div>
-                 <button>탈퇴하기</button>
+                 <button onClick={deleteUser}>탈퇴하기</button>
             </div>
            
         </div>
