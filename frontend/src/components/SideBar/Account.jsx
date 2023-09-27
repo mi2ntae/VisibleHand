@@ -5,13 +5,14 @@ import styled from "styled-components";
 
 export default function Account() {
   const loginId = useSelector((state) => state.user.userId);
+  const nickname = useSelector((state) => state.user.nickname);
 
   return (
     <div style={{ gap: "240px" }}>
       <hr style={{ border: "0.5px solid #EDEDED", margin: "24px 0px" }} />
       <StyledLink to={`/mypage/${loginId}`}>
         <img src="/icons/header/ic_dictionary.svg" alt="dictionary" />
-        nickname
+        {nickname}
       </StyledLink>
     </div>
   );
