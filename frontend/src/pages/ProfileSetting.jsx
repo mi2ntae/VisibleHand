@@ -4,6 +4,7 @@ import { setUser } from "reducer/userReducer";
 import http from "api/commonHttp";
 import { useNavigate } from 'react-router-dom';
 import Profile from 'components/user/login/Profile';
+import Swal from "sweetalert2";
 
 export default function ProfileSetting() {
   const user = useSelector((state) => state.user);
@@ -11,7 +12,7 @@ export default function ProfileSetting() {
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
-  // 닉네임, 상태메시지 유효성
+  //닉네임, 상태메시지 유효성
   const [nickname, setNickname] = useState("");
   const [statusMsg, setStatusMsg] = useState("");
 
@@ -77,7 +78,7 @@ export default function ProfileSetting() {
 
   const isDuplicatedNick = (nickname) => {
     if(nickname==null || nickname==="") {
-      alert("닉네임을 입력해주세요.");
+      Swal.fire({icon: 'warning', title: "닉네임을 입력해주세요."});
       return;
     }
 
@@ -85,15 +86,11 @@ export default function ProfileSetting() {
     .then(({ data }) => {
       if(data.isDuplicated===0) {
         setDupCheck(true);
-        alert("사용가능한 닉네임입니다.");
+        Swal.fire({icon: 'success', title: "사용가능한 닉네임입니다."});
         setNickname(nickname);
 
       } else if(data.isDuplicated===1) {
-        if(user.nickname===nickname) {
-          alert("현재 아이디와 동일한 닉네임입니다.")
-        } else {
-          alert("사용할 수 없는 닉네임입니다. 다른 닉네임을 입력해주세요.")
-        }
+        Swal.fire({icon: 'error', title: "사용할 수 없는 닉네임입니다. 다른 닉네임을 입력해주세요."})
       }
     })
     .catch(error => {
@@ -106,7 +103,7 @@ export default function ProfileSetting() {
     event.preventDefault();
 
     if(!dupCheck) {
-      alert("닉네임 중복 확인을 완료해주세요.");
+      Swal.fire({icon: 'warning', title: "닉네임 중복 확인을 완료해주세요."});
       return;
     }
 
