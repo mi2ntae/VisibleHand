@@ -12,6 +12,7 @@ import {
 import http from "api/commonHttp";
 import styled from "styled-components";
 import { useSelector } from "react-redux";
+import Swal from "sweetalert2";
 
 export default function NewsContent({ articleId }) {
   const [article, setArticle] = useState([]);
