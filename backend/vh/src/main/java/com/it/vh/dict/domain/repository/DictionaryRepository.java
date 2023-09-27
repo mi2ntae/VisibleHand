@@ -32,4 +32,5 @@ public interface DictionaryRepository extends JpaRepository<Dictionary, Long>, J
             "limit 1;",nativeQuery = true)
     Optional<List<Dictionary>> findRandomRetryWordQuiz(@Param("userId") Long userId);
 
+    Optional<Dictionary> findByWordId(Long wordId);
 }
