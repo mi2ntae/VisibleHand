@@ -49,10 +49,17 @@ public class FeedController {
     }
 
     @ApiOperation(value = "피드 좋아요 취소", notes = "로그인한 유저로 피드 좋아요 취소")
-    @DeleteMapping("/heart")
-    public ResponseEntity<Void> deleteHeartByFeedId(@RequestBody HeartReq heartReq) throws NonExistFeedIdException {
-        heartService.deleteHeartByFeedId(heartReq);
+    @DeleteMapping("/heart/{feedId}")
+    public ResponseEntity<Void> deleteHeartByFeedId(@PathVariable long feedId) throws NonExistFeedIdException {
+        heartService.deleteHeartByFeedId(feedId);
         return ResponseEntity.ok().build();
+    }
+
+    @ApiOperation(value = "좋아요 개수 갱신", notes = "좋아요 개수 조회")
+    @GetMapping("/heart/{feedId}")
+    public ResponseEntity<Integer> getHeartByFeedId(@PathVariable long feedId) {
+
+        return ResponseEntity.ok().body(heartService.getHeartByFeedId(feedId));
     }
 
     @ApiOperation(value = "뉴스별 피드 목록", notes = "해당 뉴스에 대한 피드 목록 조회")

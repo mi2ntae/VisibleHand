@@ -5,7 +5,7 @@ import { Doughnut } from 'react-chartjs-2';
 
 ChartJS.register(ArcElement, Tooltip);
 
-export default function MyPageWordQuizChart({data}) {
+export default function MyPageArticleQuizChart({data}) {
     const options = {
         legend: {
             display: true,
@@ -19,7 +19,7 @@ export default function MyPageWordQuizChart({data}) {
     };
 
     const doughnutData = {
-    labels: ["경제", "사회", "과학", "경영", "공공", "금융", "기타"],
+    labels: ["금융", "증권", "산업/재계", "중기/벤처", "부동산", "글로벌경제", "생활경제", "일반경제"],
     datasets: [
         {
         label: 'solved ',
@@ -32,6 +32,7 @@ export default function MyPageWordQuizChart({data}) {
             'rgba(153, 102, 255, 0.2)',
             'rgba(255, 159, 64, 0.2)',
             'rgba(204, 255, 255, 0.9)',
+            'rgba(198, 219, 218, 0.9)',
         ],
         borderColor: [
             'rgba(255, 99, 132, 1)',
@@ -41,6 +42,7 @@ export default function MyPageWordQuizChart({data}) {
             'rgba(153, 102, 255, 1)',
             'rgba(255, 159, 64, 1)',
             'rgba(204, 255, 255, 1)',
+            'rgba(198, 219, 218, 1)',
           ],
           borderWidth: 0,
         }

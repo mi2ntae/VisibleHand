@@ -1,18 +1,42 @@
 import { Button } from "@mui/material";
 import { grey, primary, white } from "lib/style/colorPalette";
 import React from "react";
+import { useEffect } from "react";
 import { BannerElement, ProfileImg } from "styled";
 
 export default function User({ user }) {
   const handleFollow = (e) => {
     e.preventDefault();
   };
+
+  useEffect(() => console.log(user), []);
   return (
-    <BannerElement to={`/${user.nickname}`}>
-      <ProfileImg src={user.profileImg} alt={user.nickname} />
+    <BannerElement to={`/${user.nickname ? user.nickname : user.userName}`}>
+      <ProfileImg
+        src={
+          user.profileImg || user.imageUrl
+            ? user.profileImg
+              ? user.profileImg
+              : user.imageUrl
+            : "/images/user/user_default.png"
+        }
+        alt={user.nickname ? user.nickname : user.userName}
+      />
       <div style={{ flex: 1 }}>
-        <div style={{ fontWeight: 500 }}>{user.nickname}</div>
-        <div style={{ fontSize: "0.875rem", color: grey }}>
+        <div style={{ fontWeight: 500 }}>
+          {user.nickname ? user.nickname : user.userName}
+        </div>
+        <div
+          style={{
+            fontSize: "0.875rem",
+            color: grey,
+            marginTop: "4px",
+            whiteSpace: "nowrap",
+            overflow: "hidden",
+            textOverflow: "ellipsis",
+            maxWidth: "235px",
+          }}
+        >
           {user.statusMsg}
         </div>
       </div>

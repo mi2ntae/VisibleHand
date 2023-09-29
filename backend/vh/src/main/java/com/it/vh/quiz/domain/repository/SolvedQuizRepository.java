@@ -1,8 +1,10 @@
 package com.it.vh.quiz.domain.repository;
 
+import com.it.vh.dict.domain.entity.Dictionary;
 import com.it.vh.quiz.api.dto.responseDto.QuizRankResDto;
 import com.it.vh.quiz.domain.dto.ArticleQuizCountDto;
 import com.it.vh.quiz.domain.dto.WordQuizCountDto;
+import com.it.vh.quiz.domain.entity.NewsQuiz;
 import com.it.vh.quiz.domain.entity.SolvedQuiz;
 import com.it.vh.user.api.dto.StreakResDto;
 import org.springframework.data.domain.Page;
@@ -13,6 +15,7 @@ import org.springframework.data.jpa.repository.Query;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Optional;
 
 public interface SolvedQuizRepository extends JpaRepository<SolvedQuiz, Long> {
 
@@ -40,4 +43,8 @@ public interface SolvedQuizRepository extends JpaRepository<SolvedQuiz, Long> {
             "GROUP BY u.userId " +
             "ORDER BY count(s.solvedId) DESC")
     Page<QuizRankResDto> getQuizRank(LocalDateTime start, LocalDateTime end, Pageable page);
+
+    Optional<SolvedQuiz> findSolvedQuizByWord(Dictionary word);
+
+    Optional<SolvedQuiz> findSolvedQuizByNewsquiz(NewsQuiz nq);
 }

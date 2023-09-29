@@ -8,11 +8,11 @@ import java.util.List;
 @Getter
 @Builder
 public class UserArticleQuizResDto {
-    private long[] cnt;
+    private long[] cnts;
 
     public static UserArticleQuizResDto from(List<ArticleQuizCountDto> articleQuizCountDtoList) {
         long[] cnts = new long[8];
         for(ArticleQuizCountDto articleQuizCountDto: articleQuizCountDtoList) cnts[articleQuizCountDto.getType().ordinal()] = articleQuizCountDto.getCnt();
-        return UserArticleQuizResDto.builder().cnt(cnts).build();
+        return UserArticleQuizResDto.builder().cnts(cnts).build();
     }
 }

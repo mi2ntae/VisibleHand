@@ -95,7 +95,7 @@ export default function Articles() {
               company={article.company}
             />))
         }
-        {articles.length === 0 ? "No Content" : <div ref={target} style={{ opacity:'1', height: '30px', width: '100%' }}></div>}
+        {articles.length === 0 ? "No Content" : <div ref={target} style={{ opacity:'0', height: '30px', width: '100%', backgroundColor:'red'}}></div>}
       </Row>
     </Container>
   );

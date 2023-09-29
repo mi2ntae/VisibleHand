@@ -6,24 +6,31 @@ import styled from "styled-components";
 export default function Heart({ clicked, cnt, feedId }) {
   const [isHeart, setIsHeart] = useState(clicked);
   const [heart, setHeart] = useState(cnt);
+  const temp = parseInt(feedId);
 
   const handleLike = () => {
     if (isHeart) {
       http
-        .delete("/feed/heart", feedId)
+        .delete(`/feed/heart/${feedId}`)
         .then(() => {
-          setHeart(heart - 1);
           setIsHeart(false);
+          http
+            .get(`/feed/heart/${feedId}`)
+            .then((data) => setHeart(data.data))
+            .catch((err) => alert(err));
         })
         .catch((err) => {
           alert(err);
         });
     } else {
       http
-        .post("feed/heart", feedId)
+        .post(`feed/heart/`, { feedId: feedId })
         .then(() => {
-          setHeart(heart + 1);
           setIsHeart(true);
+          http
+            .get(`/feed/heart/${feedId}`)
+            .then((data) => setHeart(data.data))
+            .catch((err) => alert(err));
         })
         .catch((err) => {
           alert(err);
@@ -48,4 +55,5 @@ const HeartContainer = styled.div`
   gap: 6px;
   color: ${dark_grey};
   font-weight: 500;
+  cursor: pointer;
 `;

@@ -37,7 +37,7 @@ export default function MyPageStreak({userId}) {
         return k;
     }
     return (
-        <Background style={{gap: "1rem"}}>
+        <Background style={{padding: "1.5em", gap: "0.5rem"}}>
             <TitleContainer>
                 <BannerTitle style={{fontWeight: 500}}>활동기록</BannerTitle>
                 <Button>월간</Button>

@@ -18,7 +18,7 @@ export default function Mypage() {
     }, [])
 
     return (
-        <div style={{ display: "flex", padding: "40px 100px", gap: "88px" }}>
+        <div style={{ display: "flex", padding: "40px 80px", gap: "88px" }}>
             {/* <MyPageTop userId={params.userId}>
             </MyPageTop>
             <MyPageDown userId={params.userId}>
