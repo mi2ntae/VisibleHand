@@ -117,7 +117,7 @@ export default function ProfileUpdate() {
                 dispatch(setUser({
                 token: {
                     accessToken: user.accessToken,
-                    refreshToken: user.accessToken,
+                    refreshToken: user.refreshToken,
                 },
                 user: {
                     userId: user.userId,
