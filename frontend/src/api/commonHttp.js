@@ -3,6 +3,8 @@ import { useEffect } from "react";
 import store from "../store.js";
 import { useDispatch } from 'react-redux';
 import { setUser } from "reducer/userReducer";
+import Swal from "sweetalert2";
+
 const http = axios.create({
   baseURL: process.env.REACT_APP_HTTP_URL + "/api/",
 });
@@ -22,6 +24,7 @@ const Interceptor = ({ children }) => {
         }
       },
       function (error) {
+        Swal.fire({icon: 'error', title: "시스템 에러가 발생하였습니다. 관리자에게 문의하세요."})
         return Promise.reject(error);
       }
     );
@@ -33,7 +36,6 @@ const Interceptor = ({ children }) => {
         if (error.response.data.message === "만료된 토큰") {
 
         const user = store.getState().user;
-        const refreshToken = user.refreshToken;
         const userId = user.userId;
 
         await http
@@ -63,10 +65,13 @@ const Interceptor = ({ children }) => {
               return error.config;
           }
         })
-        } else {
-          alert(error);
-        return Promise.reject(error);
-        }
+        } else if(error.response.status===500){
+          Swal.fire({icon: 'error', title: "시스템 에러가 발생하였습니다. 관리자에게 문의하세요."})
+          return Promise.reject(error);
+        } else if(error.response.status===401){
+          Swal.fire({icon: 'error', title: "로그인 후 다시 접속해주세요."})
+          return Promise.reject(error);
+        } 
       }
     );
   }, []);
