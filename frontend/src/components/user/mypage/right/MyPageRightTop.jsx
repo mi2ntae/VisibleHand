@@ -20,7 +20,9 @@ export default function MyPageRightTop({userId}) {
     const navigate = useNavigate();
     const moveUpdate = () => {
         navigate('/update');
-      }
+    }
+    const imgUrl = "https://visiblehand-bucket.s3.ap-northeast-2.amazonaws.com/user_default.png";
+
     useEffect(() => {
         http.get(`user/profile/${userId}`)
         .then(({data}) => {
@@ -43,7 +45,7 @@ export default function MyPageRightTop({userId}) {
     return (
         <Background style={{ padding: "1.5rem", gap: "1.25rem" }}>
             <Div>
-                <Image src={profile.profileImg}></Image>
+                <Image src={profile.profileImg!="" && profile.profileImg!=null ? profile.profileImg : imgUrl}></Image>
                 <div style={{display: "flex", flexDirection: "column", justifyContent: "flex-start", flex: 1}}>
                     <div style={{display: "flex", justifyContent: "flex-end"}}>
                         {userId == loginId
