@@ -4,6 +4,7 @@ import http from "api/commonHttp";
 import { Background } from 'styled';
 import { black_grey, dark_grey, darkest_grey, white } from 'lib/style/colorPalette';
 import { useSelector } from 'react-redux';
+import { useNavigate } from 'react-router-dom';
 
 export default function MyPageRightTop({userId}) {
     const loginId = useSelector((state) => state.user.userId);
@@ -16,6 +17,10 @@ export default function MyPageRightTop({userId}) {
         followingCnt: 0,
         followerCnt: 0
     });
+    const navigate = useNavigate();
+    const moveUpdate = () => {
+        navigate('/update');
+      }
     useEffect(() => {
         http.get(`user/profile/${userId}`)
         .then(({data}) => {
@@ -43,7 +48,8 @@ export default function MyPageRightTop({userId}) {
                     <div style={{display: "flex", justifyContent: "flex-end"}}>
                         {userId == loginId
                         ?
-                        <Button onClick={() => alert("이동!")}><img src='/icons/mypage/ic_settings.svg' alt='회원정보 수정'/></Button>
+                        // <Button onClick={() => alert("이동!")}><img src='/icons/mypage/ic_settings.svg' alt='회원정보 수정'/></Button>
+                        <Button onClick={moveUpdate}><img src='/icons/mypage/ic_settings.svg' alt='회원정보 수정'/></Button>
                         :
                         <span></span>
                         }
