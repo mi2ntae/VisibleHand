@@ -2,15 +2,16 @@ import React,  {useRef, useEffect, useState} from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { setUser } from "reducer/userReducer";
 import http from "api/commonHttp";
-import { useNavigate } from 'react-router-dom';
 import Profile from 'components/user/login/Profile';
 import Swal from "sweetalert2";
+import { useNavigate } from 'react-router-dom';
+import styled from 'styled-components';
 
 export default function ProfileUpdate() {
     const user = useSelector((state) => state.user);
 
-    const navigate = useNavigate();
     const dispatch = useDispatch();
+    const navigate = useNavigate();
 
     //프로필 가져오기
     const [nickname, setNickname] = useState('');
@@ -47,7 +48,6 @@ export default function ProfileUpdate() {
 
     //프로필 사진
     const imgUrl = "https://visiblehand-bucket.s3.ap-northeast-2.amazonaws.com/user_default.png";
-    // const [image, setImage] = useState(imgUrl); // 프로필 이미지 초기값 설정
     const [file, setFile] = useState("");
     const inputFile = useRef();
 
@@ -55,9 +55,6 @@ export default function ProfileUpdate() {
       if (event.target.files[0]) {
         setFile(event.target.files[0]);
         setProfileImg((event.target.files[0]));
-      } else {
-        setProfileImg(imgUrl);
-        return;
       }
 
       const reader = new FileReader();
@@ -160,9 +157,9 @@ export default function ProfileUpdate() {
     console.log(error);
     });  
     }
+
+    //이미지 크기 제한...
     //프로필 수정
-    //이미지 삭제랑
-    //이미지 변경하지 않는 거랑 구분되도록
     const updateProfile = (event) => {
         event.preventDefault();
         
@@ -177,14 +174,27 @@ export default function ProfileUpdate() {
         const fileInput = event.target.querySelector('input[type="file"]');
         const formData = new FormData();
 
-        const req = {
-            profile: {
-                nickname: event.target.nickname.value,
-                statusMsg: event.target.statusMsg.value,
-            },
-            snsEmail: user.snsEmail,
-            provider: user.provider
-        };
+        let req = null;
+        if(profileImg===imgUrl) {
+            req = {
+                profile: {
+                    nickname: event.target.nickname.value,
+                    statusMsg: event.target.statusMsg.value,
+                },
+                profileImg: "default",
+                snsEmail: user.snsEmail,
+                provider: user.provider
+            }
+        } else {
+            req = {
+                profile: {
+                    nickname: event.target.nickname.value,
+                    statusMsg: event.target.statusMsg.value,
+                },
+                snsEmail: user.snsEmail,
+                provider: user.provider
+            };
+        }
 
         formData.append(
             'userProfileReqDto',
@@ -227,16 +237,32 @@ export default function ProfileUpdate() {
     //탈퇴
     //카카오에서도 연결 끊기
     const deleteUser = () => {
-        //모달 띄워서 진짜 탈퇴할 거냐고 묻기
+        Swal.fire({
+            title: '정말로 탈퇴하실 건가요?',
+            text: "다시 되돌릴 수 없습니다. 신중하세요.",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: '예',
+            cancelButtonText: '아니오',
+        }).then((result) => {
+            if (result.isConfirmed) {
+            Swal.fire({icon: 'success', title: "탈퇴가 완료되었습니다."})
 
-        http
-        .delete('/user/'+user.userId)
-        .then(response => {
-            console.log(response);
+            http
+                .delete('/user/'+user.userId)
+                .then(response => {
+                    console.log(response);
+                })
+                .catch(error => {
+                    console.log(error);
+                });  
+
+                //온보딩 페이지로 변경
+                navigate('/login');
+            }
         })
-        .catch(error => {
-            console.log(error);
-        });  
     }
 
     return (
@@ -259,13 +285,31 @@ export default function ProfileUpdate() {
             msgValue={statusMsg}
             >
             </Profile>
-            <div>
-                 <button onClick={deleteUser}>탈퇴하기</button>
-            </div>
-            <div>
-                 <button onClick={() => navigate('/')}>메인으로 이동</button>
-            </div>
+            <ContentWrap>
+                 <Button onClick={deleteUser}>탈퇴하기</Button>
+            </ContentWrap>
            
         </div>
     );
 }
+
+const ContentWrap = styled.div`
+    position: relative;
+    height: 5vh;
+`;
+
+const Button = styled.button`
+    position: absolute;
+    top: 0;
+    right: 0;
+    transform: translate(-50%, -50%);
+    cursor: pointer;
+    font-size: 15px;
+    letter-spacing: 2px;
+    font-weight: bold;
+    padding: 0.7em 2em;
+    border: 2px solid #FF0072;
+    border-radius: 5px;
+    background: white;
+    color: #FF0072;
+`
