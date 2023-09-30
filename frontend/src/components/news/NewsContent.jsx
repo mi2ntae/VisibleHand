@@ -271,7 +271,9 @@ export default function NewsContent({ articleId }) {
           margin: "1.5rem 0",
         }}
       />
-      {Object.keys(quiz).length === 0 ? (
+      {Object.keys(quiz).length === 0 ||
+      quiz.question === null ||
+      quiz.question.length === 0 ? (
         <></>
       ) : (
         <QuizContainer>
