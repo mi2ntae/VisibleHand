@@ -197,14 +197,8 @@ public class UserServiceImpl implements UserService{
 
         if(s3ImgUrl!=null) {
             user.setProfileImg(userProfileReqDto.getProfileImg());
-        }
-
-        //프로필 사진 삭제되었으면
-        if(userProfileReqDto.getProfileImg()==null) {
-            //원래 프로필 S3에서 삭제하기
-            String originS3ImgUrl = user.getProfileImg();
-            uploader.deleteFileFromS3Bucket(originS3ImgUrl);
-            user.setProfileImg(null);
+        } else {
+            user.setProfileImg(user.getProfileImg());
         }
 
         user.setNickname(userProfileReqDto.getProfile().getNickname());
