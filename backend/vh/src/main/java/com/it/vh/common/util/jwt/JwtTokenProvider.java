@@ -65,7 +65,7 @@ public class JwtTokenProvider {
             .compact();
 
         String refreshToken = Jwts.builder()
-            .setSubject(String.valueOf(authentication.getName()) + "_refresh")
+            .setSubject(String.valueOf(authentication.getName()))
             .claim("userId", authentication.getName())
             .claim("authority", authorities)
             .setIssuedAt(new Date(System.currentTimeMillis()))

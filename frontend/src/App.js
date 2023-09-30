@@ -3,13 +3,27 @@ import SideBar from "./components/SideBar/SideBar";
 import styled, { createGlobalStyle } from "styled-components";
 
 function App() {
+  // const path = window.location.pathname;
+
+  // const notSidebar = path === '/login' || path === '/auth/kakao' || path === '/auth/google' || path === '/profile';
+  
   return (
     <Root>
       <GlobalStyle />
-      <SideBar />
-      <Content>
-        <Outlet />
-      </Content>
+      {/* {notSidebar ? (
+        <>
+          <Content>
+            <Outlet />
+          </Content>
+        </>
+      ) : (
+        <> */}
+          <SideBar />
+          <Content>
+            <Outlet />
+          </Content>
+        {/* </> */}
+      {/* )} */}
     </Root>
   );
 }

@@ -4,6 +4,7 @@ import http from "api/commonHttp";
 import { Background } from 'styled';
 import { black_grey, dark_grey, darkest_grey, white } from 'lib/style/colorPalette';
 import { useSelector } from 'react-redux';
+import { useNavigate } from 'react-router-dom';
 
 export default function MyPageRightTop({userId}) {
     const loginId = useSelector((state) => state.user.userId);
@@ -16,6 +17,12 @@ export default function MyPageRightTop({userId}) {
         followingCnt: 0,
         followerCnt: 0
     });
+    const navigate = useNavigate();
+    const moveUpdate = () => {
+        navigate('/update');
+    }
+    const imgUrl = "https://visiblehand-bucket.s3.ap-northeast-2.amazonaws.com/user_default.png";
+
     useEffect(() => {
         http.get(`user/profile/${userId}`)
         .then(({data}) => {
@@ -38,12 +45,13 @@ export default function MyPageRightTop({userId}) {
     return (
         <Background style={{ padding: "1.5rem", gap: "1.25rem" }}>
             <Div>
-                <Image src={profile.profileImg}></Image>
+                <Image src={profile.profileImg!="" && profile.profileImg!=null ? profile.profileImg : imgUrl}></Image>
                 <div style={{display: "flex", flexDirection: "column", justifyContent: "flex-start", flex: 1}}>
                     <div style={{display: "flex", justifyContent: "flex-end"}}>
                         {userId == loginId
                         ?
-                        <Button onClick={() => alert("이동!")}><img src='/icons/mypage/ic_settings.svg' alt='회원정보 수정'/></Button>
+                        // <Button onClick={() => alert("이동!")}><img src='/icons/mypage/ic_settings.svg' alt='회원정보 수정'/></Button>
+                        <Button onClick={moveUpdate}><img src='/icons/mypage/ic_settings.svg' alt='회원정보 수정'/></Button>
                         :
                         <span></span>
                         }
