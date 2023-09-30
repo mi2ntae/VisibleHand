@@ -1,4 +1,4 @@
-import React,  {useState} from 'react';
+import React,  {useRef, useState} from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { setUser } from "reducer/userReducer";
 import http from "api/commonHttp";
@@ -11,6 +11,30 @@ export default function ProfileSetting() {
 
   const navigate = useNavigate();
   const dispatch = useDispatch();
+  
+  //프로필 사진
+  const imgUrl = "https://visiblehand-bucket.s3.ap-northeast-2.amazonaws.com/user_default.png";
+  const [image, setImage] = useState(imgUrl);
+  const [file, setFile] = useState("");
+  const inputFile = useRef();
+
+  const onFile = (event) => {
+    if(event.target.files[0]) {
+      setFile(event.target.files[0]);
+      setImage((event.target.files[0]));
+    } else {
+      setImage(imgUrl);
+      return;
+    }
+
+    const reader = new FileReader();
+    reader.onload = () => {
+      if(reader.readyState===2) {
+        setImage(reader.result);
+      }
+    }
+      reader.readAsDataURL(event.target.files[0]);
+  }
 
   //닉네임, 상태메시지 유효성
   const [nickname, setNickname] = useState("");
@@ -90,7 +114,9 @@ export default function ProfileSetting() {
         setNickname(nickname);
 
       } else if(data.isDuplicated===1) {
+        setDupCheck(false);
         Swal.fire({icon: 'error', title: "사용할 수 없는 닉네임입니다. 다른 닉네임을 입력해주세요."})
+        setNickname(nickname);
       }
     })
     .catch(error => {
@@ -160,11 +186,16 @@ export default function ProfileSetting() {
     <Profile
       title={"프로필 설정"}
       onSubmit={setProfile}
+      inputImg={() =>  inputFile.current.click()}
+      deleteImg={() => setImage(imgUrl)}
+      imgRef={inputFile}
+      imgChange={onFile}
       nickChange={onChangeNick}
       nickClick={() => isDuplicatedNick(nickname)}
       msgChange={onChangeMsg}
       nickError={errors.nickname.invalid ? errors.nickname.message : ''}
       msgError={errors.statusMsg.invalid ? errors.statusMsg.message : ''}
+      imgValue={image}
     >
     </Profile>
   );
