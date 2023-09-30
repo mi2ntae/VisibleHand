@@ -1,6 +1,6 @@
 import React,  {useRef, useEffect, useState} from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import { setUser } from "reducer/userReducer";
+import { initUser, setUser } from "reducer/userReducer";
 import http from "api/commonHttp";
 import Profile from 'components/user/login/Profile';
 import Swal from "sweetalert2";
@@ -254,13 +254,14 @@ export default function ProfileUpdate() {
                 .delete('/user/'+user.userId)
                 .then(response => {
                     console.log(response);
+                    if(response.status===200) {
+                        dispatch(initUser());
+                        navigate('/login');
+                    }
                 })
                 .catch(error => {
                     console.log(error);
                 });  
-
-                //온보딩 페이지로 변경
-                navigate('/login');
             }
         })
     }
