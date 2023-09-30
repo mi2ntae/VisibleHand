@@ -9,15 +9,23 @@ function Congrats() {
 
   const navigate = useNavigate();
 
-  const onClick = () => {
+  const moveMain = () => {
     navigate('/');
   }
 
+  const moveUpdate = () => {
+    navigate('/update');
+  }
+
   return (
+    // 예쁘게 꾸미기
     <ContentWrap>
         <Container>
           <h3>{user.nickname} 님의 회원가입을 축하합니다</h3>
-          <button onClick={onClick}>메인으로 이동</button>
+          <button onClick={moveMain}>메인으로 이동</button>
+
+          {/* //마이페이지에서 연결할 것 */}
+          <button onClick={moveUpdate}>프로필 수정 페이지</button>
         </Container>
     </ContentWrap>
   );
@@ -28,6 +36,7 @@ export default Congrats;
 const ContentWrap = styled.div`
     position: relative;
     height: 100vh;
+    width: 150vh;
 `;
 const Container = styled.div`
     position: absolute;
