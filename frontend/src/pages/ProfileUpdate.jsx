@@ -1,9 +1,10 @@
-import React,  {useState} from 'react';
+import React,  {useRef, useEffect, useState} from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { setUser } from "reducer/userReducer";
 import http from "api/commonHttp";
 import { useNavigate } from 'react-router-dom';
 import Profile from 'components/user/login/Profile';
+import Swal from "sweetalert2";
 
 export default function ProfileUpdate() {
     const user = useSelector((state) => state.user);
@@ -11,10 +12,65 @@ export default function ProfileUpdate() {
     const navigate = useNavigate();
     const dispatch = useDispatch();
 
-    //닉네임, 상태메시지 유효성
-    const [nickname, setNickname] = useState("");
-    const [statusMsg, setStatusMsg] = useState("");
+    //프로필 가져오기
+    const [nickname, setNickname] = useState('');
+    const [statusMsg, setStatusMsg] = useState('');
+    const [profileImg, setProfileImg] = useState('');
 
+    useEffect(() => {
+        http.get('/user/profile/'+user.userId,
+    )
+    .then(response => {
+        if(response.status===200) {
+            setNickname(response.data.nickname);
+            setStatusMsg(response.data.statusMsg);
+            setProfileImg(response.data.profileImg);
+
+            dispatch(setUser({
+            token: {
+                accessToken: user.accessToken,
+                refreshToken: user.refreshToken,
+            },
+            user: {
+                userId: user.userId,
+                nickname: response.data.nickname,
+                snsEmail: user.snsEmail,
+                provider: user.provider
+            }
+            }));
+        }
+    })
+    .catch(error => {
+        console.log(error);
+    });    
+    }, [])
+
+    //프로필 사진
+    const imgUrl = "https://visiblehand-bucket.s3.ap-northeast-2.amazonaws.com/user_default.png";
+    // const [image, setImage] = useState(imgUrl); // 프로필 이미지 초기값 설정
+    const [file, setFile] = useState("");
+    const inputFile = useRef();
+
+    const onFile = (event) => {
+      if (event.target.files[0]) {
+        setFile(event.target.files[0]);
+        setProfileImg((event.target.files[0]));
+      } else {
+        setProfileImg(imgUrl);
+        return;
+      }
+
+      const reader = new FileReader();
+        reader.onload = () => {
+            if(reader.readyState===2) {
+                setProfileImg(reader.result);
+            }
+        }
+
+        reader.readAsDataURL(event.target.files[0]);
+    }
+
+    //닉네임, 상태메시지 유효성
     const onChangeNick = (event) => {
     const newNickname = event.target.value;
     setNickname(newNickname);
@@ -77,7 +133,7 @@ export default function ProfileUpdate() {
 
     const isDuplicatedNick = (nickname) => {
     if(nickname==null || nickname==="") {
-    alert("닉네임을 입력해주세요.");
+        Swal.fire({icon: 'warning', title: "닉네임을 입력해주세요."});
     return;
     }
 
@@ -85,61 +141,37 @@ export default function ProfileUpdate() {
     .then(({ data }) => {
     if(data.isDuplicated===0) {
         setDupCheck(true);
-        alert("사용가능한 닉네임입니다.");
+        Swal.fire({icon: 'success', title: "사용가능한 닉네임입니다."});
         setNickname(nickname);
 
     } else if(data.isDuplicated===1) {
         if(user.nickname===nickname) {
-        alert("현재 아이디와 동일한 닉네임입니다.")
+            setDupCheck(true);
+            Swal.fire({icon: 'warning', title: "현재 닉네임과 동일합니다."});
+            setNickname(nickname);
         } else {
-        alert("사용할 수 없는 닉네임입니다. 다른 닉네임을 입력해주세요.")
-        }
+            setDupCheck(false);
+            Swal.fire({icon: 'error', title: "사용할 수 없는 닉네임입니다. 다른 닉네임을 입력해주세요."})
+            setNickname(nickname);
+      }
     }
     })
     .catch(error => {
     console.log(error);
     });  
     }
-
-    const imgUrl = "https://visiblehand-bucket.s3.ap-northeast-2.amazonaws.com/user_default.png";
-    const [img, setImg] = useState(imgUrl);
-
-    //프로필 가져오기
-    //이미지 있으면 이미지 띄우고 없으면 기본 이미지로
-    const getProfile = () => {
-        http.get('/user/profile/'+user.userId,
-        )
-        .then(response => {
-            console.log()
-            if(response.status===200) {
-                setImg(response.data.proflieImg);
-                setStatusMsg(response.data.statusMsg);
-                dispatch(setUser({
-                token: {
-                    accessToken: user.accessToken,
-                    refreshToken: user.refreshToken,
-                },
-                user: {
-                    userId: user.userId,
-                    nickname: response.data.nickname,
-                    snsEmail: user.snsEmail,
-                    provider: user.provider
-                }
-                }));
-            }
-        })
-        .catch(error => {
-            console.log(error);
-        });   
-    }
-
     //프로필 수정
+    //이미지 삭제랑
+    //이미지 변경하지 않는 거랑 구분되도록
     const updateProfile = (event) => {
         event.preventDefault();
-
-        if(!dupCheck) {
-        alert("닉네임 중복 확인을 완료해주세요.");
-        return;
+        
+        if(user.nickname===nickname) {
+            setDupCheck(true);
+        }
+        else if(!dupCheck) {
+            alert("닉네임 중복 확인을 완료해주세요.");
+            return;
         }
 
         const fileInput = event.target.querySelector('input[type="file"]');
@@ -183,8 +215,9 @@ export default function ProfileUpdate() {
                     provider: user.provider
                 }
                 }));
+
+                Swal.fire({icon: 'success', title: "프로필이 수정되었습니다."});
             }
-            navigate('/signUp');
         })
         .catch(error => {
             console.log(error);
@@ -208,24 +241,29 @@ export default function ProfileUpdate() {
 
     return (
         <div>
-            <div>
-                 <button onClick={getProfile}>정보 가져오기</button>
-            </div>
+
             <Profile
             title={"프로필 수정"}
             onSubmit={updateProfile}
+            inputImg={() =>  inputFile.current.click()}
+            deleteImg={() => setProfileImg(imgUrl)}
+            imgRef={inputFile}
+            imgChange={onFile}
             nickChange={onChangeNick}
             nickClick={() => isDuplicatedNick(nickname)}
             msgChange={onChangeMsg}
             nickError={errors.nickname.invalid ? errors.nickname.message : ''}
             msgError={errors.statusMsg.invalid ? errors.statusMsg.message : ''}
-            nickValue={user.nickname}
-            // imgValue={img}
+            nickValue={nickname}
+            imgValue={profileImg}
             msgValue={statusMsg}
             >
             </Profile>
             <div>
                  <button onClick={deleteUser}>탈퇴하기</button>
+            </div>
+            <div>
+                 <button onClick={() => navigate('/')}>메인으로 이동</button>
             </div>
            
         </div>
