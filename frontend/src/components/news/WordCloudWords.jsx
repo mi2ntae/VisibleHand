@@ -81,7 +81,7 @@ export default function WordCloudWords() {
 
   return (
       <Container>
-         <Canvas dpr={[1, 2]} camera={{ position: [0, 0, 35], fov: 90 }} style={{minHeight:'600px'}}>
+         <Canvas dpr={[1, 2]} camera={{ position: [0, 0, 35], fov: 90 }} >
                 <fog attach="fog" args={['#202025', 0, 80]} />
                 <Cloud  wordclouds={words} count={5} radius={20} onSelected={onSelected}/>
                 <TrackballControls />
@@ -91,5 +91,6 @@ export default function WordCloudWords() {
 }
 
 const Container = styled.div`
-
+width: 100%;
+height : 90%;
 `;
