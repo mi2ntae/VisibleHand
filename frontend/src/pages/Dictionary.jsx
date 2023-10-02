@@ -121,24 +121,41 @@ export default function Dictionary() {
         />
       </ListContainer>
       <DetailContainer>
-        <div>
-          <WordCat
-            style={{
-              width: "64px",
-              height: "28px",
-              fontSize: "20px",
-            }}
-          >
-            {currentWord.type}
-          </WordCat>
-          <div
-            className="word"
-            style={currentWord.word.length > 30 ? { fontSize: "24px" } : {}}
-          >
-            {currentWord.word}
-          </div>
-        </div>
-        <div className="meaning">{currentWord.meaning}</div>
+        {currentWord.word === "" ? (
+          <>
+            <img src={"/icons/quiz/selectVoca.png"} alt="" />
+            <div
+              style={{
+                fontWeight: "600",
+                fontSize: "24px",
+                color: color.black_grey,
+              }}
+            >
+              선택된 단어가 없습니다.
+            </div>
+          </>
+        ) : (
+          <>
+            <div>
+              <WordCat
+                style={{
+                  width: "64px",
+                  height: "28px",
+                  fontSize: "20px",
+                }}
+              >
+                {currentWord.type}
+              </WordCat>
+              <div
+                className="word"
+                style={currentWord.word.length > 30 ? { fontSize: "24px" } : {}}
+              >
+                {currentWord.word}
+              </div>
+            </div>
+            <div className="meaning">{currentWord.meaning}</div>
+          </>
+        )}
       </DetailContainer>
     </MainContainer>
   );
@@ -220,6 +237,10 @@ const DetailContainer = styled.div`
     color: ${color.darkest_grey};
     overflow-y: auto;
     text-align: justify;
+  }
+  img {
+    width: 240px;
+    height: 240px;
   }
 `;
 
