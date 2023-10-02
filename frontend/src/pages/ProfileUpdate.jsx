@@ -256,7 +256,7 @@ export default function ProfileUpdate() {
                     console.log(response);
                     if(response.status===200) {
                         dispatch(initUser());
-                        navigate('/login');
+                        navigate('/');
                     }
                 })
                 .catch(error => {
@@ -268,7 +268,6 @@ export default function ProfileUpdate() {
 
     return (
         <div>
-
             <Profile
             title={"프로필 수정"}
             onSubmit={updateProfile}
@@ -289,21 +288,18 @@ export default function ProfileUpdate() {
             <ContentWrap>
                  <Button onClick={deleteUser}>탈퇴하기</Button>
             </ContentWrap>
-           
         </div>
     );
 }
 
 const ContentWrap = styled.div`
     position: relative;
-    height: 5vh;
 `;
 
 const Button = styled.button`
     position: absolute;
-    top: 0;
     right: 0;
-    transform: translate(-50%, -50%);
+    transform: translate(-100%, -200%);
     cursor: pointer;
     font-size: 15px;
     letter-spacing: 2px;
@@ -313,4 +309,9 @@ const Button = styled.button`
     border-radius: 5px;
     background: white;
     color: #FF0072;
+    &:hover {
+        background: #FF0072;
+        color: white;
+        transition: 0.5s;
+      }
 `
