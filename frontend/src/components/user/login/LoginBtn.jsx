@@ -1,6 +1,6 @@
 import React from 'react';
 import BtnImg from "components/user/login/BtnImg";
-
+import styled from "styled-components";
 
 export default function LoginBtn({ background, title, onClick, imgWidth, imgHeight, imgSrc, imgAlt, imgPadding }) {
 
@@ -20,11 +20,18 @@ export default function LoginBtn({ background, title, onClick, imgWidth, imgHeig
   };
 
   return (
-    <button style={BtnStyle} onClick={onClick}>
+      <Container>
+        <button style={BtnStyle} onClick={onClick}>
         <div style={{ paddingRight: imgPadding }}>
             <BtnImg width={imgWidth} height={imgHeight} src={imgSrc} alt={imgAlt}></BtnImg>
         </div>
             {title}
-    </button>
+        </button>
+      </Container>
   );
 }
+
+const Container = styled.div`
+    transform: translate(30%, 50%);
+    margin-top: 10px;
+`;

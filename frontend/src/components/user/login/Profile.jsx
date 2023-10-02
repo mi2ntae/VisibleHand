@@ -22,6 +22,7 @@ function Profile({title, onSubmit, inputImg, deleteImg, imgRef, imgChange, nickC
             <div class="center">
                <div class="profile-container" onMouseEnter={() => setDropdown(true)} onMouseLeave={handleMouseLeave}>
                         <img class="profile" src={imgValue!=null && imgValue!="" ? imgValue : imgUrl} />
+                        <img class="dropdownbtn" src="https://cdn-icons-png.flaticon.com/512/7601/7601867.png"></img>
                         {dropdown && 
                         <div class="dropdown">
                             <button class="imgbtn" type="button" onClick={inputImg}>이미지 등록</button><br />

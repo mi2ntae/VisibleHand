@@ -1,6 +1,7 @@
 import React from 'react';
 import LoginBtn from "components/user/login/LoginBtn";
 import styled from "styled-components";
+import Discription from 'components/user/login/Discription';
 
 export default function Login() {
     const GOOGLE_CLIENT_ID=process.env.REACT_APP_GOOGLE_CLIENT_ID;
@@ -23,6 +24,8 @@ export default function Login() {
     return (
         <ContentWrap>
             <Container>
+                <Discription>
+                </Discription>                
                 <LoginBtn background={"white"} title={"구글로 시작하기"} onClick={googleLogin}
                     imgWidth={25} imgHeight={25} imgSrc={"https://upload.wikimedia.org/wikipedia/commons/thumb/5/53/Google_%22G%22_Logo.svg/2048px-Google_%22G%22_Logo.svg.png"} imgAlt={"Google Logo"}
                     imgPadding={10}
