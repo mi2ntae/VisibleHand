@@ -1,17 +1,19 @@
 import React,  {useRef, useState} from 'react';
-import { useSelector} from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
 import { setUser } from "reducer/userReducer";
 import http from "api/commonHttp";
 import { useNavigate } from 'react-router-dom';
 import Profile from 'components/user/login/Profile';
+import Swal from "sweetalert2";
 
 export default function ProfileSetting() {
   const user = useSelector((state) => state.user);
 
   const navigate = useNavigate();
-
+  const dispatch = useDispatch();
+  
   //프로필 사진
-  const imgUrl = "https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png";
+  const imgUrl = "https://visiblehand-bucket.s3.ap-northeast-2.amazonaws.com/user_default.png";
   const [image, setImage] = useState(imgUrl);
   const [file, setFile] = useState("");
   const inputFile = useRef();
@@ -19,6 +21,7 @@ export default function ProfileSetting() {
   const onFile = (event) => {
     if(event.target.files[0]) {
       setFile(event.target.files[0]);
+      setImage((event.target.files[0]));
     } else {
       setImage(imgUrl);
       return;
@@ -30,23 +33,15 @@ export default function ProfileSetting() {
         setImage(reader.result);
       }
     }
-    reader.readAsDataURL(event.target.files[0]);
+      reader.readAsDataURL(event.target.files[0]);
   }
-
-  //드롭다운
-  const [dropdown, setDropdown] = useState(false);
-
-  const dropdownOpen = () => {
-    setDropdown(!dropdown);
-  };
 
   //닉네임, 상태메시지 유효성
   const [nickname, setNickname] = useState("");
-  const [stateMsg, setStateMsg] = useState("");
+  const [statusMsg, setStatusMsg] = useState("");
 
   const onChangeNick = (event) => {
     const newNickname = event.target.value;
-    setUser({ ...user, nickname: newNickname });
     setNickname(newNickname);
     
     if(newNickname.length>32) {
@@ -69,22 +64,22 @@ export default function ProfileSetting() {
   }
 
   const onChangeMsg = (event) => {
-    const newStateMsg = event.target.value;
-    setStateMsg(newStateMsg);
+    const newStatusMsg = event.target.value;
+    setStatusMsg(newStatusMsg);
     
-    if(newStateMsg.length>128) {
+    if(newStatusMsg.length>128) {
       setErrors((prev) => ({
         ...prev,
-        stateMsg: {
-          ...prev.stateMsg,
+        statusMsg: {
+          ...prev.statusMsg,
           invalid: true,
         },
       }));
     } else {
       setErrors((prev) => ({
         ...prev,
-        stateMsg: {
-          ...prev.stateMsg,
+        statusMsg: {
+          ...prev.statusMsg,
           invalid: false,
         },
       }));
@@ -96,7 +91,7 @@ export default function ProfileSetting() {
         invalid: false,
         message: "닉네임은 32글자 이하여야 합니다.",
     },
-    stateMsg: {
+    statusMsg: {
         invalid: false,
         message: "상태메시지는 128자 이하여야 합니다.",
     }
@@ -107,7 +102,7 @@ export default function ProfileSetting() {
 
   const isDuplicatedNick = (nickname) => {
     if(nickname==null || nickname==="") {
-      alert("닉네임을 입력해주세요.");
+      Swal.fire({icon: 'warning', title: "닉네임을 입력해주세요."});
       return;
     }
 
@@ -115,11 +110,14 @@ export default function ProfileSetting() {
     .then(({ data }) => {
       if(data.isDuplicated===0) {
         setDupCheck(true);
-        alert("사용가능한 닉네임입니다.");
-      } else if(data.isDuplicated===1) (
-        alert("사용할 수 없는 닉네임입니다. 다른 닉네임을 입력해주세요.")
-      )
-      console.log("확인", nickname);
+        Swal.fire({icon: 'success', title: "사용가능한 닉네임입니다."});
+        setNickname(nickname);
+
+      } else if(data.isDuplicated===1) {
+        setDupCheck(false);
+        Swal.fire({icon: 'error', title: "사용할 수 없는 닉네임입니다. 다른 닉네임을 입력해주세요."})
+        setNickname(nickname);
+      }
     })
     .catch(error => {
       console.log(error);
@@ -127,11 +125,11 @@ export default function ProfileSetting() {
   }
 
   //프로필 등록
-  const useSubmit = (event) => {
+  const setProfile = (event) => {
     event.preventDefault();
 
     if(!dupCheck) {
-      alert("닉네임 중복 확인을 완료해주세요.");
+      Swal.fire({icon: 'warning', title: "닉네임 중복 확인을 완료해주세요."});
       return;
     }
 
@@ -141,7 +139,7 @@ export default function ProfileSetting() {
     const req = {
       profile: {
         nickname: event.target.nickname.value,
-        statusMsg: event.target.stateMsg.value,
+        statusMsg: event.target.statusMsg.value,
       },
       snsEmail: user.snsEmail,
       provider: user.provider
@@ -158,15 +156,26 @@ export default function ProfileSetting() {
       formData.append('file', fileInput.files[0]);
     }
 
-    setUser({ ...user, nickname: event.target.value });
-
     http.put('/user/auth/profile',
         formData,
         { headers: { 'content-type': `multipart/form-data` }
       })
       .then(response => {
+          if(response.status===200) {
+            dispatch(setUser({
+              token: {
+                accessToken: user.accessToken,
+                refreshToken: user.refreshToken,
+              },
+              user: {
+                userId: user.userId,
+                nickname: req.profile.nickname,
+                snsEmail: user.snsEmail,
+                provider: user.provider
+              }
+            }));
+          }
           navigate('/signUp');
-          console.log(response);
       })
       .catch(error => {
         console.log(error);
@@ -174,17 +183,19 @@ export default function ProfileSetting() {
   }
 
   return (
-    <Profile onSubmit={useSubmit}
-      img={image}
-      imgClick={() =>  inputFile.current.click()}
+    <Profile
+      title={"프로필 설정"}
+      onSubmit={setProfile}
+      inputImg={() =>  inputFile.current.click()}
+      deleteImg={() => setImage(imgUrl)}
       imgRef={inputFile}
       imgChange={onFile}
       nickChange={onChangeNick}
       nickClick={() => isDuplicatedNick(nickname)}
       msgChange={onChangeMsg}
-      value={user.snsEmail}
       nickError={errors.nickname.invalid ? errors.nickname.message : ''}
-      msgError={errors.stateMsg.invalid ? errors.stateMsg.message : ''}
+      msgError={errors.statusMsg.invalid ? errors.statusMsg.message : ''}
+      imgValue={image}
     >
     </Profile>
   );

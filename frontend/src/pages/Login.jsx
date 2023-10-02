@@ -39,6 +39,7 @@ export default function Login() {
 const ContentWrap = styled.div`
     position: relative;
     height: 100vh;
+    width: 150vh;
 `;
 const Container = styled.div`
     position: absolute;

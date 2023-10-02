@@ -5,20 +5,27 @@ import { useSelector } from "react-redux";
 import OnBoarding from "pages/Onboarding";
 
 function App() {
+  // const path = window.location.pathname;
 
+  // const notSidebar = path === '/login' || path === '/auth/kakao' || path === '/auth/google' || path === '/profile';
+  
   return (
     <Root>
       <GlobalStyle />
-      {/* {user ===  "" ? 
-          <OnBoarding/> 
-      :  */}
-      {/* <div> */}
-      <SideBar />
-      <Content>
-        <Outlet />
-      </Content>
-      {/* </div> */}
-      {/* } */}
+      {/* {notSidebar ? (
+        <>
+          <Content>
+            <Outlet />
+          </Content>
+        </>
+      ) : (
+        <> */}
+          <SideBar />
+          <Content>
+            <Outlet />
+          </Content>
+        {/* </> */}
+      {/* )} */}
     </Root>
   );
 }

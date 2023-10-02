@@ -26,8 +26,11 @@ export default function Heart({ clicked, cnt, feedId }) {
       http
         .post(`feed/heart/`, { feedId: feedId })
         .then(() => {
-          setHeart(heart + 1);
           setIsHeart(true);
+          http
+            .get(`/feed/heart/${feedId}`)
+            .then((data) => setHeart(data.data))
+            .catch((err) => alert(err));
         })
         .catch((err) => {
           alert(err);

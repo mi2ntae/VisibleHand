@@ -126,12 +126,9 @@ public class UserServiceImpl implements UserService{
     public NicknameResDto isDuplicatedNickname(String nickname) {
         Optional<User> findUser = userRespository.findByNickname(nickname);
         log.info(nickname);
-        log.info("user: {}", findUser);
         if (findUser.isPresent()) {
-            log.info("사용불가");
             return NicknameResDto.builder().isDuplicated(1).build();
         } else {
-            log.info("사용가능");
             return NicknameResDto.builder().isDuplicated(0).build();
         }
     }
@@ -185,7 +182,9 @@ public class UserServiceImpl implements UserService{
         if(!Objects.isNull(file)) {
             //원래 프로필 S3에서 삭제하기
             String originS3ImgUrl = user.getProfileImg();
-            uploader.deleteFileFromS3Bucket(originS3ImgUrl);
+            if(originS3ImgUrl!=null && originS3ImgUrl!="") {
+                uploader.deleteFileFromS3Bucket(originS3ImgUrl);
+            }
 
             try {
                 s3ImgUrl = uploader.upload(file, userProfileReqDto.getSnsEmail());
@@ -196,15 +195,11 @@ public class UserServiceImpl implements UserService{
         log.info(s3ImgUrl);
 
         if(s3ImgUrl!=null) {
-            user.setProfileImg(userProfileReqDto.getProfileImg());
-        }
-
-        //프로필 사진 삭제되었으면
-        if(userProfileReqDto.getProfileImg()==null) {
-            //원래 프로필 S3에서 삭제하기
-            String originS3ImgUrl = user.getProfileImg();
-            uploader.deleteFileFromS3Bucket(originS3ImgUrl);
-            user.setProfileImg(null);
+            user.setProfileImg(s3ImgUrl);
+        } else if(s3ImgUrl==null && userProfileReqDto.getProfileImg()!=null && userProfileReqDto.getProfileImg().equals("default")){
+            user.setProfileImg("");
+        } else if(s3ImgUrl==null && userProfileReqDto.getProfileImg()==null) {
+            user.setProfileImg(user.getProfileImg());
         }
 
         user.setNickname(userProfileReqDto.getProfile().getNickname());

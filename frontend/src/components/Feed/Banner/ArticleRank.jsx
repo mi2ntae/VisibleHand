@@ -11,6 +11,7 @@ export default function ArticleRank() {
     http
       .get("article/rank")
       .then(({ data }) => {
+        console.log(data);
         setArticles(data);
       })
       .catch((err) => {
@@ -44,10 +45,14 @@ export default function ArticleRank() {
               <div style={{ flex: 1 }}>
                 <div>{data.title}</div>
                 <div style={{ color: grey, fontSize: "0.75rem" }}>
-                  {data.company} | {data.createAt}
+                  {data.company} | {data.issueDate}
                 </div>
               </div>
-              <Thumbnail src={data.thumbnail} alt={data.title} />
+              {data.thumbnail ? (
+                <Thumbnail src={data.thumbnail} alt={data.title} />
+              ) : (
+                ""
+              )}
             </BannerElement>
             {index !== articles.length - 1 && (
               <div
