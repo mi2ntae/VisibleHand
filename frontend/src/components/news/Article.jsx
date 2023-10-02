@@ -23,7 +23,7 @@ export default function Article({ articleId, company, kind, title, thumbnail }) 
     return (
 
         <Container>
-            <Link to={'/'}  style={{ color:'black' }}>
+            <Link to={`/news/${articleId}`}  style={{ color:'black' }}>
                 <Box >
                     <div>
                         <div style={{paddingBottom:'10px'}}>
