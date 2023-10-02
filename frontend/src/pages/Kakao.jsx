@@ -20,7 +20,7 @@ export default function Kakao() {
         .then(({ data }) => {
           dispatch(setUser(data));
           if(data.user.isAlready===1) {
-            navigate('/');
+            navigate('/news');
           } else if(data.user.isAlready===0) {
             navigate( '/profile');
           }
