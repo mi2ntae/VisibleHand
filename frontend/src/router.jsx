@@ -14,6 +14,7 @@ import Kakao from "pages/Kakao";
 import Google from "pages/Google";
 import SignUp from "pages/SignUp";
 import ProfileSetting from "pages/ProfileSetting";
+import Onboarding from "pages/Onboarding";
 
 const router = createBrowserRouter([
   {
@@ -21,7 +22,7 @@ const router = createBrowserRouter([
     element: <App />,
     errorElement: <Error />,
     children: [
-      { index: true, path: "/", element: <Home /> },
+      { index: true, path: "/", element: <Onboarding /> },
       { path: "/news", element: <News /> },
       { path: "/news/:articleId", element: <NewsDetail /> },
       { path: "/feed", element: <Feed /> },
