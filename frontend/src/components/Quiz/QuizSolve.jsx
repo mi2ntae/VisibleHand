@@ -31,6 +31,19 @@ export default function QuizSolve({ retry }) {
       http
         .get(`quiz/retry/${userId}`)
         .then((res) => {
+          if (res.data.allSolved) {
+            Swal.fire({
+              text: "수고하셨습니다! 모두 다시 풀었어요!",
+              imageUrl: "/icons/quiz/allSolved.png",
+              showConfirmButton: false,
+              showDenyButton: false,
+              showCancelButton: false,
+              timer: 2000,
+            }).then(() => {
+              navigate("/");
+            });
+            return;
+          }
           setQuestion("다음 의미를 가진 경제용어는?");
           setContent(res.data.entries[0].meaning);
           setText(res.data.entries[0].word);
@@ -41,6 +54,19 @@ export default function QuizSolve({ retry }) {
       http
         .get(`quiz/dict/${userId}`)
         .then((res) => {
+          if (res.data.allSolved) {
+            Swal.fire({
+              text: "수고하셨습니다! 모두 다시 풀었어요!",
+              imageUrl: "/icons/quiz/allSolved.png",
+              showConfirmButton: false,
+              showDenyButton: false,
+              showCancelButton: false,
+              timer: 2000,
+            }).then(() => {
+              navigate("/");
+            });
+            return;
+          }
           setQuestion("다음 의미를 가진 경제용어는?");
           setContent(res.data.entries[0].meaning);
           setText(res.data.entries[0].word);
@@ -73,6 +99,19 @@ export default function QuizSolve({ retry }) {
         http
           .get(`quiz/retry/${userId}`)
           .then((res) => {
+            if (res.data.allSolved) {
+              Swal.fire({
+                text: "수고하셨습니다! 모두 다시 풀었어요!",
+                imageUrl: "/icons/quiz/allSolved.png",
+                showConfirmButton: false,
+                showDenyButton: false,
+                showCancelButton: false,
+                timer: 2000,
+              }).then(() => {
+                navigate("/");
+              });
+              return;
+            }
             setQuestion("다음 의미를 가진 경제용어는?");
             setContent(res.data.entries[0].meaning);
             setText(res.data.entries[0].word);
@@ -83,6 +122,19 @@ export default function QuizSolve({ retry }) {
         http
           .get(`quiz/dict/${userId}`)
           .then((res) => {
+            if (res.data.allSolved) {
+              Swal.fire({
+                text: "수고하셨습니다! 모두 다시 풀었어요!",
+                imageUrl: "/icons/quiz/allSolved.png",
+                showConfirmButton: false,
+                showDenyButton: false,
+                showCancelButton: false,
+                timer: 2000,
+              }).then(() => {
+                navigate("/");
+              });
+              return;
+            }
             setQuestion("다음 의미를 가진 경제용어는?");
             setContent(res.data.entries[0].meaning);
             setText(res.data.entries[0].word);
@@ -102,7 +154,6 @@ export default function QuizSolve({ retry }) {
         navigate("/");
       });
     }
-    //콤보 계산
   };
   return (
     <MainContainer>
