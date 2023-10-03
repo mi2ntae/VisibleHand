@@ -21,8 +21,9 @@ export default function ProfileSetting() {
   const onFile = (event) => {
     if(event.target.files[0]) {
       setFile(event.target.files[0]);
-      setImage((event.target.files[0]));
+      // setImage((event.target.files[0]));
     } else {
+      setFile("");
       setImage(imgUrl);
       return;
     }
@@ -36,6 +37,10 @@ export default function ProfileSetting() {
       reader.readAsDataURL(event.target.files[0]);
   }
 
+  const deleteProfileImg = () => {
+    setFile("");
+    setImage(imgUrl);
+}
   //닉네임, 상태메시지 유효성
   const [nickname, setNickname] = useState("");
   const [statusMsg, setStatusMsg] = useState("");
@@ -136,14 +141,29 @@ export default function ProfileSetting() {
     const fileInput = event.target.querySelector('input[type="file"]');
     const formData = new FormData();
 
-    const req = {
-      profile: {
-        nickname: event.target.nickname.value,
-        statusMsg: event.target.statusMsg.value,
-      },
-      snsEmail: user.snsEmail,
-      provider: user.provider
-    };
+    let req = null;
+    if(image===imgUrl) {
+        req = {
+              profile: {
+                nickname: event.target.nickname.value,
+                statusMsg: event.target.statusMsg.value,
+              },
+              profileImg: "default",
+              snsEmail: user.snsEmail,
+              provider: user.provider
+            };
+    } else {
+      req = {
+          profile: {
+              nickname: event.target.nickname.value,
+              statusMsg: event.target.statusMsg.value,
+          },
+          snsEmail: user.snsEmail,
+          provider: user.provider
+      };
+  }
+
+     
 
     formData.append(
       'userProfileReqDto',
@@ -187,7 +207,7 @@ export default function ProfileSetting() {
       title={"프로필 설정"}
       onSubmit={setProfile}
       inputImg={() =>  inputFile.current.click()}
-      deleteImg={() => setImage(imgUrl)}
+      deleteImg={() => deleteProfileImg()}
       imgRef={inputFile}
       imgChange={onFile}
       nickChange={onChangeNick}
