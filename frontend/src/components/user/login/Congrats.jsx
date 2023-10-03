@@ -70,19 +70,19 @@ export default Congrats;
 
 const ContentWrap = styled.div`
     position: relative;
-    height: 100vh;
+    height: 100%;
     background: #494A4E;
 `;
 const Container = styled.div`
     position: absolute;
-    top: 25%;
+    top: 20%;
     left: 50%;
     transform: translate(-50%, -50%);
 `;
   
 const Container2 = styled.div`
     position: relative;
-    top: 43%;
+    top: 40%;
     left: 48.5%;
     transform: translate(-50%, -50%);
 `;
