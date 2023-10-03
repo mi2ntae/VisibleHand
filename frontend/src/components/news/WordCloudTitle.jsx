@@ -60,4 +60,5 @@ align-items : center;
 
 const Span = styled.span`
 font-size : 24px;
+display : inline;
 `;
