@@ -54,7 +54,11 @@ export default function ProfileUpdate() {
     const onFile = (event) => {
       if (event.target.files[0]) {
         setFile(event.target.files[0]);
-        setProfileImg((event.target.files[0]));
+        // setProfileImg((event.target.files[0]));
+      } else {
+        setFile("");
+        setProfileImg(imgUrl);
+        return;
       }
 
       const reader = new FileReader();
@@ -65,6 +69,11 @@ export default function ProfileUpdate() {
         }
 
         reader.readAsDataURL(event.target.files[0]);
+    }
+
+    const deleteProfileImg = () => {
+        setFile("");
+        setProfileImg(imgUrl);
     }
 
     //닉네임, 상태메시지 유효성
@@ -272,7 +281,7 @@ export default function ProfileUpdate() {
             title={"프로필 수정"}
             onSubmit={updateProfile}
             inputImg={() =>  inputFile.current.click()}
-            deleteImg={() => setProfileImg(imgUrl)}
+            deleteImg={() => deleteProfileImg()}
             imgRef={inputFile}
             imgChange={onFile}
             nickChange={onChangeNick}
