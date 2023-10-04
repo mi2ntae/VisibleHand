@@ -12,6 +12,7 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 @Builder
 public class FeedListOfArticleRes {
+    private long userId;
     private long feedId;
     private String profileImg;
     private String nickname;
