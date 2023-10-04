@@ -5,6 +5,7 @@ import { Background } from 'styled';
 import { black_grey, dark_grey, darkest_grey, white } from 'lib/style/colorPalette';
 import { useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
+import MyPageProfileUpdateButton from "./MyPageProfileUpdateButton"
 
 export default function MyPageRightTop() {
     const userId = useSelector((state) => state.mypageTab.userId);
@@ -18,10 +19,7 @@ export default function MyPageRightTop() {
         followingCnt: 0,
         followerCnt: 0
     });
-    const navigate = useNavigate();
-    const moveUpdate = () => {
-        navigate('/update');
-    }
+    
     const imgUrl = "https://visiblehand-bucket.s3.ap-northeast-2.amazonaws.com/user_default.png";
 
     useEffect(() => {
@@ -52,7 +50,7 @@ export default function MyPageRightTop() {
                         {userId == loginId
                         ?
                         // <Button onClick={() => alert("이동!")}><img src='/icons/mypage/ic_settings.svg' alt='회원정보 수정'/></Button>
-                        <Button onClick={moveUpdate}><img src='/icons/mypage/ic_settings.svg' alt='회원정보 수정'/></Button>
+                        <MyPageProfileUpdateButton></MyPageProfileUpdateButton>
                         :
                         <span></span>
                         }
@@ -74,7 +72,7 @@ export default function MyPageRightTop() {
 const Image = styled.img`
     width: 6rem;
     height: 6rem;
-    border: 1px solid ${dark_grey};
+    border: 0px solid ${dark_grey};
     border-radius: 3.75rem;
     object-fit: cover;
 `
