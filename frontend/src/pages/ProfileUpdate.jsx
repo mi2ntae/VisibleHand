@@ -237,7 +237,10 @@ export default function ProfileUpdate() {
                 unlinkToken: user.unlinkToken
                 }));
 
-                Swal.fire({icon: 'success', title: "프로필이 수정되었습니다."});
+                Swal.fire({icon: 'success', title: "프로필이 수정되었습니다."})
+                .then(() => {
+                    window.location.reload();
+                  });
             }
         })
         .catch(error => {
