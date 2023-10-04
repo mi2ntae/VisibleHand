@@ -8,7 +8,9 @@ export default function Heart({ clicked, cnt, feedId }) {
   const [heart, setHeart] = useState(cnt);
   const temp = parseInt(feedId);
 
-  const handleLike = () => {
+  const handleLike = (e) => {
+    e.stopPropagation();
+    e.preventDefault();
     if (isHeart) {
       http
         .delete(`/feed/heart/${feedId}`)
@@ -38,7 +40,7 @@ export default function Heart({ clicked, cnt, feedId }) {
     }
   };
   return (
-    <HeartContainer onClick={handleLike}>
+    <HeartContainer onClick={(e) => handleLike(e)}>
       {isHeart ? (
         <img src="/icons/feed/ic_heart.svg" alt="좋아요" />
       ) : (
