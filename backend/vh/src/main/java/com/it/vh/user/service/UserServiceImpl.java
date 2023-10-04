@@ -2,11 +2,7 @@ package com.it.vh.user.service;
 
 import com.it.vh.common.util.S3Uploader;
 import com.it.vh.feed.api.dto.FeedRes;
-import com.it.vh.user.api.dto.FollowResDto;
-import com.it.vh.user.api.dto.NicknameResDto;
-import com.it.vh.user.api.dto.UserFollowListResDto;
-import com.it.vh.user.api.dto.UserFollowResDto;
-import com.it.vh.user.api.dto.UserProfileReqDto;
+import com.it.vh.user.api.dto.*;
 import com.it.vh.user.domain.dto.UserDto;
 import com.it.vh.user.domain.entity.Follow;
 import com.it.vh.user.domain.entity.User;
@@ -100,9 +96,9 @@ public class UserServiceImpl implements UserService{
     }
 
     @Override
-    public List<UserFollowListResDto> getUsersByKeyword(String keyword, int page) {
+    public List<UserSearchListDto> getUsersByKeyword(String keyword, long userId, int page) {
 
-        return userRespository.findUsersByNickname(keyword, PageRequest.of(page, 7));
+        return userRespository.findUsersByNickname(keyword, userId, PageRequest.of(page, 7));
     }
 
     @Override
@@ -115,6 +111,7 @@ public class UserServiceImpl implements UserService{
                                 .build());
     }
 
+    @Transactional
     @Override
     public void deleteFollow(FollowResDto followResDto) {
         User from = userRespository.findUserByUserId(followResDto.getFromId()).get();

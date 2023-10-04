@@ -38,11 +38,9 @@ export default function Feed() {
           }&keyword=${keyword}&page=${page.current}`
         )
         .then((data) => {
-          console.log(data);
           searchType
             ? setFeeds((prevFeeds) => [...prevFeeds, ...data.data])
             : setUsers((prevUsers) => [...prevUsers, ...data.data]);
-          console.log(data.data);
         })
         .catch((err) => {
           alert(err);
@@ -105,7 +103,9 @@ export default function Feed() {
                 return <FeedElement data={data} key={data.feedId} />;
               })
             : users.map((data) => {
-                return <UserElement user={data} key={data.userId} />;
+                return (
+                  <UserElement user={data} myId={userId} key={data.userId} />
+                );
               })}
           {showObserver ? (
             <div

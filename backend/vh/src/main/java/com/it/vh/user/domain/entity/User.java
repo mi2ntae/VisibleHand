@@ -2,6 +2,7 @@ package com.it.vh.user.domain.entity;
 
 import com.it.vh.user.api.dto.StreakResDto;
 import com.it.vh.user.api.dto.UserFollowListResDto;
+import com.it.vh.user.api.dto.UserSearchListDto;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -34,9 +35,10 @@ import java.time.LocalDate;
         ),
         @NamedNativeQuery(
                 name = "findUsersByNickname",
-                query = "SELECT user_id AS userId, nickname AS userName, status_msg AS statusMsg, IFNULL(profile_img, 'https://visiblehand-bucket.s3.ap-northeast-2.amazonaws.com/user_default.png') AS imageUrl " +
-                        "FROM user " +
-                        "WHERE nickname LIKE :keyword",
+                query = "SELECT u.user_id AS userId, u.nickname AS userName, u.status_msg AS statusMsg, IFNULL(u.profile_img, 'https://visiblehand-bucket.s3.ap-northeast-2.amazonaws.com/user_default.png') AS imageUrl, IF(f.to_id IS NULL, 0, 1) AS isFollow " +
+                        "FROM user u " +
+                        "LEFT JOIN follow f ON u.user_id = f.to_id AND f.from_id = :userId " +
+                        "WHERE u.nickname LIKE :keyword",
                 resultSetMapping = "userFollowListDto"
         )
 })
@@ -55,12 +57,13 @@ import java.time.LocalDate;
 @SqlResultSetMapping(
         name = "userFollowListDto",
         classes = @ConstructorResult(
-                targetClass = UserFollowListResDto.class,
+                targetClass = UserSearchListDto.class,
                 columns = {
                         @ColumnResult(name = "userId", type = Long.class),
                         @ColumnResult(name = "userName", type = String.class),
                         @ColumnResult(name = "statusMsg", type = String.class),
                         @ColumnResult(name = "imageUrl", type = String.class),
+                        @ColumnResult(name = "isFollow", type = Integer.class)
                 }
         )
 )
