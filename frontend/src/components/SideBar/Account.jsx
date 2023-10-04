@@ -1,11 +1,19 @@
 import React from "react";
-import { useSelector } from "react-redux";
-import { Link } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
+import { Link, useNavigate } from "react-router-dom";
+import { initUser } from "reducer/userReducer";
 import styled from "styled-components";
 
 export default function Account() {
   const loginId = useSelector((state) => state.user.userId);
   const nickname = useSelector((state) => state.user.nickname);
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+
+  const logout = () => {
+    dispatch(initUser());
+    navigate('/');
+  }
 
   return (
     <div style={{ gap: "240px" }}>
@@ -14,6 +22,7 @@ export default function Account() {
         <img src="/icons/header/ic_dictionary.svg" alt="dictionary" />
         {nickname}
       </StyledLink>
+      <Button onClick={() => logout()}>로그아웃</Button>
     </div>
   );
 }
@@ -26,3 +35,20 @@ const StyledLink = styled(Link)`
   color: #35383b;
   font-size: 1rem;
 `;
+
+const Button = styled.button`
+    position: absolute;
+    transform: translate(170%, -80%);
+    cursor: pointer;
+    font-size: 10px;
+    letter-spacing: 2px;
+    font-weight: bold;
+    padding: 0.7em 2em;
+    border: none;
+    background: white;
+    color: #ccc;
+    &:hover {
+        color: black;
+        transition: 0.5s;
+      }
+`
