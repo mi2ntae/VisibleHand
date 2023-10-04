@@ -3,13 +3,26 @@ import { grey, lightest_grey, primary, white } from "lib/style/colorPalette";
 import React from "react";
 import { ProfileImg } from "styled";
 import styled from "styled-components";
+import { useNavigate } from "react-router";
+import { useDispatch } from "react-redux";
+import { setUserId } from "reducer/mypageTabReducer";
 
 export default function UserElement({ user }) {
+  const navi = useNavigate();
+  const dispatch = useDispatch();
+
+  const move = () => {
+    dispatch(setUserId(user.userId));
+    navi("/mypage");
+  }
+
   const handleFollow = (e) => {
     e.preventDefault();
+    e.stopPropagation();
   };
+
   return (
-    <UserContainer>
+    <UserContainer onClick={() => move()}>
       <ProfileImg src={user.profileImg ? user.profileImg : user.imageUrl} />
       <div style={{ flex: 1 }}>
         <div style={{ fontWeight: 500 }}>
@@ -28,7 +41,7 @@ export default function UserElement({ user }) {
           padding: "0.375rem 1rem",
           height: "2.25rem",
         }}
-        onClick={handleFollow}
+        onClick={(e) => handleFollow(e)}
       >
         팔로우
         <img
