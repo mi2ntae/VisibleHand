@@ -92,6 +92,7 @@ import java.time.LocalDateTime;
         @NamedNativeQuery(
                 name = "findFeedsByArticle",
                 query = "SELECT " +
+                        "    u.user_id AS userId " +
                         "    f.feed_id AS feedId, " +
                         "    u.profile_img AS profileImg, " +
                         "    u.nickname," +
@@ -158,6 +159,7 @@ import java.time.LocalDateTime;
         classes = @ConstructorResult(
                 targetClass = FeedListOfArticleRes.class,
                 columns = {
+                        @ColumnResult(name = "userId", type = Long.class),
                         @ColumnResult(name = "feedId", type = Long.class),
                         @ColumnResult(name = "profileImg", type = String.class),
                         @ColumnResult(name = "nickname", type = String.class),

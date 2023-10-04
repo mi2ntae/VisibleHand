@@ -3,11 +3,21 @@ import React from "react";
 import { ProfileImg } from "styled";
 import Heart from "../Heart";
 import styled from "styled-components";
+import { useNavigate } from "react-router";
+import { useDispatch } from "react-redux";
+import { setUserId } from "reducer/mypageTabReducer";
 
 export default function FeedBannerElement({ data, isLast }) {
+  const navi = useNavigate();
+  const dispatch = useDispatch();
+
+  const moveMypage = () => {
+    dispatch(setUserId(data.userId))
+    navi("/mypage")
+  }
   return (
     <div style={{ width: "100%" }}>
-      <ProfileContainer>
+      <ProfileContainer onClick={() => moveMypage()}>
         <ProfileImg
           src={
             data.profileImg ? data.profileImg : "/images/user/user_default.png"
