@@ -85,7 +85,7 @@ const Title = styled.div`
 z-index : 1;
 position: absolute;
 top : 45%;
-left : 50%;
+left : 35%;
 `;
 
 const Sub = styled.div`

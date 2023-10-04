@@ -126,5 +126,5 @@ const Title = styled.div`
 const Row = styled.div`
   margin-top: 100px;
   overflow-y: scroll;
-  max-height: 90%;
+  max-height: 80%;
 `;
