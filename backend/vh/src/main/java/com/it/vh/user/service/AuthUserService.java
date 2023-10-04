@@ -42,6 +42,8 @@ public class AuthUserService {
 
         //토큰 받기
         AuthTokenInfo token = getToken(code, providerInfo);
+        String unlinkToken = token.getAccess_token();
+        log.info("kakaoToken: {}", unlinkToken);
 
         //가입 또는 로그인 처리
         User user = getUser(token, providerInfo, provider);
@@ -88,6 +90,7 @@ public class AuthUserService {
         return LoginResDto.builder()
                 .user(userProfile)
                 .token(tokenInfo)
+                .unlinkToken(unlinkToken)
                 .build();
     }
 

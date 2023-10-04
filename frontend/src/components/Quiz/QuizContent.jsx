@@ -107,7 +107,9 @@ export default function QuizContent({
       e.target.value = e.target.value.substring(e.target.value.length - 1);
       let temp = [];
       for (let index = 0; index < answer.length; index++) {
-        if (idx === index) temp.push(e.target.value);
+        if (idx === index && e.target.value !== " ") {
+          temp.push(e.target.value);
+        }
         else temp.push(answer[index]);
       }
       setAnswer(temp);

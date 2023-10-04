@@ -89,8 +89,8 @@ const SearchBtn = styled.button`
 
 const Select = styled.select`
   border: 0px;
-  color: "#2A2B2E";
+  color: #2A2B2E;
   fontSize: 0.8rem;
-  fontWeight: "700";
-  alignItems: 'center';
+  font-weight: 600;
+  align-items: center;
 `;

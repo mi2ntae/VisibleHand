@@ -10,6 +10,9 @@ import {
 import React, { useEffect, useState } from "react";
 import { ProfileImg } from "styled";
 import styled from "styled-components";
+import { useNavigate } from "react-router";
+import { useDispatch } from "react-redux";
+import { setUserId } from "reducer/mypageTabReducer";
 
 export default function UserElement({ user, myId }) {
   const [isFollow, setIsFollow] = useState(user.isFollow);
@@ -24,8 +27,17 @@ export default function UserElement({ user, myId }) {
       .delete("/user/follow", { data: { fromId: myId, toId: user.userId } })
       .then(setIsFollow(0));
   };
+
+  const navi = useNavigate();
+  const dispatch = useDispatch();
+
+  const move = () => {
+    dispatch(setUserId(user.userId));
+    navi("/mypage");
+  }
+
   return (
-    <UserContainer>
+    <UserContainer onClick={() => move()}>
       <ProfileImg src={user.profileImg ? user.profileImg : user.imageUrl} />
       <div style={{ flex: 1 }}>
         <div style={{ fontWeight: 500 }}>
@@ -74,6 +86,7 @@ export default function UserElement({ user, myId }) {
           />
         </Button>
       )}
+
     </UserContainer>
   );
 }

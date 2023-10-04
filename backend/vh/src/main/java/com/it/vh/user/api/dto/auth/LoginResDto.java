@@ -11,6 +11,7 @@ public class LoginResDto {
 
     private UserProfile user;
     private TokenInfo token;
+    private String unlinkToken;
 
     @Getter
     @Builder
