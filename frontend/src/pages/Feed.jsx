@@ -41,9 +41,6 @@ export default function Feed() {
           searchType
             ? setFeeds((prevFeeds) => [...prevFeeds, ...data.data])
             : setUsers((prevUsers) => [...prevUsers, ...data.data]);
-        })
-        .catch((err) => {
-          alert(err);
         });
       console.log("fetchData");
       setLoading(false);
@@ -73,8 +70,7 @@ export default function Feed() {
         searchType ? setFeeds(data.data) : setUsers(data.data);
         if (searchType && data.data.length < 6) setShowObserver(false);
         if (!searchType && data.data.length < 8) setShowObserver(false);
-      })
-      .catch((err) => alert(err));
+      });
     console.log("resetData");
     setLoading(false);
   }, [btnClick]);

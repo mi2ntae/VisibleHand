@@ -20,12 +20,14 @@ export default function UserElement({ user, myId }) {
     http
       .post("/user/follow", { fromId: myId, toId: user.userId })
       .then(setIsFollow(1));
+    e.stopPropagation();
   };
 
   const handleUnfollow = (e) => {
     http
       .delete("/user/follow", { data: { fromId: myId, toId: user.userId } })
       .then(setIsFollow(0));
+    e.stopPropagation();
   };
 
   const navi = useNavigate();
@@ -34,13 +36,16 @@ export default function UserElement({ user, myId }) {
   const move = () => {
     dispatch(setUserId(user.userId));
     navi("/mypage");
-  }
+  };
 
   return (
     <UserContainer onClick={() => move()}>
-      <ProfileImg src={user.profileImg ? user.profileImg : user.imageUrl} />
+      <ProfileImg
+        src={user.profileImg ? user.profileImg : user.imageUrl}
+        style={{ cursor: "pointer" }}
+      />
       <div style={{ flex: 1 }}>
-        <div style={{ fontWeight: 500 }}>
+        <div style={{ fontWeight: 500, cursor: "pointer" }}>
           {user.nickname ? user.nickname : user.userName}
         </div>
         <div style={{ fontSize: "0.875rem", color: grey }}>
@@ -86,7 +91,6 @@ export default function UserElement({ user, myId }) {
           />
         </Button>
       )}
-
     </UserContainer>
   );
 }
