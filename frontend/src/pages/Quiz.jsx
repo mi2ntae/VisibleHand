@@ -19,7 +19,7 @@ export default function Quiz() {
         if (res.isConfirmed) {
           navigate("/quiz/solve");
         } else {
-          navigate("/");
+          navigate("/news");
         }
       })
       .catch((err) => alert(err));
