@@ -16,6 +16,7 @@ import SignUp from "pages/SignUp";
 import ProfileSetting from "pages/ProfileSetting";
 import Onboarding from "pages/Onboarding";
 import ProfileUpdate from "pages/ProfileUpdate";
+import App2 from "App2";
 
 const router = createBrowserRouter([
   {
@@ -46,14 +47,21 @@ const router = createBrowserRouter([
         ],
       },
       { path: "/mypage", element: <Mypage /> },
+      {path: '/update', element: <ProfileUpdate />}
+    ],
+  },
+  {
+    path: "/",
+    element: <App2 />,
+    errorElement: <Error />,
+    children: [
       {path: '/login', element: <Login />},
       {path: '/auth/kakao', element: <Kakao />},
       {path: '/auth/google', element: <Google />},
       {path: '/profile', element: <ProfileSetting />},
       {path: '/signup', element: <SignUp />},
-      {path: '/update', element: <ProfileUpdate />}
-    ],
-  },
+    ]
+  }
 ]);
 
 export default router;

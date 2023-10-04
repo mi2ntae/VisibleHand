@@ -62,6 +62,7 @@
     animation-name: change;
     animation-duration: 10s;
     animation-iteration-count: infinite;
+    color: #323762;
   }
   
   .content__container__list__item {
