@@ -163,8 +163,6 @@ export default function ProfileSetting() {
       };
   }
 
-     
-
     formData.append(
       'userProfileReqDto',
       new Blob([JSON.stringify(req)], {
@@ -191,8 +189,9 @@ export default function ProfileSetting() {
                 userId: user.userId,
                 nickname: req.profile.nickname,
                 snsEmail: user.snsEmail,
-                provider: user.provider
-              }
+                provider: user.provider,
+              },
+              unlinkToken: user.unlinkToken
             }));
           }
           navigate('/signUp');

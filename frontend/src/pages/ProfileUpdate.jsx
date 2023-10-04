@@ -36,8 +36,9 @@ export default function ProfileUpdate() {
                 userId: user.userId,
                 nickname: response.data.nickname,
                 snsEmail: user.snsEmail,
-                provider: user.provider
-            }
+                provider: user.provider,
+            },
+            unlinkToken: user.unlinkToken
             }));
         }
     })
@@ -231,8 +232,9 @@ export default function ProfileUpdate() {
                     userId: user.userId,
                     nickname: req.profile.nickname,
                     snsEmail: user.snsEmail,
-                    provider: user.provider
-                }
+                    provider: user.provider,
+                },
+                unlinkToken: user.unlinkToken
                 }));
 
                 Swal.fire({icon: 'success', title: "프로필이 수정되었습니다."});
@@ -243,8 +245,9 @@ export default function ProfileUpdate() {
         });   
     }
 
+    const unlinkToken = user.unlinkToken;
+
     //탈퇴
-    //카카오에서도 연결 끊기
     const deleteUser = () => {
         Swal.fire({
             title: '정말로 탈퇴하실 건가요?',
@@ -263,7 +266,33 @@ export default function ProfileUpdate() {
                 .delete('/user/'+user.userId)
                 .then(response => {
                     console.log(response);
+
                     if(response.status===200) {
+                        if(user.provider==="kakao") {
+                            fetch('https://kapi.kakao.com/v1/user/unlink', {
+                                method: 'POST',
+                                headers: {
+                                    'Content-Type': 'application/x-www-form-urlencoded', 
+                                    'Authorization': 'Bearer ' + unlinkToken
+                                },
+                            })
+                            .then(response => {
+                                console.log(response);
+                            }).catch(error => {
+                                console.error(error);
+                            });
+                            
+                        } else if(user.provider==="google") {
+                            fetch('https://accounts.google.com/o/oauth2/revoke?token=' + user.unlinkToken, {
+                                method: 'GET',
+                            })
+                            .then(response => {
+                                console.log(response);
+                            }).catch(error => {
+                                console.error(error);
+                            });
+                        }
+
                         dispatch(initUser());
                         navigate('/');
                     }
