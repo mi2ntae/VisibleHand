@@ -1,4 +1,5 @@
-import React from "react";
+import http from "api/commonHttp";
+import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Link, useNavigate } from "react-router-dom";
 import { setUserId } from "reducer/mypageTabReducer";
@@ -16,6 +17,21 @@ export default function Account() {
     navigate('/');
   }
 
+  const imgUrl = "https://visiblehand-bucket.s3.ap-northeast-2.amazonaws.com/user_default.png";
+  const [profileImg, setProfileImg] = useState('');
+  useEffect(() => {
+    http.get('/user/profile/'+loginId,
+  )
+  .then(response => {
+      if(response.status===200) {
+          setProfileImg(response.data.profileImg);
+      }
+  })
+  .catch(error => {
+      console.log(error);
+  });    
+  }, []);
+
   const move = (e) => {
     e.stopPropagation();
     e.preventDefault();
@@ -26,7 +42,10 @@ export default function Account() {
     <div style={{ gap: "240px" }}>
       <hr style={{ border: "0.5px solid #EDEDED", margin: "24px 0px" }} />
       <StyledLink onClick={(e) => move(e)}>
-        <img src="/icons/header/ic_dictionary.svg" alt="dictionary" />
+        {profileImg!=null && profileImg!=""
+        ?  <img src={profileImg} alt="profileImg" width={20} height={20}/>
+        : <img src={imgUrl} alt="profileImg" width={20} height={20}/>
+        }
         {nickname}
       </StyledLink>
       {nickname!=null && nickname!="" ?
