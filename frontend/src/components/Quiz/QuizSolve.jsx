@@ -14,11 +14,11 @@ export default function QuizSolve({ retry }) {
   const [isCombo, setIsCombo] = useState(false);
   const [comboNum, setComboNum] = useState(0);
 
-  // useEffect(() => {
-  //   http.get(`quiz/rank`).then((res) => {
-  //     setRanking(res.data);
-  //   });
-  // }, []);
+  useEffect(() => {
+    http.get(`quiz/rank`).then((res) => {
+      setRanking(res.data);
+    });
+  }, []);
 
   const [question, setQuestion] = useState("");
   const [content, setContent] = useState("");
@@ -176,7 +176,7 @@ export default function QuizSolve({ retry }) {
               }}
             >
               <img src={"/icons/quiz/Clock.svg"} alt="시계" />
-              대충 기간
+              2023-10-01~2023-10-06
             </div>
           </RankingHeader>
           <ItemContainer>
