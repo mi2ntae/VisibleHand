@@ -40,7 +40,7 @@ export default function QuizSolve({ retry }) {
               showCancelButton: false,
               timer: 2000,
             }).then(() => {
-              navigate("/");
+              navigate("/news");
             });
             return;
           }
@@ -63,7 +63,7 @@ export default function QuizSolve({ retry }) {
               showCancelButton: false,
               timer: 2000,
             }).then(() => {
-              navigate("/");
+              navigate("/news");
             });
             return;
           }
@@ -108,7 +108,7 @@ export default function QuizSolve({ retry }) {
                 showCancelButton: false,
                 timer: 2000,
               }).then(() => {
-                navigate("/");
+                navigate("/news");
               });
               return;
             }
@@ -131,7 +131,7 @@ export default function QuizSolve({ retry }) {
                 showCancelButton: false,
                 timer: 2000,
               }).then(() => {
-                navigate("/");
+                navigate("/news");
               });
               return;
             }
@@ -151,7 +151,7 @@ export default function QuizSolve({ retry }) {
         showDenyButton: false,
         timer: 1000,
       }).then(() => {
-        navigate("/");
+        navigate("/news");
       });
     }
   };
