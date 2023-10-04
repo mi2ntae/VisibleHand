@@ -12,8 +12,8 @@ import java.time.LocalDateTime;
         @NamedNativeQuery(
                 name = "getArticleRanking",
                 query = "SELECT IFNULL(a.article_id, -1) AS articleId, a.title, a.company, a.issue_date AS issueDate, thumbnail " +
-                        "FROM Article a " +
-                        "JOIN (SELECT f.article_id AS articleId, COUNT(f.feed_id) AS feedCount FROM Feed f " +
+                        "FROM article a " +
+                        "JOIN (SELECT f.article_id AS articleId, COUNT(f.feed_id) AS feedCount FROM feed f " +
                         "WHERE f.create_at >= NOW() - INTERVAL 1 HOUR " +
                         "GROUP BY articleId ORDER BY feedCount DESC LIMIT 5) " +
                         "subquery ON a.article_id = subquery.articleId " +

@@ -20,11 +20,11 @@ import java.time.LocalDateTime;
         @NamedNativeQuery(
                 name = "findFeedsAndHeartAndIsHeartByUserIdWhereTitleIsKeyword",
                 query = "SELECT u.user_id AS userId, u.nickname, u.profile_img AS profileImg, F.feed_id as feedId, F.content, A.article_id as articleId, A.title, F.create_at as createAt, A.kind, " +
-                        "       IF((select count(*) from Heart " +
-                        "       where Heart.user_id = :myId and Heart.feed_id = F.feed_id) <= 0, false, true) as isHeart, " +
-                        "       (select count(*) from Heart where Heart.feed_id = F.feed_id) as heart " +
-                        "       from Feed as F " +
-                        "       join Article as A " +
+                        "       IF((select count(*) from heart " +
+                        "       where heart.user_id = :myId and heart.feed_id = F.feed_id) <= 0, false, true) as isHeart, " +
+                        "       (select count(*) from heart where heart.feed_id = F.feed_id) as heart " +
+                        "       from feed as F " +
+                        "       join article as A " +
                         "       on F.article_id = A.article_id " +
                         "       JOIN user AS u ON F.user_id = u.user_id " +
                         "       where A.title like :keyword and F.share >= :isOther and F.user_id = :userId " +
@@ -34,11 +34,11 @@ import java.time.LocalDateTime;
         @NamedNativeQuery(
                 name = "findFeedsAndHeartAndIsHeartByUserIdWhereContentIsKeyword",
                 query = "SELECT u.user_id AS userId, u.nickname, u.profile_img AS profileImg, F.feed_id as feedId, F.content, A.article_id as articleId, A.title, F.create_at as createAt, A.kind, " +
-                        "       IF((select count(*) from Heart " +
-                        "       where Heart.user_id = :myId and Heart.feed_id = F.feed_id) <= 0, false, true) as isHeart, " +
-                        "       (select count(*) from Heart where Heart.feed_id = F.feed_id) as heart " +
-                        "       from Feed as F " +
-                        "       join Article as A " +
+                        "       IF((select count(*) from heart " +
+                        "       where heart.user_id = :myId and heart.feed_id = F.feed_id) <= 0, false, true) as isHeart, " +
+                        "       (select count(*) from heart where heart.feed_id = F.feed_id) as heart " +
+                        "       from feed as F " +
+                        "       join article as A " +
                         "       on F.article_id = A.article_id " +
                         "       JOIN user AS u ON F.user_id = u.user_id " +
                         "       where F.content like :keyword and F.share >= :isOther and F.user_id = :userId " +
@@ -50,12 +50,12 @@ import java.time.LocalDateTime;
                 name = "findFeedsByContent",
                 query = "SELECT u.user_id AS userId, u.nickname, u.profile_img AS profileImg, " +
                         "f.feed_id AS feedId, f.content, f.create_at AS createAt, " +
-                        "IFNULL((SELECT COUNT(*) FROM Heart AS h WHERE h.feed_id = f.feed_id), 0) AS heart, " +
-                        "IF((SELECT COUNT(*) FROM Heart AS h WHERE h.user_id = :userId AND h.feed_id = f.feed_id) > 0, 1, 0) AS isHeart, " +
+                        "IFNULL((SELECT COUNT(*) FROM heart AS h WHERE h.feed_id = f.feed_id), 0) AS heart, " +
+                        "IF((SELECT COUNT(*) FROM heart AS h WHERE h.user_id = :userId AND h.feed_id = f.feed_id) > 0, 1, 0) AS isHeart, " +
                         "a.article_id AS articleId, a.title, a.kind " +
-                        "FROM Feed AS f " +
-                        "JOIN Article AS a ON f.article_id = a.article_id " +
-                        "JOIN User AS u ON f.user_id = u.user_id " +
+                        "FROM feed AS f " +
+                        "JOIN article AS a ON f.article_id = a.article_id " +
+                        "JOIN user AS u ON f.user_id = u.user_id " +
                         "WHERE f.content LIKE :keyword AND f.share > 0 " +
                         "ORDER BY f.create_at DESC",
                 resultSetMapping = "feedListDto"
@@ -64,12 +64,12 @@ import java.time.LocalDateTime;
                 name = "findFeedsByTitle",
                 query = "SELECT u.user_id AS userId, u.nickname, u.profile_img AS profileImg, " +
                         "f.feed_id AS feedId, f.content, f.create_at AS createAt, " +
-                        "IFNULL((SELECT COUNT(*) FROM Heart AS h WHERE h.feed_id = f.feed_id), 0) AS heart, " +
-                        "IF((SELECT COUNT(*) FROM Heart AS h WHERE h.user_id = :userId AND h.feed_id = f.feed_id) > 0, true, false) AS isHeart, " +
+                        "IFNULL((SELECT COUNT(*) FROM heart AS h WHERE h.feed_id = f.feed_id), 0) AS heart, " +
+                        "IF((SELECT COUNT(*) FROM heart AS h WHERE h.user_id = :userId AND h.feed_id = f.feed_id) > 0, true, false) AS isHeart, " +
                         "a.article_id AS articleId, a.title " +
-                        "FROM Feed AS f " +
-                        "JOIN Article AS a ON f.article_id = a.article_id " +
-                        "JOIN User AS u ON f.user_id = u.user_id " +
+                        "FROM feed AS f " +
+                        "JOIN article AS a ON f.article_id = a.article_id " +
+                        "JOIN user AS u ON f.user_id = u.user_id " +
                         "WHERE a.title LIKE :keyword AND f.share > 0 " +
                         "ORDER BY f.create_at DESC",
                 resultSetMapping = "feedListDto"
@@ -78,13 +78,13 @@ import java.time.LocalDateTime;
                 name = "findFeedsByFollowerUserId",
                 query = "SELECT u.user_id AS userId, u.nickname, u.profile_img AS profileImg, " +
                         "f.feed_id AS feedId, f.content, f.create_at AS createAt, " +
-                        "IFNULL((SELECT COUNT(*) FROM Heart AS h WHERE h.feed_id = f.feed_id), 0) AS heart, " +
-                        "IF((SELECT COUNT(*) FROM Heart AS h WHERE h.user_id = :userId AND h.feed_id = f.feed_id) > 0, 1, 0) AS isHeart, " +
+                        "IFNULL((SELECT COUNT(*) FROM heart AS h WHERE h.feed_id = f.feed_id), 0) AS heart, " +
+                        "IF((SELECT COUNT(*) FROM heart AS h WHERE h.user_id = :userId AND h.feed_id = f.feed_id) > 0, 1, 0) AS isHeart, " +
                         "a.article_id AS articleId, a.title, a.kind " +
-                        "FROM Feed AS f " +
-                        "JOIN Article AS a ON f.article_id = a.article_id " +
-                        "JOIN Follow AS ff ON f.user_id = ff.to_id " +
-                        "JOIN User AS u ON f.user_id = u.user_id " +
+                        "FROM feed AS f " +
+                        "JOIN article AS a ON f.article_id = a.article_id " +
+                        "JOIN follow AS ff ON f.user_id = ff.to_id " +
+                        "JOIN user AS u ON f.user_id = u.user_id " +
                         "WHERE f.share > 0 AND ff.from_id = :userId " +
                         "ORDER BY f.create_at DESC",
                 resultSetMapping = "feedListDto"
