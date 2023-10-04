@@ -112,7 +112,10 @@ public class UserController {
 
     @ApiOperation(value = "유저 프로필 수정", notes = "유저 프로필을 수정합니다.")
     @PutMapping("/profile/{userId}")
-    public ResponseEntity<?> updateProfile(@PathVariable Long userId, @RequestPart(value = "file", required = false) MultipartFile file, @RequestBody UserProfileReqDto userProfileReqDto) {
+    public ResponseEntity<?> updateProfile(
+            @PathVariable Long userId,
+            @RequestPart(value = "file", required = false) MultipartFile file,
+            @RequestPart(value = "userProfileReqDto") UserProfileReqDto userProfileReqDto) {
         userService.updateProfile(userId, file, userProfileReqDto);
         return ResponseEntity.ok().build();
     }

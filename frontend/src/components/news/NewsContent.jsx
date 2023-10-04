@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import SizeBubble from "components/news/SizeBubble";
 import SummaryBubble from "components/news/SummaryBubble";
 import {
+  black_grey,
   grey,
   lightest_grey,
   primary,
@@ -16,13 +17,28 @@ import Swal from "sweetalert2";
 export default function NewsContent({ articleId }) {
   const [article, setArticle] = useState([]);
   const [scraped, setScraped] = useState(true);
+  const [category, setCategory] = useState("");
+  const userId = useSelector((state) => state.user.userId);
   const [quiz, setQuiz] = useState({});
   const [text, setText] = useState("");
-  const userId = useSelector((state) => state.user.userId);
+  const [hint, setHint] = useState("");
   useEffect(() => {
     http
       .get(`/article/${articleId}/${userId}`)
       .then((data) => {
+        const types = [
+          { kor: "금융", eng: "FINANCE" },
+          { kor: "증권", eng: "STOCK" },
+          { kor: "산업/재계", eng: "INDUSTRY" },
+          { kor: "중기/벤처", eng: "VENTURE" },
+          { kor: "부동산", eng: "REAL_ESTATE" },
+          { kor: "글로벌 경제", eng: "GLOBAL" },
+          { kor: "생활경제", eng: "LIVING" },
+          { kor: "경제 일반", eng: "GENERAL" },
+        ];
+        setCategory(
+          types.find((type) => type.eng === data.kind)?.kor || "기타"
+        );
         setArticle(data.data.article);
         setScraped(data.data.scraped);
       })
@@ -33,9 +49,45 @@ export default function NewsContent({ articleId }) {
       .then((res) => {
         if (res.data.newsQuizId === -1) return;
         setQuiz(res.data);
+        makeHint(res.data.answer);
       })
       .catch((err) => alert(err));
   }, []);
+
+  const makeHint = (str) => {
+    const cho = [
+      "ㄱ",
+      "ㄲ",
+      "ㄴ",
+      "ㄷ",
+      "ㄸ",
+      "ㄹ",
+      "ㅁ",
+      "ㅂ",
+      "ㅃ",
+      "ㅅ",
+      "ㅆ",
+      "ㅇ",
+      "ㅈ",
+      "ㅉ",
+      "ㅊ",
+      "ㅋ",
+      "ㅌ",
+      "ㅍ",
+      "ㅎ",
+    ];
+    let result = "";
+    for (let i = 0; i < str.length; i++) {
+      let code = str.charCodeAt(i) - 44032;
+      if (str.charCodeAt(i) >= 65 && str.charCodeAt(i) <= 122) {
+        result += "?";
+        continue;
+      }
+      if (code > -1 && code < 11172) result += cho[Math.floor(code / 588)];
+      else result += str.charAt(i);
+    }
+    setHint(result);
+  };
 
   // 글자크기 모달
   const [fSize, setFSize] = useState("1rem");
@@ -46,15 +98,9 @@ export default function NewsContent({ articleId }) {
 
   // 북마크 로직
   const handleBookmark = () => {
-    if (scraped) {
-      http
-        .delete(`article/scrap/${articleId}/${userId}`)
-        .then(() => setScraped(false));
-    } else {
-      http.post(`article/scrap/${articleId}/${userId}`).then(() => {
-        setScraped(true);
-      });
-    }
+    http.post(`article/scrap/${articleId}/${userId}`).then(() => {
+      setScraped(!scraped);
+    });
   };
 
   const transformLazyLoad = (content) => {
@@ -120,7 +166,9 @@ export default function NewsContent({ articleId }) {
             showConfirmButton: false,
             showDenyButton: false,
             timer: 1000,
-          }).then(() => {});
+          }).then(() => {
+            setText("");
+          });
         })
         .catch((err) => {
           alert(err);
@@ -136,7 +184,7 @@ export default function NewsContent({ articleId }) {
         .then(() => {
           Swal.fire({
             title: "오답입니다!",
-            text: `(정답: ${text})`,
+            text: `(힌트: ${hint})`,
             width: 600,
             imageUrl: "/icons/quiz/ic_wrong.svg",
             showConfirmButton: false,
@@ -161,8 +209,8 @@ export default function NewsContent({ articleId }) {
           }}
         >
           <div style={{ fontSize: "0.75rem", color: grey }}>
-            <span style={{ color: primary }}>{article.kind}</span>
-            <span>{article.company} </span>
+            <span style={{ color: primary }}>{category} </span>
+            <span>| {article.company} | </span>
             <span>{article.issueDate}</span>
           </div>
           <div
@@ -223,13 +271,26 @@ export default function NewsContent({ articleId }) {
           margin: "1.5rem 0",
         }}
       />
-      {Object.keys(quiz).length === 0 ? (
+      {Object.keys(quiz).length === 0 ||
+      quiz.question === null ||
+      quiz.question.length === 0 ? (
         <></>
       ) : (
         <QuizContainer>
+          <div>
+            <img src={"/icons/news/ic_quiz.svg"} alt="퀴즈 이미지" />
+            QUIZ
+          </div>
           <div>{quiz.question}</div>
-          <input type="text" onChange={(e) => setText(e.target.value)} />
-          <button onClick={mark}>제출하기</button>
+          <div className="blank">
+            <input
+              placeholder="정답을 입력해주세요!"
+              type="text"
+              value={text}
+              onChange={(e) => setText(e.target.value)}
+            />
+            <button onClick={mark}>제출하기</button>
+          </div>
         </QuizContainer>
       )}
     </NewsContainer>
@@ -253,8 +314,50 @@ const Icon = styled.button`
 `;
 
 const QuizContainer = styled.div`
-  border-radius: 16px;
+  border-radius: 8px;
   border: 1px solid ${lightest_grey};
   width: 996px;
   font-size: 16px;
+  padding-top: 28px;
+  & > div:nth-child(1) {
+    img {
+      margin-right: 8px;
+    }
+    display: flex;
+    align-items: center;
+    padding: 0px 28px 16px;
+    color: ${black_grey};
+  }
+  & > div:nth-child(2) {
+    padding: 0px 28px 28px;
+  }
+  .blank {
+    display: flex;
+    border-radius: 0 0 8px 8px;
+    border-top: 1px solid ${lightest_grey};
+    input {
+      flex: 1 0 auto;
+      padding: 16px 28px;
+      border: none;
+      outline: none;
+      color: ${black_grey};
+      font-size: 16px;
+      height: inherit;
+      border-radius: 0 0 0 8px;
+    }
+    input:focus {
+      outline: none;
+    }
+    button {
+      padding: 16px 28px;
+      font-size: 16px;
+      background-color: ${primary};
+      color: ${white};
+      font-weight: 600;
+      height: inherit;
+      outline: none;
+      border: none;
+      border-radius: 0 0px 8px 0;
+    }
+  }
 `;

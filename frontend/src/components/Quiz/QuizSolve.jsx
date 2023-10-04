@@ -19,7 +19,7 @@ export default function QuizSolve({ retry }) {
   //     setRanking(res.data);
   //   });
   // }, []);
-  
+
   const [question, setQuestion] = useState("");
   const [content, setContent] = useState("");
   const [wordId, setWordId] = useState(1);
@@ -31,6 +31,19 @@ export default function QuizSolve({ retry }) {
       http
         .get(`quiz/retry/${userId}`)
         .then((res) => {
+          if (res.data.allSolved) {
+            Swal.fire({
+              text: "수고하셨습니다! 모두 다시 풀었어요!",
+              imageUrl: "/icons/quiz/allSolved.png",
+              showConfirmButton: false,
+              showDenyButton: false,
+              showCancelButton: false,
+              timer: 2000,
+            }).then(() => {
+              navigate("/");
+            });
+            return;
+          }
           setQuestion("다음 의미를 가진 경제용어는?");
           setContent(res.data.entries[0].meaning);
           setText(res.data.entries[0].word);
@@ -41,6 +54,19 @@ export default function QuizSolve({ retry }) {
       http
         .get(`quiz/dict/${userId}`)
         .then((res) => {
+          if (res.data.allSolved) {
+            Swal.fire({
+              text: "수고하셨습니다! 모두 다시 풀었어요!",
+              imageUrl: "/icons/quiz/allSolved.png",
+              showConfirmButton: false,
+              showDenyButton: false,
+              showCancelButton: false,
+              timer: 2000,
+            }).then(() => {
+              navigate("/");
+            });
+            return;
+          }
           setQuestion("다음 의미를 가진 경제용어는?");
           setContent(res.data.entries[0].meaning);
           setText(res.data.entries[0].word);
@@ -73,6 +99,19 @@ export default function QuizSolve({ retry }) {
         http
           .get(`quiz/retry/${userId}`)
           .then((res) => {
+            if (res.data.allSolved) {
+              Swal.fire({
+                text: "수고하셨습니다! 모두 다시 풀었어요!",
+                imageUrl: "/icons/quiz/allSolved.png",
+                showConfirmButton: false,
+                showDenyButton: false,
+                showCancelButton: false,
+                timer: 2000,
+              }).then(() => {
+                navigate("/");
+              });
+              return;
+            }
             setQuestion("다음 의미를 가진 경제용어는?");
             setContent(res.data.entries[0].meaning);
             setText(res.data.entries[0].word);
@@ -83,6 +122,19 @@ export default function QuizSolve({ retry }) {
         http
           .get(`quiz/dict/${userId}`)
           .then((res) => {
+            if (res.data.allSolved) {
+              Swal.fire({
+                text: "수고하셨습니다! 모두 다시 풀었어요!",
+                imageUrl: "/icons/quiz/allSolved.png",
+                showConfirmButton: false,
+                showDenyButton: false,
+                showCancelButton: false,
+                timer: 2000,
+              }).then(() => {
+                navigate("/");
+              });
+              return;
+            }
             setQuestion("다음 의미를 가진 경제용어는?");
             setContent(res.data.entries[0].meaning);
             setText(res.data.entries[0].word);
@@ -102,7 +154,6 @@ export default function QuizSolve({ retry }) {
         navigate("/");
       });
     }
-    //콤보 계산
   };
   return (
     <MainContainer>
@@ -184,17 +235,17 @@ export default function QuizSolve({ retry }) {
 }
 const MainContainer = styled.div`
   display: flex;
-  padding: 70px 0;
+  padding: 48px 0;
 `;
 const RightContainer = styled.div``;
 const RankingContainer = styled.div`
   box-sizing: border-box;
-  width: 468px;
-  height: 516px;
+  width: 341px;
+  height: 376px;
   background-color: ${color.white};
   border-radius: 16px;
   border: 1px solid ${color.lightest_grey};
-  padding: 20px 32px;
+  padding: 16px 22px;
 `;
 const RankingHeader = styled.div`
   display: flex;
@@ -209,17 +260,17 @@ const RankingHeader = styled.div`
 `;
 const RankingItem = styled.div`
   display: flex;
-  height: 90px;
+  height: 48px;
   align-items: center;
   border-bottom: 1px solid ${color.lightest_grey};
   & > div:first-child {
-    width: 32px;
-    font-size: 32px;
+    width: 22px;
+    font-size: 22px;
   }
   & > div:nth-child(2) {
-    width: 40px;
-    height: 40px;
-    border-radius: 20px;
+    width: 30px;
+    height: 30px;
+    border-radius: 15px;
     img {
       border-radius: inherit;
       width: inherit;
@@ -229,18 +280,18 @@ const RankingItem = styled.div`
     }
   }
   div:nth-child(3) {
-    margin-left: 12px;
+    margin-left: 8px;
   }
   .nickname {
     color: ${color.black_grey};
-    font-size: 20px;
+    font-size: 12px;
     display: flex;
     align-items: center;
     gap: 4px;
   }
   .statusMsg {
     color: ${color.grey};
-    font-size: 14px;
+    font-size: 10px;
   }
 `;
 const ItemContainer = styled.div`
@@ -252,24 +303,25 @@ const ItemContainer = styled.div`
 const ComboContainer = styled.div`
   padding: 0px 32px;
   margin-top: 32px;
-  width: 468px;
-  height: 194px;
+  width: 341px;
+  height: 141px;
   box-sizing: border-box;
   background-image: url("/icons/quiz/Banner_continuity.svg");
+  background-size: cover;
   display: flex;
   align-items: center;
   color: ${color.white};
   gap: 8px;
   & > div:first-child {
-    font-size: 64px;
+    font-size: 46px;
     font-weight: 600;
   }
   & > div:last-child {
     & > div:first-child {
-      font-size: 24px;
+      font-size: 18px;
     }
     & > div:last-child {
-      font-size: 16px;
+      font-size: 12px;
     }
   }
 `;

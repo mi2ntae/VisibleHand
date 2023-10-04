@@ -49,10 +49,10 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
             if (token != null && jwtTokenProvider.isValidateToken(token.getToken())) {
 
                 //리프레시 토큰 확인
-                if (token.getTokenType() == "REFRESH") {
+                if (token.getTokenType().equals("REFRESH")) {
+
                     Authentication authentication
                         = jwtTokenProvider.getAuthentication(token.getToken());
-                    log.info("[토큰 권한 확인]: {}", authentication);
 
                     String userId = authentication.getName();
 
@@ -77,10 +77,8 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
                 Authentication authentication = jwtTokenProvider.getAuthentication(
                     token.getToken());
-                log.info("[토큰 권한 확인]: {}", authentication);
 
                 SecurityContextHolder.getContext().setAuthentication(authentication);
-                log.info("[Security 권한 등록]");
 
 //                Authentication auth  = SecurityContextHolder.getContext().getAuthentication();
 //                log.info("[권한 등록 확인] auth: {}", auth);

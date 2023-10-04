@@ -126,12 +126,9 @@ public class UserServiceImpl implements UserService{
     public NicknameResDto isDuplicatedNickname(String nickname) {
         Optional<User> findUser = userRespository.findByNickname(nickname);
         log.info(nickname);
-        log.info("user: {}", findUser);
         if (findUser.isPresent()) {
-            log.info("사용불가");
             return NicknameResDto.builder().isDuplicated(1).build();
         } else {
-            log.info("사용가능");
             return NicknameResDto.builder().isDuplicated(0).build();
         }
     }
@@ -139,6 +136,9 @@ public class UserServiceImpl implements UserService{
     @Transactional
     @Override
     public void createProfile(MultipartFile file, UserProfileReqDto userProfileReqDto) throws NonExistUserIdException {
+        log.info("file: {}", file);
+        log.info("img: {}", userProfileReqDto.getProfileImg());
+
         String snsEmail = userProfileReqDto.getSnsEmail();
         String provider = userProfileReqDto.getProvider();
 
@@ -147,24 +147,37 @@ public class UserServiceImpl implements UserService{
         if(!findUser.isPresent())
             throw new NonExistUserIdException();
 
-        String s3ImgUrl = null;
-        if(!Objects.isNull(file)) {
-            try {
-                s3ImgUrl = uploader.upload(file, userProfileReqDto.getSnsEmail()+"_"+userProfileReqDto.getProvider());
-            } catch (IOException e) {
-                throw new RuntimeException(e);
-            }
-        }
-        log.info(s3ImgUrl);
+        User user = null;
+        if(userProfileReqDto.getProfileImg()!=null && userProfileReqDto.getProfileImg().equals("default")) {
+            user = User.builder()
+                    .userId(findUser.get().getUserId())
+                    .nickname(userProfileReqDto.getProfile().getNickname())
+                    .statusMsg(userProfileReqDto.getProfile().getStatusMsg())
+                    .profileImg(null)
+                    .snsEmail(findUser.get().getSnsEmail())
+                    .provider(findUser.get().getProvider())
+                    .build();
 
-        User user = User.builder()
-                .userId(findUser.get().getUserId())
-                .nickname(userProfileReqDto.getProfile().getNickname())
-                .statusMsg(userProfileReqDto.getProfile().getStatusMsg())
-                .profileImg(s3ImgUrl)
-                .snsEmail(findUser.get().getSnsEmail())
-                .provider(findUser.get().getProvider())
-                .build();
+        } else {
+            String s3ImgUrl = null;
+            if (!Objects.isNull(file)) {
+                try {
+                    s3ImgUrl = uploader.upload(file, userProfileReqDto.getSnsEmail() + "_" + userProfileReqDto.getProvider());
+                } catch (IOException e) {
+                    throw new RuntimeException(e);
+                }
+            }
+            log.info(s3ImgUrl);
+
+             user = User.builder()
+                    .userId(findUser.get().getUserId())
+                    .nickname(userProfileReqDto.getProfile().getNickname())
+                    .statusMsg(userProfileReqDto.getProfile().getStatusMsg())
+                    .profileImg(s3ImgUrl)
+                    .snsEmail(findUser.get().getSnsEmail())
+                    .provider(findUser.get().getProvider())
+                    .build();
+        }
 
         log.info("[changed1] user: {}", user);
 
@@ -174,37 +187,40 @@ public class UserServiceImpl implements UserService{
     @Transactional
     @Override
     public void updateProfile(Long userId, MultipartFile file, UserProfileReqDto userProfileReqDto) throws NonExistUserIdException {
+        log.info("file: {}", file);
+        log.info("img: {}", userProfileReqDto.getProfileImg());
+
         Optional<User> findUser = userRespository.findUserByUserId(userId);
         if(!findUser.isPresent())
             throw new NonExistUserIdException();
 
         User user = findUser.get();
 
-        //프로필 사진 변경되었으면
-        String s3ImgUrl = null;
-        if(!Objects.isNull(file)) {
-            //원래 프로필 S3에서 삭제하기
-            String originS3ImgUrl = user.getProfileImg();
-            uploader.deleteFileFromS3Bucket(originS3ImgUrl);
-
-            try {
-                s3ImgUrl = uploader.upload(file, userProfileReqDto.getSnsEmail());
-            } catch (IOException e) {
-                throw new RuntimeException(e);
-            }
-        }
-        log.info(s3ImgUrl);
-
-        if(s3ImgUrl!=null) {
-            user.setProfileImg(userProfileReqDto.getProfileImg());
-        }
-
-        //프로필 사진 삭제되었으면
-        if(userProfileReqDto.getProfileImg()==null) {
-            //원래 프로필 S3에서 삭제하기
-            String originS3ImgUrl = user.getProfileImg();
-            uploader.deleteFileFromS3Bucket(originS3ImgUrl);
+        if(userProfileReqDto.getProfileImg()!=null && userProfileReqDto.getProfileImg().equals("default")) {
             user.setProfileImg(null);
+        } else {
+            //프로필 사진 변경되었으면
+            String s3ImgUrl = null;
+            if(!Objects.isNull(file)) {
+                //원래 프로필 S3에서 삭제하기
+                String originS3ImgUrl = user.getProfileImg();
+                if(originS3ImgUrl!=null && originS3ImgUrl!="") {
+                    uploader.deleteFileFromS3Bucket(originS3ImgUrl);
+                }
+
+                try {
+                    s3ImgUrl = uploader.upload(file, userProfileReqDto.getSnsEmail());
+                } catch (IOException e) {
+                    throw new RuntimeException(e);
+                }
+            }
+            log.info(s3ImgUrl);
+
+            if(s3ImgUrl!=null) {
+                user.setProfileImg(s3ImgUrl);
+            } else {
+                user.setProfileImg(user.getProfileImg());
+            }
         }
 
         user.setNickname(userProfileReqDto.getProfile().getNickname());

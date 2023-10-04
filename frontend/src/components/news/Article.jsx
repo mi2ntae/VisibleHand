@@ -23,12 +23,12 @@ export default function Article({ articleId, company, kind, title, thumbnail }) 
     return (
 
         <Container>
-            <Link to={'/'}  style={{ color:'black' }}>
+            <Link to={`/news/${articleId}`}  style={{ color:'black' }}>
                 <Box >
                     <div>
                         <div style={{paddingBottom:'10px'}}>
-                            <span style={{color : 'navy', fontWeight :'700', paddingRight :'10px'}}>{company}</span> 
-                            <span style={{color : light_grey}}>{EngToKorTitle(kind)}</span>
+                            <span style={{color : 'navy', fontWeight :'700', paddingRight :'10px', display:'inline'}}>{company}</span> 
+                            <span style={{color : light_grey, display:'inline'}}>{EngToKorTitle(kind)}</span>
                         </div>
                         <div>{title.slice(0,22)}...</div>
                     </div>

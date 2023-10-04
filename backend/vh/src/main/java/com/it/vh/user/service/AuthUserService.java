@@ -2,18 +2,11 @@ package com.it.vh.user.service;
 
 import com.it.vh.common.util.jwt.JwtTokenProvider;
 import com.it.vh.common.util.jwt.dto.TokenInfo;
-import com.it.vh.user.api.dto.auth.AuthTokenInfo;
-import com.it.vh.user.api.dto.auth.AuthUserInfo;
-import com.it.vh.user.api.dto.auth.GoogleUserInfo;
-import com.it.vh.user.api.dto.auth.KakaoUserInfo;
-import com.it.vh.user.api.dto.auth.LoginResDto;
+import com.it.vh.user.api.dto.auth.*;
 import com.it.vh.user.api.dto.auth.LoginResDto.UserProfile;
 import com.it.vh.user.domain.entity.User;
 import com.it.vh.user.domain.repository.UserRespository;
-import java.nio.charset.StandardCharsets;
-import java.util.Collections;
-import java.util.Map;
-import java.util.Optional;
+import com.it.vh.user.exception.NonExistUserIdException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.core.ParameterizedTypeReference;
@@ -27,6 +20,11 @@ import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.reactive.function.client.WebClient;
 
+import java.nio.charset.StandardCharsets;
+import java.util.Collections;
+import java.util.Map;
+import java.util.Optional;
+
 @Slf4j
 @Transactional(readOnly = true)
 @RequiredArgsConstructor
@@ -37,7 +35,7 @@ public class AuthUserService {
     private final UserRespository userRespository;
     private final JwtTokenProvider jwtTokenProvider;
     private final UserRedisService userRedisService;
-    
+
     @Transactional
     public LoginResDto login(String code, String provider) {
         ClientRegistration providerInfo = inMemoryRepository.findByRegistrationId(provider);
@@ -50,26 +48,26 @@ public class AuthUserService {
         log.info("[사용자] user: {}", user);
 
         UserProfile userProfile = null;
-        if(user.getNickname()=="") {
+        if (user.getNickname() == "") {
             userProfile = UserProfile.builder()
-                .userId(user.getUserId())
-                .nickname(user.getNickname())
-                .statusMsg(user.getStatusMsg())
-                .profileImg(user.getProfileImg())
-                .snsEmail(user.getSnsEmail())
-                .provider(user.getProvider())
-                .isAlready(0)
-                .build();
+                    .userId(user.getUserId())
+                    .nickname(user.getNickname())
+                    .statusMsg(user.getStatusMsg())
+                    .profileImg(user.getProfileImg())
+                    .snsEmail(user.getSnsEmail())
+                    .provider(user.getProvider())
+                    .isAlready(0)
+                    .build();
         } else {
             userProfile = UserProfile.builder()
-                .userId(user.getUserId())
-                .nickname(user.getNickname())
-                .statusMsg(user.getStatusMsg())
-                .profileImg(user.getProfileImg())
-                .snsEmail(user.getSnsEmail())
-                .provider(user.getProvider())
-                .isAlready(1)
-                .build();
+                    .userId(user.getUserId())
+                    .nickname(user.getNickname())
+                    .statusMsg(user.getStatusMsg())
+                    .profileImg(user.getProfileImg())
+                    .snsEmail(user.getSnsEmail())
+                    .provider(user.getProvider())
+                    .isAlready(1)
+                    .build();
         }
 
         log.info("userProfile: {}", userProfile);
@@ -85,26 +83,26 @@ public class AuthUserService {
 
         //레디스에 리프레시 토큰 저장
         userRedisService.saveRefreshToken(String.valueOf(user.getUserId()),
-            token.getRefresh_token());
+                tokenInfo.getRefreshToken());
 
         return LoginResDto.builder()
-            .user(userProfile)
-            .token(tokenInfo)
-            .build();
+                .user(userProfile)
+                .token(tokenInfo)
+                .build();
     }
 
     private AuthTokenInfo getToken(String code, ClientRegistration provider) {
         return WebClient.create()
-            .post()
-            .uri(provider.getProviderDetails().getTokenUri())
-            .headers(header -> {
-                header.setContentType(MediaType.APPLICATION_FORM_URLENCODED);
-                header.setAcceptCharset(Collections.singletonList(StandardCharsets.UTF_8));
-            })
-            .bodyValue(tokenRequest(code, provider))
-            .retrieve()
-            .bodyToMono(AuthTokenInfo.class)
-            .block();
+                .post()
+                .uri(provider.getProviderDetails().getTokenUri())
+                .headers(header -> {
+                    header.setContentType(MediaType.APPLICATION_FORM_URLENCODED);
+                    header.setAcceptCharset(Collections.singletonList(StandardCharsets.UTF_8));
+                })
+                .bodyValue(tokenRequest(code, provider))
+                .retrieve()
+                .bodyToMono(AuthTokenInfo.class)
+                .block();
     }
 
     private MultiValueMap<String, String> tokenRequest(String code, ClientRegistration provider) {
@@ -136,26 +134,48 @@ public class AuthUserService {
         }
 
         User saveUser = User.builder()
-            .nickname("")
-            .snsEmail(snsEmail)
-            .provider(provider)
-            .build();
+                .nickname("")
+                .snsEmail(snsEmail)
+                .provider(provider)
+                .build();
+
         userRespository.save(saveUser);
         log.info("[가입완료] userId: {}", saveUser.getUserId());
         return saveUser;
     }
 
     private Map<String, Object> getUserAttributes(AuthTokenInfo token,
-        ClientRegistration provider) {
+                                                  ClientRegistration provider) {
         return WebClient.create()
-            .get()
-            .uri(provider.getProviderDetails().getUserInfoEndpoint().getUri())
-            .headers(header -> {
-                header.setBearerAuth(token.getAccess_token());
-            })
-            .retrieve()
-            .bodyToMono(new ParameterizedTypeReference<Map<String, Object>>() {
-            })
-            .block();
+                .get()
+                .uri(provider.getProviderDetails().getUserInfoEndpoint().getUri())
+                .headers(header -> {
+                    header.setBearerAuth(token.getAccess_token());
+                })
+                .retrieve()
+                .bodyToMono(new ParameterizedTypeReference<Map<String, Object>>() {
+                })
+                .block();
+    }
+
+    public TokenInfo setToken(Long userId) {
+        Optional<User> findUser = userRespository.findUserByUserId(userId);
+        if (!findUser.isPresent())
+            throw new NonExistUserIdException();
+
+        //권한 설정
+        Authentication authentication = jwtTokenProvider.setAuthentication(findUser.get());
+        TokenInfo tokenInfo = jwtTokenProvider.generateToken(authentication);
+
+        //권한 확인
+//        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+//        Long userId = Long.parseLong(auth.getName());
+//        log.info("userId: {}", userId);
+
+        //레디스에 리프레시 토큰 저장
+        userRedisService.saveRefreshToken(String.valueOf(userId),
+                tokenInfo.getRefreshToken());
+
+        return tokenInfo;
     }
 }
