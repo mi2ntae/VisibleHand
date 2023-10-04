@@ -5,7 +5,7 @@ import MypageSearch from "components/user/mypage/left/top/MypageSearch";
 import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 
-export default function MyPageLeftTop({ userId, tabs }) {
+export default function MyPageLeftTop({ tabs }) {
   const tabNo = useSelector((state) => state.mypageTab.tabNo);
   const navi = useNavigate();
 

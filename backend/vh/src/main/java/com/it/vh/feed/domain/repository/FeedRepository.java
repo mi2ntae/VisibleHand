@@ -16,10 +16,10 @@ import java.util.Optional;
 
 public interface FeedRepository extends JpaRepository<Feed, Long> {
     @Query(name = "findFeedsAndHeartAndIsHeartByUserIdWhereTitleIsKeyword", nativeQuery = true)
-    List<FeedRes> findFeedsAndHeartAndIsHeartByUserIdWhereTitleIsKeyword(long userId, long myId, String keyword, boolean isOther, Pageable page);
+    List<FeedListRes> findFeedsAndHeartAndIsHeartByUserIdWhereTitleIsKeyword(long userId, long myId, String keyword, boolean isOther, Pageable page);
 
     @Query(name = "findFeedsAndHeartAndIsHeartByUserIdWhereContentIsKeyword", nativeQuery = true)
-    List<FeedRes> findFeedsAndHeartAndIsHeartByUserIdWhereContentIsKeyword(long userId, long myId, String keyword, boolean isOther, Pageable page);
+    List<FeedListRes> findFeedsAndHeartAndIsHeartByUserIdWhereContentIsKeyword(long userId, long myId, String keyword, boolean isOther, Pageable page);
 
     @Query(name = "findFeedsByContent", nativeQuery = true)
     List<FeedListRes> findFeedsByContent(long userId, String keyword, Pageable page);

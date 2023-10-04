@@ -8,7 +8,7 @@ import com.it.vh.feed.api.dto.MyFeedRes;
 import java.util.List;
 
 public interface FeedService {
-    List<FeedRes> getFeedsByUserId(long userId, int searchType, String keyword, int page);
+    List<FeedListRes> getFeedsByUserId(long userId, int searchType, String keyword, int page);
 
     List<FeedListRes> searchFeedsByUserId(long userId, int searchType, String keyword, int page);
 

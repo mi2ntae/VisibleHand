@@ -19,30 +19,32 @@ import java.time.LocalDateTime;
 @NamedNativeQueries({
         @NamedNativeQuery(
                 name = "findFeedsAndHeartAndIsHeartByUserIdWhereTitleIsKeyword",
-                query = "SELECT F.feed_id as feedId, F.content, A.article_id as articleId, A.title, F.create_at as createAt, " +
+                query = "SELECT u.user_id AS userId, u.nickname, u.profile_img AS profileImg, F.feed_id as feedId, F.content, A.article_id as articleId, A.title, F.create_at as createAt, A.kind, " +
                         "       IF((select count(*) from Heart " +
                         "       where Heart.user_id = :myId and Heart.feed_id = F.feed_id) <= 0, false, true) as isHeart, " +
                         "       (select count(*) from Heart where Heart.feed_id = F.feed_id) as heart " +
                         "       from Feed as F " +
                         "       join Article as A " +
                         "       on F.article_id = A.article_id " +
+                        "       JOIN user AS u ON F.user_id = u.user_id " +
                         "       where A.title like :keyword and F.share >= :isOther and F.user_id = :userId " +
                         "       order by createAt desc",
-                resultSetMapping = "findFeedsAndHeartAndIsHeartByUserIdWhereTitleIsKeyword"
+                resultSetMapping = "feedListDto"
         ),
         @NamedNativeQuery(
                 name = "findFeedsAndHeartAndIsHeartByUserIdWhereContentIsKeyword",
-                query = "SELECT F.feed_id as feedId, F.content, A.article_id as articleId, A.title, F.create_at as createAt, " +
+                query = "SELECT u.user_id AS userId, u.nickname, u.profile_img AS profileImg, F.feed_id as feedId, F.content, A.article_id as articleId, A.title, F.create_at as createAt, A.kind, " +
                         "       IF((select count(*) from Heart " +
                         "       where Heart.user_id = :myId and Heart.feed_id = F.feed_id) <= 0, false, true) as isHeart, " +
                         "       (select count(*) from Heart where Heart.feed_id = F.feed_id) as heart " +
                         "       from Feed as F " +
                         "       join Article as A " +
                         "       on F.article_id = A.article_id " +
+                        "       JOIN user AS u ON F.user_id = u.user_id " +
                         "       where F.content like :keyword and F.share >= :isOther and F.user_id = :userId " +
                         "       order by createAt desc",
 
-                resultSetMapping = "findFeedsAndHeartAndIsHeartByUserIdWhereTitleIsKeyword"
+                resultSetMapping = "feedListDto"
         ),
         @NamedNativeQuery(
                 name = "findFeedsByContent",

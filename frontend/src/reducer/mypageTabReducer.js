@@ -1,6 +1,7 @@
 import { createSlice } from "@reduxjs/toolkit";
 
 const initialState = {
+  userId: 0,
   tabNo: 0,
   keyword: "",
   searchType: 0,
@@ -19,7 +20,11 @@ const tabSlice = createSlice({
     setSearchType: (state, action) => {
       state.searchType = action.payload;
     },
+    setUserId: (state, action) => {
+      state.userId = action.payload;
+    },
   },
 });
-export const { setTabNo, setKeyword, setSearchType } = tabSlice.actions;
+export const { setTabNo, setKeyword, setSearchType, setUserId } =
+  tabSlice.actions;
 export default tabSlice.reducer;

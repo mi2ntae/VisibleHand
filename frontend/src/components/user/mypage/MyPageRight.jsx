@@ -3,8 +3,9 @@ import styled from 'styled-components';
 import MyPageRightTop from './right/MyPageRightTop';
 import MyPageRightCenter from './right/MyPageRightCenter';
 import MyPageRightBottom from './right/MyPageRightBottom';
-
-export default function MyPageRight({userId}) {
+import { useSelector } from 'react-redux';
+export default function MyPageRight() {
+    const userId = useSelector((state) => state.mypageTab.userId);
     return (
         <RightContainer>
             <MyPageRightTop userId={userId}></MyPageRightTop>
