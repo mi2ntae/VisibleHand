@@ -5,7 +5,8 @@ import { Background } from 'styled';
 import { black_grey, dark_grey, darkest_grey, white } from 'lib/style/colorPalette';
 import { useSelector } from 'react-redux';
 
-export default function MyPageRightTop({userId}) {
+export default function MyPageRightTop() {
+    const userId = useSelector((state) => state.mypageTab.userId);
     const loginId = useSelector((state) => state.user.userId);
     const [profile, setProfile] = useState({
         nickname: "",
@@ -33,7 +34,7 @@ export default function MyPageRightTop({userId}) {
             alert(err.message)
         })
         // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [])
+    }, [userId])
 
     return (
         <Background style={{ padding: "1.5rem", gap: "1.25rem" }}>

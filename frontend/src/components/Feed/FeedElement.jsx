@@ -10,11 +10,15 @@ import { Link, useNavigate } from "react-router-dom";
 import { ProfileImg } from "styled";
 import styled from "styled-components";
 import Heart from "components/Feed/Heart";
+import { useDispatch } from "react-redux";
+import { setUserId } from "reducer/mypageTabReducer";
 
 export default function FeedElement({ data }) {
   const navigate = useNavigate();
+  const dispatch = useDispatch();
   const moveToProfile = () => {
-    navigate(`/profile/${data.nickname}`);
+    dispatch(setUserId(data.userId));
+    navigate(`/mypage`);
   };
 
   const [moreBtn, setMoreBtn] = useState(false);

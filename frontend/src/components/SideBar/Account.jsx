@@ -1,16 +1,25 @@
 import React from "react";
-import { useSelector } from "react-redux";
-import { Link } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
+import { Link, useNavigate } from "react-router-dom";
+import { setUserId } from "reducer/mypageTabReducer";
 import styled from "styled-components";
 
 export default function Account() {
+  const dispatch = useDispatch();
   const loginId = useSelector((state) => state.user.userId);
   const nickname = useSelector((state) => state.user.nickname);
+  const navi = useNavigate();
 
+  const move = (e) => {
+    e.stopPropagation();
+    e.preventDefault();
+    dispatch(setUserId(loginId));
+    navi(`/mypage`);
+  }
   return (
     <div style={{ gap: "240px" }}>
       <hr style={{ border: "0.5px solid #EDEDED", margin: "24px 0px" }} />
-      <StyledLink to={`/mypage/${loginId}`}>
+      <StyledLink onClick={(e) => move(e)}>
         <img src="/icons/header/ic_dictionary.svg" alt="dictionary" />
         {nickname}
       </StyledLink>

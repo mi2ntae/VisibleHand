@@ -1,14 +1,15 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
-import { useDispatch } from 'react-redux';
 import { setKeyword, setSearchType, setTabNo } from '../reducer/mypageTabReducer';
 import { useParams } from 'react-router';
 import MyPageLeft from 'components/user/mypage/MyPageLeft';
 import MyPageRight from 'components/user/mypage/MyPageRight';
+import { setUserId } from '../reducer/mypageTabReducer';
+import { useDispatch, useSelector } from 'react-redux';
 
 export default function Mypage() {
-    const userId = parseInt(useParams().userId);
     const dispatch = useDispatch();
+    const userId = useSelector((state) => state.mypageTab.userId);
 
     useEffect(() => {
         return() => {
@@ -25,8 +26,20 @@ export default function Mypage() {
             </MyPageTop>
             <MyPageDown userId={params.userId}>
             </MyPageDown> */}
-            <MyPageLeft userId={userId}></MyPageLeft>
-            <MyPageRight userId={userId}></MyPageRight>
+            {
+                userId === 0 
+                ?
+                <div></div>
+                :
+                <MyPageLeft></MyPageLeft>
+            }
+            {
+                userId === 0 
+                ?
+                <div></div>
+                :
+                <MyPageRight></MyPageRight>
+            }
         </div>
     );
 }

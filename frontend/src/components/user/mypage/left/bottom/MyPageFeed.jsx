@@ -7,8 +7,9 @@ import UserElement from "components/Feed/UserElement";
 import FeedElement from "components/Feed/FeedElement";
 import { background } from "lib/style/colorPalette";
 
-export default function MypageFeed({userId}) {
+export default function MypageFeed() {
     const dispatch = useDispatch();
+    const userId = useSelector((state) => state.mypageTab.userId);
     const searchType = useSelector((state) => state.mypageTab.searchType);
     const keyword = useSelector((state) => state.mypageTab.keyword);
     const [feeds, setFeeds] = useState([]);
@@ -64,7 +65,7 @@ export default function MypageFeed({userId}) {
     useEffect(() => {
         if(!loading) return;
         setTimeout(() => getInitData(), 10)
-    }, [keyword])
+    }, [keyword, userId])
 
     return (
         <div>
