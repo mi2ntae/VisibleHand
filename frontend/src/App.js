@@ -2,15 +2,26 @@ import { Outlet } from "react-router-dom";
 import SideBar from "./components/SideBar/SideBar";
 import styled, { createGlobalStyle } from "styled-components";
 import OnBoarding from "pages/Onboarding";
+import { useSelector } from "react-redux";
+import { Navigate, useLocation } from "react-router-dom";
 
 function App() {
+  const token = useSelector((state) => state.user.accessToken);
+  const pathname = useLocation().pathname;
+
+  const whiteList = [/^\/$/, /^\/login$/];
+
   return (
     <Root>
       <GlobalStyle />
-        <SideBar />
-          <Content>
-            <Outlet />
-          </Content>
+      <SideBar />
+      <Content>
+        {token || whiteList.some((item) => item.test(pathname)) ? (
+          <Outlet />
+        ) : (
+          <Navigate to="/login" />
+        )}
+      </Content>
     </Root>
   );
 }
