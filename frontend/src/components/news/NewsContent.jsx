@@ -221,9 +221,6 @@ export default function NewsContent({ articleId }) {
             }}
           >
             <Icon>
-              <img src="/icons/news/ic_read.svg" />
-            </Icon>
-            <Icon>
               <img
                 src="/icons/news/ic_size.svg"
                 onClick={() => setFontSizeModal(!fontSizeModal)}
