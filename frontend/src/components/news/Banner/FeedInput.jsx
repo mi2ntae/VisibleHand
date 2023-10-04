@@ -11,6 +11,7 @@ import {
 import React, { useEffect, useState } from "react";
 import { Background, ProfileImg } from "styled";
 import styled from "styled-components";
+import Swal from "sweetalert2";
 
 export default function FeedInput({ articleId, userId, setFeeds }) {
   const [content, setContent] = useState("");
@@ -49,16 +50,30 @@ export default function FeedInput({ articleId, userId, setFeeds }) {
         })
         .then((data) => {
           setFeedId(data.data);
-          alert("등록이 완료되었습니다.");
-          getFeeds();
+          Swal.fire({
+            title: "등록이 완료되었습니다",
+            imageUrl: "/icons/quiz/ic_right.svg",
+            width: 600,
+            showConfirmButton: false,
+            timer: 1000,
+          }).then(() => {
+            getFeeds();
+          });
         })
         .catch((err) => console.log(err));
     } else {
       http
         .put(`/feed/${feedId}`, { content: content, shared: isShared })
         .then(() => {
-          alert("수정이 완료되었습니다.");
-          getFeeds();
+          Swal.fire({
+            title: "등록이 완료되었습니다",
+            imageUrl: "/icons/quiz/ic_right.svg",
+            width: 600,
+            showConfirmButton: false,
+            timer: 1000,
+          }).then(() => {
+            getFeeds();
+          });
         })
         .catch((err) => {
           alert(err);
