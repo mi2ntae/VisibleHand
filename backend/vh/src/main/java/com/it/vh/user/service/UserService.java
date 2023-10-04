@@ -1,10 +1,6 @@
 package com.it.vh.user.service;
 
-import com.it.vh.user.api.dto.FollowResDto;
-import com.it.vh.user.api.dto.NicknameResDto;
-import com.it.vh.user.api.dto.UserFollowListResDto;
-import com.it.vh.user.api.dto.UserFollowResDto;
-import com.it.vh.user.api.dto.UserProfileReqDto;
+import com.it.vh.user.api.dto.*;
 import com.it.vh.user.domain.dto.UserDto;
 import com.it.vh.user.exception.NonExistUserIdException;
 import org.springframework.data.domain.Page;
@@ -31,6 +27,6 @@ public interface UserService {
     void updateProfile(Long userId, MultipartFile file, UserProfileReqDto userProfileReqDto);
     void deleteUser(Long userId);
 
-    List<UserFollowListResDto> getUsersByKeyword(String keyword, int page);
+    List<UserSearchListDto> getUsersByKeyword(String keyword, long userId, int page);
     List<UserFollowListResDto> getRecommendUserListByUserId(long userId);
 }

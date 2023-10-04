@@ -33,7 +33,7 @@ public class FeedController {
                 res = feedService.searchFeedsByUserId(userId, searchType, keyword, page);
                 break;
             case 1:
-                res = userService.getUsersByKeyword("%" + keyword + "%", page);
+                res = userService.getUsersByKeyword("%" + keyword + "%", userId, page);
                 break;
             default:
                 res = feedService.searchFeedsByUserId(userId, searchType, keyword, page);
