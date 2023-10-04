@@ -35,7 +35,7 @@ export default function ScrapSearch() {
 
   return (
     <SearchContainer>
-      <Select defaultValue="0" onChange={(e) => setType(e.target.value)}>
+      <Select defaultValue="0" onChange={(e) => setType(parseInt(e.target.value))}>
         {options[tabNo].map((opt) => (
           <option value={opt.value}>{opt.content}</option>
         ))}

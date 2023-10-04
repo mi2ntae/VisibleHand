@@ -4,8 +4,10 @@ import http from "api/commonHttp";
 import Streak from "react-github-contribution-calendar"
 import color, { dark_grey } from "lib/style/colorPalette";
 import { Background, BannerTitle } from 'styled';
+import { useSelector } from 'react-redux';
 
-export default function MyPageStreak({userId}) {
+export default function MyPageStreak() {
+    const userId = useSelector((state) => state.mypageTab.userId);
     const [data, setData] = useState({});
     const colors = ["lightgray", color.streakFirst, color.streakSecond, color.streakThird, color.streakFourth, color.streakFifth]
     const monthNames = [
@@ -27,7 +29,7 @@ export default function MyPageStreak({userId}) {
         })
 
         // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [])
+    }, [userId])
 
     const variate = (res) => {
         let k = {};
