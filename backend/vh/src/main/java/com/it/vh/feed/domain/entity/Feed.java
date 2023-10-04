@@ -92,7 +92,7 @@ import java.time.LocalDateTime;
         @NamedNativeQuery(
                 name = "findFeedsByArticle",
                 query = "SELECT " +
-                        "    u.user_id AS userId " +
+                        "    u.user_id AS userId, " +
                         "    f.feed_id AS feedId, " +
                         "    u.profile_img AS profileImg, " +
                         "    u.nickname," +
