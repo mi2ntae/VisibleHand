@@ -39,7 +39,7 @@ import java.time.LocalDate;
                         "FROM user u " +
                         "LEFT JOIN follow f ON u.user_id = f.to_id AND f.from_id = :userId " +
                         "WHERE u.nickname LIKE :keyword",
-                resultSetMapping = "userFollowListDto"
+                resultSetMapping = "userSearchListDto"
         )
 })
 
@@ -57,6 +57,19 @@ import java.time.LocalDate;
 @SqlResultSetMapping(
         name = "userFollowListDto",
         classes = @ConstructorResult(
+                targetClass = UserFollowListResDto.class,
+                columns = {
+                        @ColumnResult(name = "userId", type = Long.class),
+                        @ColumnResult(name = "userName", type = String.class),
+                        @ColumnResult(name = "statusMsg", type = String.class),
+                        @ColumnResult(name = "imageUrl", type = String.class),
+                }
+        )
+)
+
+@SqlResultSetMapping(
+        name = "userSearchListDto",
+        classes = @ConstructorResult(
                 targetClass = UserSearchListDto.class,
                 columns = {
                         @ColumnResult(name = "userId", type = Long.class),
@@ -67,6 +80,7 @@ import java.time.LocalDate;
                 }
         )
 )
+
 @Data
 @Entity(name = "user")
 @NoArgsConstructor
