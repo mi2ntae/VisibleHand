@@ -14,6 +14,10 @@ spring:
         - redisprod
 ---
 spring:
+  servlet:
+    multipart:
+      max-file-size: 200MB
+      max-request-size: 250MB
   config:
     activate:
       on-profile: common
