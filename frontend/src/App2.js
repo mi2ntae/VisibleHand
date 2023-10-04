@@ -1,16 +1,16 @@
 import { Outlet } from "react-router-dom";
 import SideBar from "./components/SideBar/SideBar";
 import styled, { createGlobalStyle } from "styled-components";
+import { useSelector } from "react-redux";
 import OnBoarding from "pages/Onboarding";
 
-function App() {
+function App2() {
   return (
     <Root>
       <GlobalStyle />
-        <SideBar />
-          <Content>
-            <Outlet />
-          </Content>
+      <Content>
+        <Outlet />
+      </Content>
     </Root>
   );
 }
@@ -29,7 +29,6 @@ const Root = styled.div`
 
 const Content = styled.div`
   flex-grow: 1;
-  margin-left: 276px;
 `;
 
-export default App;
+export default App2;

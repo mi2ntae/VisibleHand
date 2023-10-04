@@ -71,6 +71,7 @@ const ContentWrap = styled.div`
     position: relative;
     background: #494A4E;
     height: 100%;
+    width: 100%;
 `;
 const Container = styled.div`
     position: absolute;
