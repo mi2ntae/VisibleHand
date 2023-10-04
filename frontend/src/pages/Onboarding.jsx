@@ -108,6 +108,7 @@ margin-top : 50px;
 color : #6A74C9;
 transition: 0.5s;
 text-align: center;
+cursor : pointer;
 &:hover {
   background: #6A74C9;
   color: white;
