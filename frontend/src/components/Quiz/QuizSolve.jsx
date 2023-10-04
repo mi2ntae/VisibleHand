@@ -175,8 +175,16 @@ export default function QuizSolve({ retry }) {
                 alignItems: "center",
               }}
             >
-              <img src={"/icons/quiz/Clock.svg"} alt="시계" />
-              2023-10-01~2023-10-06
+              <div
+                style={{
+                  fontSize: "12px",
+                  display: "flex",
+                  alignItems: "center",
+                }}
+              >
+                <img src={"/icons/quiz/Clock.svg"} alt="시계" />
+                2023-10-01~2023-10-06
+              </div>
             </div>
           </RankingHeader>
           <ItemContainer>
@@ -252,7 +260,7 @@ const RankingHeader = styled.div`
   height: 65px;
   align-items: center;
   & > div:first-child {
-    font-size: 20px;
+    font-size: 16px;
     color: ${color.black_grey};
     font-weight: 600;
   }
