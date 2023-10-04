@@ -18,6 +18,7 @@ const Bubble = styled.div`
   margin-top: 20px; // 삼각형과 거리를 주기 위해 조금 더 높게 설정했습니다.
   color: ${black_grey};
   max-width: 70%;
+  z-index: 999;
 
   &:before,
   &:after {
