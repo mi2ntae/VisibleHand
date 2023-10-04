@@ -30,7 +30,6 @@ function Congrats() {
             <br></br>
           </div>
           </Container>
-
           <Container2>
           <div class="rocket">
             <div class="rocket-body">
@@ -70,21 +69,21 @@ export default Congrats;
 
 const ContentWrap = styled.div`
     position: relative;
-    height: 100%;
     background: #494A4E;
+    height: 100%;
 `;
 const Container = styled.div`
     position: absolute;
-    top: 20%;
+    top: 15%;
     left: 50%;
     transform: translate(-50%, -50%);
 `;
   
 const Container2 = styled.div`
     position: relative;
-    top: 40%;
+    top: 35%;
     left: 48.5%;
-    transform: translate(-50%, -50%);
+    transform: translate(-50%, 0%);
 `;
 
 const Button = styled.button`
