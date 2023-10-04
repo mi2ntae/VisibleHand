@@ -6,6 +6,7 @@ import http from 'api/commonHttp';
 import UserElement from "components/Feed/UserElement";
 import FeedElement from "components/Feed/FeedElement";
 import { background } from "lib/style/colorPalette";
+import NoContentComponent from './NoContentComponent';
 
 export default function MypageFeed() {
     const dispatch = useDispatch();
@@ -71,6 +72,10 @@ export default function MypageFeed() {
         <div>
             <FeedContainer>
             {
+            feeds.length == 0 
+            ?
+            <NoContentComponent text="피드가 존재하지 않습니다."></NoContentComponent>
+            :
             feeds.map((data) => {
                 return <FeedElement data={data} key={data.feedId} />;
             })
