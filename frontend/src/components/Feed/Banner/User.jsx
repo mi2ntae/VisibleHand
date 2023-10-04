@@ -2,16 +2,29 @@ import { Button } from "@mui/material";
 import { grey, primary, white } from "lib/style/colorPalette";
 import React from "react";
 import { useEffect } from "react";
+import { useNavigate } from "react-router";
+import { setUserId } from "reducer/mypageTabReducer";
 import { BannerElement, ProfileImg } from "styled";
+import { useDispatch } from "react-redux";
 
 export default function User({ user }) {
+  const navi = useNavigate();
+  const dispatch = useDispatch();
+
   const handleFollow = (e) => {
     e.preventDefault();
   };
 
+  const move = (e) => {
+    e.stopPropagation();
+    e.preventDefault();
+    dispatch(setUserId(user.userId));
+    navi("/mypage")
+  }
+
   useEffect(() => console.log(user), []);
   return (
-    <BannerElement to={`/${user.nickname ? user.nickname : user.userName}`}>
+    <BannerElement onClick={(e) => move(e)}>
       <ProfileImg
         src={
           user.profileImg || user.imageUrl
