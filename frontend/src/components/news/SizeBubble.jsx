@@ -91,6 +91,7 @@ const Bubble = styled.div`
   padding: 1.5rem;
   margin-top: 20px; // 삼각형과 거리를 주기 위해 조금 더 높게 설정했습니다.
   color: ${black_grey};
+  z-index: 999;
 
   &:before,
   &:after {
@@ -126,6 +127,7 @@ const Container = styled.button`
   font-family: Pretendard;
   border: 0;
   background-color: ${white};
+  cursor: pointer;
 `;
 
 const Btn = styled.div`
