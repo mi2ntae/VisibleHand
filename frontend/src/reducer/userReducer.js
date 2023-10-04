@@ -6,7 +6,8 @@ const initialState = {
   userId: 1,
   nickname: "",
   snsEmail: "",
-  provider: ""
+  provider: "",
+  unlinkToken: ""
 };
 
 const userSlice = createSlice({
@@ -20,6 +21,7 @@ const userSlice = createSlice({
       state.nickname = action.payload.user.nickname;
       state.snsEmail = action.payload.user.snsEmail;
       state.provider = action.payload.user.provider;
+      state.unlinkToken = action.payload.unlinkToken;
     },
     initUser: (state) => {
       state.accessToken = "";
@@ -28,6 +30,7 @@ const userSlice = createSlice({
       state.nickname = "";
       state.snsEmail = "";
       state.provider = "";
+      state.unlinkToken = "";
     },
   },
 });
