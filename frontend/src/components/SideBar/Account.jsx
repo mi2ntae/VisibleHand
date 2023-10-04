@@ -29,7 +29,9 @@ export default function Account() {
         <img src="/icons/header/ic_dictionary.svg" alt="dictionary" />
         {nickname}
       </StyledLink>
+      {nickname!=null && nickname!="" ?
       <Button onClick={() => logout()}>로그아웃</Button>
+      : null}
     </div>
   );
 }
