@@ -1,12 +1,28 @@
 import { Button } from "@mui/material";
-import { grey, lightest_grey, primary, white } from "lib/style/colorPalette";
-import React from "react";
+import http from "api/commonHttp";
+import {
+  grey,
+  light_grey,
+  lightest_grey,
+  primary,
+  white,
+} from "lib/style/colorPalette";
+import React, { useEffect, useState } from "react";
 import { ProfileImg } from "styled";
 import styled from "styled-components";
 
-export default function UserElement({ user }) {
+export default function UserElement({ user, myId }) {
+  const [isFollow, setIsFollow] = useState(user.isFollow);
   const handleFollow = (e) => {
-    e.preventDefault();
+    http
+      .post("/user/follow", { fromId: myId, toId: user.userId })
+      .then(setIsFollow(1));
+  };
+
+  const handleUnfollow = (e) => {
+    http
+      .delete("/user/follow", { data: { fromId: myId, toId: user.userId } })
+      .then(setIsFollow(0));
   };
   return (
     <UserContainer>
@@ -19,24 +35,45 @@ export default function UserElement({ user }) {
           {user.statusMsg}
         </div>
       </div>
-      <Button
-        style={{
-          backgroundColor: primary,
-          color: white,
-          fontFamily: "Pretendard",
-          borderRadius: "1rem",
-          padding: "0.375rem 1rem",
-          height: "2.25rem",
-        }}
-        onClick={handleFollow}
-      >
-        팔로우
-        <img
-          src="/icons/feed/ic_account_plus.svg"
-          alt="팔로우"
-          style={{ marginLeft: "0.375rem" }}
-        />
-      </Button>
+      {isFollow === 0 ? (
+        <Button
+          style={{
+            backgroundColor: primary,
+            color: white,
+            fontFamily: "Pretendard",
+            borderRadius: "1rem",
+            padding: "0.375rem 1rem",
+            height: "2.25rem",
+          }}
+          onClick={handleFollow}
+        >
+          팔로우
+          <img
+            src="/icons/feed/ic_account_plus.svg"
+            alt="팔로우"
+            style={{ marginLeft: "0.375rem" }}
+          />
+        </Button>
+      ) : (
+        <Button
+          style={{
+            backgroundColor: light_grey,
+            color: white,
+            fontFamily: "Pretendard",
+            borderRadius: "1rem",
+            padding: "0.375rem 1rem",
+            height: "2.25rem",
+          }}
+          onClick={handleUnfollow}
+        >
+          언팔로우
+          <img
+            src="/icons/feed/ic_account_minus.svg"
+            alt="팔로우"
+            style={{ marginLeft: "0.375rem" }}
+          />
+        </Button>
+      )}
     </UserContainer>
   );
 }
