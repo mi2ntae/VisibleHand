@@ -45,7 +45,6 @@ export default function Account() {
       }
   })
   .catch(error => {
-      console.log(error);
   });    
   }, []);
 
