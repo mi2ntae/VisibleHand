@@ -3,7 +3,7 @@ import PropTypes from "prop-types";
 import LinearProgress from "@mui/material/LinearProgress";
 import Typography from "@mui/material/Typography";
 import Box from "@mui/material/Box";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import styled from "styled-components";
 
 function LinearProgressWithLabel(props) {
@@ -29,20 +29,29 @@ LinearProgressWithLabel.propTypes = {
    */
   value: PropTypes.number.isRequired,
 };
-export default function ProgressTimeBar({ mark, time }) {
+export default function ProgressTimeBar({ mark, time, wordId }) {
   const [progress, setProgress] = useState(0);
-
+  const [timer, setTimer] = useState(null);
   useEffect(() => {
-    const timer = setInterval(() => {
+    if(wordId == 0) return;
+    setTimer(setInterval(() => {
       setProgress((prevProgress) =>
-        prevProgress >= 97 ? () => mark() : prevProgress + 3.3
+        prevProgress + 3.3
       );
-    }, 1000);
+    }, 100));
     return () => {
       clearInterval(timer);
       setProgress(0);
     };
-  }, [time]);
+  }, [wordId]);
+
+  useEffect(() => {
+    if(progress >= 97) {
+      clearInterval(timer);
+      setProgress(0);
+      if(time) mark();
+    }
+  }, [progress]);
 
   return time ? (
     <Box sx={{ width: "100%" }}>
