@@ -43,7 +43,7 @@ export default function ProfileUpdate() {
         }
     })
     .catch(error => {
-        console.log(error);
+        console.error(error);
     });    
     }, [])
 
@@ -164,7 +164,7 @@ export default function ProfileUpdate() {
     }
     })
     .catch(error => {
-    console.log(error);
+        console.error(error);
     });  
     }
 
@@ -244,7 +244,7 @@ export default function ProfileUpdate() {
             }
         })
         .catch(error => {
-            console.log(error);
+            console.error(error);
         });   
     }
 
@@ -280,7 +280,6 @@ export default function ProfileUpdate() {
                                 },
                             })
                             .then(response => {
-                                console.log(response);
                             }).catch(error => {
                                 console.error(error);
                             });
@@ -290,7 +289,6 @@ export default function ProfileUpdate() {
                                 method: 'GET',
                             })
                             .then(response => {
-                                console.log(response);
                             }).catch(error => {
                                 console.error(error);
                             });
@@ -301,7 +299,7 @@ export default function ProfileUpdate() {
                     }
                 })
                 .catch(error => {
-                    console.log(error);
+                    console.error(error);
                 });  
             }
         })

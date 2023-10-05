@@ -26,7 +26,7 @@ export default function Kakao() {
           }
         })
         .catch((err) => {
-          console.log(err);
+          console.error(err);
         }); 
       }
       
