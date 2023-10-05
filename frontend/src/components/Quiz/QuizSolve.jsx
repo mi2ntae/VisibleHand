@@ -192,7 +192,14 @@ export default function QuizSolve({ retry }) {
               <RankingItem key={i}>
                 <div>{i + 1}</div>
                 <div>
-                  <img src={v.profileImg} alt="프로필 이미지" />
+                  {v.profileImg ? (
+                    <img src={v.profileImg} alt="프로필 이미지" />
+                  ) : (
+                    <img
+                      src={"/images/user/user_default.png"}
+                      alt="프로필 이미지"
+                    />
+                  )}
                 </div>
                 <div>
                   <div>
