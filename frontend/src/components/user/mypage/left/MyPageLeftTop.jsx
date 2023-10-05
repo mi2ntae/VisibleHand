@@ -4,6 +4,7 @@ import MyPageTabs from "components/user/mypage/left/top/MyPageTabs";
 import MypageSearch from "components/user/mypage/left/top/MypageSearch";
 import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
+import { background } from "lib/style/colorPalette";
 
 export default function MyPageLeftTop({ tabs }) {
   const tabNo = useSelector((state) => state.mypageTab.tabNo);
@@ -23,12 +24,18 @@ export default function MyPageLeftTop({ tabs }) {
 
 const LeftTopContainer = styled.div`
   display: flex;
-  position: relative;
+  justify-content: space-between;
+  position: sticky;
+  align-self: flex-start;
+  top: 0px;
+  padding-top: 40px;
+  background-color: ${background};
+  width: 100%;
 `;
 
 const Button = styled.button`
   right: 2%;
-  position: absolute;
+  // position: absolute;
   align-items: center;
   text-align: center;
   width: 20%;
