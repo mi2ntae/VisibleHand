@@ -4,7 +4,7 @@ import lombok.Getter;
 
 @Getter
 public class SolvedQuizReq {
-    long userId;
+    Long userId;
     Long newsquizId;
     Long wordId;
     boolean correct;
