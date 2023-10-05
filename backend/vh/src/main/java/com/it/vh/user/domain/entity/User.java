@@ -25,12 +25,13 @@ import java.time.LocalDate;
                 name = "findRecommendUserByUserId",
                 query = "SELECT user_id AS userId, nickname AS userName, status_msg AS statusMsg, IFNULL(profile_img, 'https://visiblehand-bucket.s3.ap-northeast-2.amazonaws.com/user_default.png') AS imageUrl " +
                         "FROM user " +
-                        "WHERE user_id IN (" +
-                        "SELECT to_id FROM follow " +
-                        "WHERE to_id NOT IN (SELECT to_id FROM follow WHERE from_id = :userId) " +
-                        "AND from_id IN (SELECT to_id FROM follow WHERE from_id = :userId) " +
-                        "GROUP BY to_id ORDER BY COUNT(*)" +
-                        ") OR user_id IN (SELECT to_id FROM follow GROUP BY to_id ORDER BY count(*) DESC) LIMIT 3",
+                        "WHERE user_id NOT IN (SELECT to_id FROM follow WHERE from_id = :userId) " +  // 이 부분을 추가
+                        "AND (user_id IN (" +
+                        "    SELECT to_id FROM follow " +
+                        "    WHERE from_id IN (SELECT to_id FROM follow WHERE from_id = :userId) " +
+                        "    GROUP BY to_id ORDER BY COUNT(*)" +
+                        ") OR user_id IN (SELECT to_id FROM follow GROUP BY to_id ORDER BY count(*) DESC)) " +
+                        "LIMIT 3",
                 resultSetMapping = "userFollowListDto"
         ),
         @NamedNativeQuery(
