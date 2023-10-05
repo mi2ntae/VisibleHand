@@ -33,8 +33,6 @@ export default function QuizContent({
     letterRef.current[0]?.focus();
     // Focus on the first element if it exists
   }, [letterRef.current.length]);
-  console.log(answer);
-  console.log(text);
   const makeHint = () => {
     const cho = [
       "ㄱ",
@@ -80,7 +78,6 @@ export default function QuizContent({
   };
 
   const onKeyDown = (e, i) => {
-    console.log(e.key);
     if (letterRef.current.length === 0) return;
     if (e.key === "ArrowRight") {
       for (let j = i + 1; j <= letterRef.current.length - 1; j++) {
@@ -199,7 +196,7 @@ export default function QuizContent({
       {/* <ProgressBar>
         <div></div>
       </ProgressBar> */}
-      <ProgressTimeBar mark={mark} time={time}></ProgressTimeBar>
+      <ProgressTimeBar mark={mark} time={time} wordId={wordId}></ProgressTimeBar>
       <AnswerContainer>
         {answer.map((v, i) =>
           v === " " ? (
