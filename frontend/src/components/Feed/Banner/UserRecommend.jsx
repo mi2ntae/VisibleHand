@@ -6,7 +6,7 @@ import User from "./User";
 export default function UserRecommend({ users }) {
   return (
     <Background style={{ gap: 20 }}>
-      <BannerTitle>나와 잘 맞을것 같은 사용자</BannerTitle>
+      <BannerTitle>나와 잘 맞을 것 같은 사용자</BannerTitle>
       {users.map((data, index) => {
         return (
           <React.Fragment key={data.userId}>
