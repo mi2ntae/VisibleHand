@@ -1,6 +1,7 @@
 package com.it.vh.quiz.service;
 
 import com.it.vh.common.util.AuthenticationHandler;
+import com.it.vh.dict.domain.entity.Dictionary;
 import com.it.vh.dict.domain.repository.DictionaryRepository;
 import com.it.vh.quiz.api.dto.requestDto.SolvedQuizReq;
 import com.it.vh.quiz.domain.dto.ArticleQuizCountDto;
@@ -53,9 +54,11 @@ public class SolvedQuizServiceImpl implements SolvedQuizService {
     public void solveQuiz(SolvedQuizReq req) throws SolvingQuizException {
         SolvedQuiz sq;
         Optional<SolvedQuiz> existingSq;
-        if(req.getNewsquizId()==null){existingSq=solvedQuizRepository.findSolvedQuizByWordAndUser(dictionaryRepository.findByWordId(req.getWordId()).get(),userRespository.findUserByUserId(req.getUserId()).get());}
+        User user=userRespository.findUserByUserId(req.getUserId()).get();
+        Dictionary dict=dictionaryRepository.findByWordId(req.getWordId()).get();
+        if(req.getNewsquizId()==null){existingSq=solvedQuizRepository.findSolvedQuizByWordAndUser(dict,user);}
         else{
-            existingSq=solvedQuizRepository.findSolvedQuizByNewsquizAndUser(newsQuizRepository.findByNewsquizId(req.getNewsquizId()).get(),userRespository.findUserByUserId(req.getUserId()).get());
+            existingSq=solvedQuizRepository.findSolvedQuizByNewsquizAndUser(newsQuizRepository.findByNewsquizId(req.getNewsquizId()).get(),user);
         }
         if(existingSq.isEmpty())sq=new SolvedQuiz();
         else sq=existingSq.get();
