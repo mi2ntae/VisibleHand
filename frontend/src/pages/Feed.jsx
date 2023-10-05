@@ -116,7 +116,7 @@ export default function Feed() {
       </div>
       <BannerContainer>
         <ArticleRank />
-        <UserRecommend users={recommendUsers} />
+        {recommendUsers.length > 0 && <UserRecommend users={recommendUsers} />}
       </BannerContainer>
     </div>
   );
