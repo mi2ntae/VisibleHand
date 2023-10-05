@@ -11,12 +11,29 @@ export default function Account() {
   const loginId = useSelector((state) => state.user.userId);
   const nickname = useSelector((state) => state.user.nickname);
   const navigate = useNavigate();
-
+  const provider = useSelector((state) => state.user.provider);
+  const unlinkToken = useSelector((state) => state.user.unlinkToken);
+  
   const logout = () => {
+    if(provider==="kakao") {
+      console.log(unlinkToken);
+
+      fetch('https://kapi.kakao.com/v1/user/logout', {
+          method: 'POST',
+          headers: {
+              'Content-Type': 'application/x-www-form-urlencoded', 
+              'Authorization': 'Bearer ' + unlinkToken
+          },
+      })
+      .then(response => {
+      }).catch(error => {
+          console.error(error);
+      });
+  } 
     dispatch(initUser());
     navigate('/');
   }
-
+  
   const imgUrl = "https://visiblehand-bucket.s3.ap-northeast-2.amazonaws.com/user_default.png";
   const [profileImg, setProfileImg] = useState('');
   useEffect(() => {
