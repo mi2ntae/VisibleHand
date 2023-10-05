@@ -18,6 +18,7 @@ export default function MypageFeed() {
   const [showObserver, setShowObserver] = useState(true);
   const target = useRef(null);
   const [loading, setLoading] = useState(false);
+  const [loadData, setLoadData] = useState(false);
 
   const observer = new IntersectionObserver((entries) => {
     entries.forEach((entry) => {
@@ -40,6 +41,7 @@ export default function MypageFeed() {
       .get(uri)
       .then((data) => {
         setFeeds((prevFeeds) => [...prevFeeds, ...data.data]);
+        setLoadData(true);
         if (data.data.length > 0) page.current += 1;
       })
       .catch((err) => {
@@ -82,7 +84,7 @@ export default function MypageFeed() {
   return (
     <div>
       <FeedContainer>
-        {feeds.length == 0 ? (
+        {feeds.length == 0 && loadData ? (
           <NoContentComponent text="피드가 존재하지 않습니다."></NoContentComponent>
         ) : (
           feeds.map((data) => {
