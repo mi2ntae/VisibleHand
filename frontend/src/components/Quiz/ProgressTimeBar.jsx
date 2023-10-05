@@ -38,7 +38,7 @@ export default function ProgressTimeBar({ mark, time, wordId }) {
       setProgress((prevProgress) =>
         prevProgress + 3.3
       );
-    }, 100));
+    }, 1000));
     return () => {
       clearInterval(timer);
       setProgress(0);
