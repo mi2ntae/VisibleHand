@@ -22,7 +22,7 @@ export default function QuizSolve({ retry }) {
 
   const [question, setQuestion] = useState("");
   const [content, setContent] = useState("");
-  const [wordId, setWordId] = useState(1);
+  const [wordId, setWordId] = useState(0);
   const [text, setText] = useState(""); //퀴즈 답
   const [correct, setCorrect] = useState(0);
   const [wrong, setWrong] = useState(0);
