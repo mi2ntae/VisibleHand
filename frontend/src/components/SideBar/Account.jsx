@@ -55,12 +55,13 @@ export default function Account() {
     dispatch(setUserId(loginId));
     navigate(`/mypage`);
   }
+
   return (
     <div style={{ gap: "240px" }}>
       <hr style={{ border: "0.5px solid #EDEDED", margin: "24px 0px" }} />
       <StyledLink onClick={(e) => move(e)}>
         {profileImg!=null && profileImg!=""
-        ?  <img src={profileImg} alt="profileImg" width={20} height={20}/>
+        ?  <img src={profileImg} alt="profileImg" width={20} height={20} style={{borderRadius: "50%"}}/>
         : <img src={imgUrl} alt="profileImg" width={20} height={20}/>
         }
         {nickname}

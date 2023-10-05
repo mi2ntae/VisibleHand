@@ -197,7 +197,7 @@ export default function ProfileSetting() {
           navigate('/signUp');
       })
       .catch(error => {
-        console.log(error);
+        console.error(error);
       });   
   }
 
