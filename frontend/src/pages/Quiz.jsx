@@ -24,5 +24,5 @@ export default function Quiz() {
       })
       .catch((err) => alert(err));
   });
-  return <div>Quiz</div>;
+  return <div></div>;
 }
