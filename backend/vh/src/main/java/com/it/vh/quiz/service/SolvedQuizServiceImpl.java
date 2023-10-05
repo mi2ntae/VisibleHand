@@ -53,9 +53,9 @@ public class SolvedQuizServiceImpl implements SolvedQuizService {
     public void solveQuiz(SolvedQuizReq req) throws SolvingQuizException {
         SolvedQuiz sq;
         Optional<SolvedQuiz> existingSq;
-        if(req.getNewsquizId()==null){existingSq=solvedQuizRepository.findSolvedQuizByWord(dictionaryRepository.findByWordId(req.getWordId()).get());}
+        if(req.getNewsquizId()==null){existingSq=solvedQuizRepository.findSolvedQuizByWordAndUser(dictionaryRepository.findByWordId(req.getWordId()).get(),userRespository.findUserByUserId(req.getUserId()).get());}
         else{
-            existingSq=solvedQuizRepository.findSolvedQuizByNewsquiz(newsQuizRepository.findByNewsquizId(req.getNewsquizId()).get());
+            existingSq=solvedQuizRepository.findSolvedQuizByNewsquizAndUser(newsQuizRepository.findByNewsquizId(req.getNewsquizId()).get(),userRespository.findUserByUserId(req.getUserId()).get());
         }
         if(existingSq.isEmpty())sq=new SolvedQuiz();
         else sq=existingSq.get();
