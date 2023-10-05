@@ -6,7 +6,7 @@ import { useNavigate } from 'react-router-dom';
 export default function ScrapComponent({deleteScrap, scrapId, articleId, image, title}) {
     const navi = useNavigate();
     return (
-        <ScrapContainer  onClick={() => {navi(`/news/${articleId}`)}}>
+        <ScrapContainer onClick={() => {navi(`/news/${articleId}`)}}>
             <div class="card">
                 <div class="card-inner">
                     <div class="card-front">
@@ -27,6 +27,7 @@ const ScrapContainer = styled.div`
     margin-left: 60px;
     margin-right: 45px;
     margin-bottom: 100px;
+    cursor: pointer;
 `;
 
 const Image = styled.img`
@@ -44,6 +45,7 @@ const Folder = styled.img`
     height: 150px;
     border-radius: 20px;
     box-shadow: -3px 3px 6px lightgrey;
+    cursor:pointer;
 `;
 
 const Title = styled.div`
@@ -81,4 +83,6 @@ const DismissButton = styled.button`
     width: 10px;
     height: 25px;
     border-radius: 7px;
+    cursor: pointer;
+    
 `;
