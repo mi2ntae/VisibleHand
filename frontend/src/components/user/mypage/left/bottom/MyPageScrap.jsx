@@ -90,7 +90,7 @@ export default function MyPageScrap() {
             </Scraps>
             
             {(load && scraps.length > 0) ? 
-                <Pagination count={maxPage} page={pageNo} onChange={(event, value) => setPageNo(value)} style={{position: 'absolute', top: 600, left: 600, textAlign: 'center'}} />
+                <Pagination count={maxPage} page={pageNo} onChange={(event, value) => setPageNo(value)} style={{position: 'absolute', top: 620, left: 600, textAlign: 'center'}} />
                 : <span></span>
             }
         </ScrapContainer>
