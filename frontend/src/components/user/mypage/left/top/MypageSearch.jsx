@@ -16,26 +16,32 @@ export default function ScrapSearch() {
   const tabNo = useSelector((state) => state.mypageTab.tabNo);
 
   const options = [
-    [{value: "0", content: "기사제목"}, {value: "1", content: "피드내용"}],
-    [{value: "0", content: "기사제목"}],
-    [{value: "0", content: "퀴즈제목"}]
-  ]
+    [
+      { value: "0", content: "기사제목" },
+      { value: "1", content: "피드내용" },
+    ],
+    [{ value: "0", content: "기사제목" }],
+    [{ value: "0", content: "퀴즈제목" }],
+  ];
 
   useEffect(() => {
     return () => {
       setText("");
-      dispatch(setSearchType(0))
-    }
-  }, [tabNo])
+      dispatch(setSearchType(0));
+    };
+  }, [tabNo]);
 
   const onSearch = () => {
-    dispatch(setSearchType(type))
-    dispatch(setKeyword(text))
-  }
+    dispatch(setSearchType(type));
+    dispatch(setKeyword(text));
+  };
 
   return (
     <SearchContainer>
-      <Select defaultValue="0" onChange={(e) => setType(parseInt(e.target.value))}>
+      <Select
+        defaultValue="0"
+        onChange={(e) => setType(parseInt(e.target.value))}
+      >
         {options[tabNo].map((opt) => (
           <option value={opt.value}>{opt.content}</option>
         ))}
@@ -43,7 +49,12 @@ export default function ScrapSearch() {
       <div
         style={{ height: "60%", width: "1px", backgroundColor: lightest_grey }}
       />
-      <SearchInput placeholder="검색어를 입력하세요." maxLength={11} value={text} onInput={(e) => setText(e.target.value)}/>
+      <SearchInput
+        placeholder="검색어를 입력하세요."
+        maxLength={11}
+        value={text}
+        onInput={(e) => setText(e.target.value)}
+      />
       <SearchBtn onClick={() => onSearch()}>
         <img src="/icons/feed/ic_search.svg" alt="검색" />
       </SearchBtn>
@@ -53,7 +64,7 @@ export default function ScrapSearch() {
 
 const SearchContainer = styled.div`
   right: 0%;
-  position: absolute;
+  // position: absolute;
   display: flex;
   border: 1px solid ${primary};
   border-radius: 16px;
@@ -89,8 +100,8 @@ const SearchBtn = styled.button`
 
 const Select = styled.select`
   border: 0px;
-  color: #2A2B2E;
-  fontSize: 0.8rem;
+  color: #2a2b2e;
+  fontsize: 0.8rem;
   font-weight: 600;
   align-items: center;
 `;
