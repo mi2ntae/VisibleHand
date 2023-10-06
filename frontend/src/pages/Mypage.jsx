@@ -26,7 +26,7 @@ export default function Mypage() {
 
   return (
     <div
-      style={{ display: "flex", padding: "0px 80px 40px 80px", gap: "88px" }}
+      style={{ display: "flex", padding: "0px 80px 10px 80px", gap: "88px" }}
     >
       {/* <MyPageTop userId={params.userId}>
             </MyPageTop>

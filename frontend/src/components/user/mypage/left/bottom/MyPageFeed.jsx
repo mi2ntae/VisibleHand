@@ -110,7 +110,7 @@ const FeedContainer = styled.div`
   margin: auto;
   box-sizing: border-box;
   width: 100%;
-  // max-height: 500px;
+  max-height: 600px;
   gap: 24px;
   background-color: ;
   flex-direction: column;
