@@ -18,12 +18,13 @@
 ### [뉴스 상세 보기 및 뉴스 퀴즈] 
 - 뉴스 글자 크기 조정 기능
 - 뉴스 스크랩 기능
+- 뉴스 피드 작성 기능
 - 뉴스 이해도를 학인할 수 있는 퀴즈 제공  
-![Visible_Hand](./readmeFiles/News.gif){: width="700px"}
+![Visible_Hand](./readmeFiles/News2.gif){: width="700px"}
 
 ### [피드]
 - 팔로우한 유저의 피드 목록 확인 기능  
-![Visible_Hand](./readmeFiles/Feed.gif){: width="700px"}
+![Visible_Hand](./readmeFiles/Feed2.gif){: width="700px"}
 
 ### [경제 용어 사전]
 - 분야별 경제 용어 사전  
