@@ -24,7 +24,7 @@ export default function ScrapComponent({deleteScrap, scrapId, articleId, image, 
 const ScrapContainer = styled.div`
     display: flex;
     margin-top: 60px;
-    margin-left: 60px;
+    margin-left: 63px;
     margin-right: 45px;
     margin-bottom: 100px;
     cursor: pointer;
