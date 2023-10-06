@@ -27,7 +27,7 @@ export default function ReviewNoteComponent({question, answer}) {
 const ReviewNoteContainer = styled.div`
     width: 140px;
     max-height: 110px;
-    margin-left: 30px;
+    margin-left: 35px;
     margin-right: 10px;
     margin-bottom: 50px;
 `;

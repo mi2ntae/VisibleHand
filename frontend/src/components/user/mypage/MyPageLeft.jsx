@@ -56,5 +56,5 @@ const LeftContainer = styled.div`
   display: flex;
   flex-direction: column;
   flex: 13;
-  height: 100vh;
+  height: 98vh;
 `;
