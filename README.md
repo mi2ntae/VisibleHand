@@ -6,37 +6,37 @@
 
 ## :bulb: [기능소개]
 ### 1) [온보딩]
-![Visible_Hand](./readmeFiles/OnBoarding.gif)
+![Visible_Hand](./readmeFiles/OnBoarding.gif){: width="700px"}
 
 ### 2) [소셜 로그인] 
-![Visible_Hand](./readmeFiles/Login.gif)
+![Visible_Hand](./readmeFiles/Login.gif){: width="700px"}
 
 ### 3) [워드 클라우드] 
 - 분야별 상위 25개 단어 워드 클라우드 형태로 제공  
-![Visible_Hand](./readmeFiles/Word.gif) 
+![Visible_Hand](./readmeFiles/Word.gif){: width="700px"}
 
 ### [뉴스 상세 보기 및 뉴스 퀴즈] 
 - 뉴스 글자 크기 조정 기능
 - 뉴스 스크랩 기능
 - 뉴스 이해도를 학인할 수 있는 퀴즈 제공  
-![Visible_Hand](./readmeFiles/News.gif) 
+![Visible_Hand](./readmeFiles/News.gif){: width="700px"}
 
 ### [피드]
 - 팔로우한 유저의 피드 목록 확인 기능  
-![Visible_Hand](./readmeFiles/Feed.gif) 
+![Visible_Hand](./readmeFiles/Feed.gif){: width="700px"}
 
 ### [경제 용어 사전]
 - 분야별 경제 용어 사전  
-![Visible_Hand](./readmeFiles/Dict.gif) 
+![Visible_Hand](./readmeFiles/Dict.gif){: width="700px"}
 
 ### [경제 용어 퀴즈]
-![Visible_Hand](./readmeFiles/Quiz.gif) 
+![Visible_Hand](./readmeFiles/Quiz.gif){: width="700px"}
 
 ### [마이페이지]
 - 뉴스에 작성한 피드 확인 기능
 - 스크랩한 뉴스 확인 기능
 - 경제 용어 퀴즈 문제 풀이 중 틀린 문제만 재풀이 기능 제공  
-![Visible_Hand](./readmeFiles/MyPage.gif) 
+![Visible_Hand](./readmeFiles/MyPage.gif){: width="700px"}
 
 ## :bulb: 기술 스택
 
@@ -83,10 +83,10 @@
 ![python](https://img.shields.io/badge/python-1.02-4170A1?logo=python&logoColor=4170A1)
 
 ## :bulb: 아키텍처
-![Visible_Hand](./readmeFiles/Architecture.png) 
+![Visible_Hand](./readmeFiles/Architecture.png){: width="700px"}
 
 ## :bulb: ERD
-![Visible_Hand](./readmeFiles/ERD.png) 
+![Visible_Hand](./readmeFiles/ERD.png){: width="700px"}
 
 ## :bulb: 팀원 소개
-![Visible_Hand](./readmeFiles/Team.png) 
+![Visible_Hand](./readmeFiles/Team.png){: width="700px"}
