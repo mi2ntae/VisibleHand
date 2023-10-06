@@ -55,8 +55,10 @@ public class SolvedQuizServiceImpl implements SolvedQuizService {
         SolvedQuiz sq;
         Optional<SolvedQuiz> existingSq;
         User user=userRespository.findUserByUserId(req.getUserId()).get();
-        Dictionary dict=dictionaryRepository.findByWordId(req.getWordId()).get();
-        if(req.getNewsquizId()==null){existingSq=solvedQuizRepository.findSolvedQuizByWordAndUser(dict,user);}
+        if(req.getNewsquizId()==null){
+            Dictionary dict=dictionaryRepository.findByWordId(req.getWordId()).get();
+            existingSq=solvedQuizRepository.findSolvedQuizByWordAndUser(dict,user);
+        }
         else{
             existingSq=solvedQuizRepository.findSolvedQuizByNewsquizAndUser(newsQuizRepository.findByNewsquizId(req.getNewsquizId()).get(),user);
         }

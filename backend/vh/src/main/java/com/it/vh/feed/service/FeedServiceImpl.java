@@ -62,7 +62,7 @@ public class FeedServiceImpl implements FeedService {
         Optional<User> optionalUser = userRespository.findById(userId);
         if(!optionalUser.isPresent()) throw new NonExistUserIdException();
 
-        authenticationHandler.checkUserAuthenticate(userId);
+//        authenticationHandler.checkUserAuthenticate(userId);
         if(keyword == null || keyword == "") return feedRepository.findFeedsByFollowerUserId(userId, PageRequest.of(page, FEED_PAGE_NUM));
         return feedRepository.findFeedsByContent(userId, "%" + keyword + "%", PageRequest.of(page, FEED_PAGE_NUM));
     }
