@@ -313,7 +313,6 @@ const Icon = styled.button`
 const QuizContainer = styled.div`
   border-radius: 8px;
   border: 1px solid ${lightest_grey};
-  width: 996px;
   font-size: 16px;
   padding-top: 28px;
   & > div:nth-child(1) {
