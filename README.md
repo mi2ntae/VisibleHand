@@ -38,6 +38,8 @@
 - 경제 용어 퀴즈 문제 풀이 중 틀린 문제만 재풀이 기능 제공  
 ![Visible_Hand](./readmeFiles/MyPage.gif){: width="700px"}  
 
+<br>
+
 ## :bulb: 기술 스택
 
 ### Cooperation
@@ -82,11 +84,17 @@
 ![PyTorch](https://img.shields.io/badge/Pytorch-1.02-EE4C2C?logo=PyTorch&logoColor=EE4C2C)
 ![python](https://img.shields.io/badge/python-1.02-4170A1?logo=python&logoColor=4170A1)  
 
+<br>
+
 ## :bulb: 아키텍처
 ![Visible_Hand](./readmeFiles/Architecture.png){: width="700px"}  
 
+<br>
+
 ## :bulb: ERD
 ![Visible_Hand](./readmeFiles/ERD.png){: width="700px"}  
+
+<br>
 
 ## :bulb: 팀원 소개
 ![Visible_Hand](./readmeFiles/Team.png){: width="700px"}
