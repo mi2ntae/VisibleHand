@@ -36,7 +36,7 @@
 - 뉴스에 작성한 피드 확인 기능
 - 스크랩한 뉴스 확인 기능
 - 경제 용어 퀴즈 문제 풀이 중 틀린 문제만 재풀이 기능 제공  
-![Visible_Hand](./readmeFiles/MyPage.gif){: width="700px"}
+![Visible_Hand](./readmeFiles/MyPage.gif){: width="700px"}  
 
 ## :bulb: 기술 스택
 
@@ -80,13 +80,13 @@
 ![Spark](https://img.shields.io/badge/Spark-3.2.4-E25A1C?logo=ApacheSpark&logoColor=E25A1C)
 ![Selenium](https://img.shields.io/badge/Selenium-4.12.0-00B400?logo=Selenium&logoColor=00B400)
 ![PyTorch](https://img.shields.io/badge/Pytorch-1.02-EE4C2C?logo=PyTorch&logoColor=EE4C2C)
-![python](https://img.shields.io/badge/python-1.02-4170A1?logo=python&logoColor=4170A1)
+![python](https://img.shields.io/badge/python-1.02-4170A1?logo=python&logoColor=4170A1)  
 
 ## :bulb: 아키텍처
-![Visible_Hand](./readmeFiles/Architecture.png){: width="700px"}
+![Visible_Hand](./readmeFiles/Architecture.png){: width="700px"}  
 
 ## :bulb: ERD
-![Visible_Hand](./readmeFiles/ERD.png){: width="700px"}
+![Visible_Hand](./readmeFiles/ERD.png){: width="700px"}  
 
 ## :bulb: 팀원 소개
 ![Visible_Hand](./readmeFiles/Team.png){: width="700px"}
