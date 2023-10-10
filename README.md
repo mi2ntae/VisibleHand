@@ -31,7 +31,7 @@
 ![Visible_Hand](./readmeFiles/Dict.gif)
 
 ### [경제 용어 퀴즈]
-![Visible_Hand](./readmeFiles/Quiz.gif)
+![Visible_Hand](./readmeFiles/WordQuiz.gif)
 
 ### [마이페이지]
 - 뉴스에 작성한 피드 확인 기능
