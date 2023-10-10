@@ -20,7 +20,7 @@
 - 뉴스 스크랩 기능
 - 뉴스 피드 작성 기능
 - 뉴스 이해도를 학인할 수 있는 퀴즈 제공  
-![Visible_Hand](./readmeFiles/News2.gif)
+![Visible_Hand](./readmeFiles/News.gif)
 
 ### [피드]
 - 팔로우한 유저의 피드 목록 확인 기능  
