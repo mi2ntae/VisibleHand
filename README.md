@@ -13,7 +13,7 @@
 
 ### 3) [워드 클라우드] 
 - 분야별 상위 25개 단어 워드 클라우드 형태로 제공  
-![Visible_Hand](./readmeFiles/Word.gif)
+![Visible_Hand](./readmeFiles/WordCloud.gif)
 
 ### [뉴스 상세 보기 및 뉴스 퀴즈] 
 - 뉴스 글자 크기 조정 기능
@@ -24,7 +24,7 @@
 
 ### [피드]
 - 팔로우한 유저의 피드 목록 확인 기능  
-![Visible_Hand](./readmeFiles/Feed2.gif)
+![Visible_Hand](./readmeFiles/Feed.gif)
 
 ### [경제 용어 사전]
 - 분야별 경제 용어 사전  
